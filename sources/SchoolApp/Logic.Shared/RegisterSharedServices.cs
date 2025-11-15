@@ -7,7 +7,8 @@ namespace Logic.Shared
     {
         public static void RegisterServices(this IServiceCollection services)
         {
-           services.AddScoped<ILogManager, LogManager>();
+            services.AddScoped<ILogManager, LogManager>();
+            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
         }
     }
 }
