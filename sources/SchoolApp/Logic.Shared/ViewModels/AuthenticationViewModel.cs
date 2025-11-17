@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 
 namespace Logic.Shared.ViewModels
 {
-
     public partial class AuthenticationViewModel : BaseViewModel
     {
         private readonly IAuthenticationService _authenticationService;
@@ -62,13 +61,11 @@ namespace Logic.Shared.ViewModels
             SetBusy(false);
         }
 
-        
         partial void OnSelectedUserChanged(ObservableUser value)
         {
             UpdateCanLogin(!string.IsNullOrEmpty(SelectedUser.Username) && !string.IsNullOrEmpty(Password));
         }
 
-        
         partial void OnPasswordChanged(string value)
         {
             UpdateCanLogin(!string.IsNullOrEmpty(SelectedUser.Username) && !string.IsNullOrEmpty(value));
@@ -78,7 +75,7 @@ namespace Logic.Shared.ViewModels
         {
             SetBusy(true);
 
-            Users = await _authenticationService.GetUsers();
+            Users = await _authenticationService.GetUsersFromSqLite();
 
             SetBusy(false);
         }

@@ -6,32 +6,47 @@ namespace Logic.Shared.Services
     public class LogService : ILogService
     {
         private bool disposedValue;
-        private readonly IRepositoryBase<LogEntryEntity> _logRepository;
-        
-        public LogService(IRepositoryBase<LogEntryEntity> logRepository)
+        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
+        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
+
+        public LogService(IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql, IApplicationUnitOfWork applicationUnitOfWork)
         {
-            _logRepository = logRepository;
+            _applicationUnitOfWork = applicationUnitOfWork;
+            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
         }
 
-        public async Task<List<LogEntryEntity>> GetLogMessages()
+        public async Task<List<LogEntryEntity>> GetLogMessagesFromSqLite()
         {
-            return await Task.FromResult(_logRepository.GetAll());
+            return await Task.FromResult(_applicationUnitOfWork.LogRepository.GetAll());
         }
 
-        public async Task LogMessage(LogEntryEntity entity)
+        public async Task<List<LogEntryEntity>> GetLogMessagesFromMySql()
         {
-            await _logRepository.AddAsync(entity, null);
-
-            await _logRepository.SaveChangesAsync();
+            return await Task.FromResult(_applicationUnitOfWorkMySql.LogRepository.GetAll());
         }
 
+        public async Task LogMessageSqLite(LogEntryEntity entity)
+        {
+            await _applicationUnitOfWork.LogRepository.AddAsync(entity, null);
+
+            await _applicationUnitOfWork.SaveChangesAsync();
+        }
+
+
+        public async Task LogMessageMySql(LogEntryEntity entity)
+        {
+            await _applicationUnitOfWorkMySql.LogRepository.AddAsync(entity, null);
+
+            await _applicationUnitOfWorkMySql.SaveChangesAsync();
+        }
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
                 if (disposing)
                 {
-                    _logRepository.Dispose();
+                    _applicationUnitOfWork.Dispose();
+                    _applicationUnitOfWorkMySql.Dispose();
                 }
 
                 disposedValue = true;

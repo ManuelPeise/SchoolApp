@@ -1,5 +1,4 @@
 ﻿using Data.Entities.Administration;
-using Data.Entities.User;
 using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
@@ -12,30 +11,33 @@ namespace Logic.Shared.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly ICurrentUserService _currentUserService;
-        private readonly IRepositoryBase<AppUserEntity> _userRepository;
+        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
+        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
         private readonly ILogService _logService;
 
         private bool disposedValue;
 
         public AuthenticationService(
             ICurrentUserService currentUserService,
-            IRepositoryBase<AppUserEntity> userRepository,
+            IApplicationUnitOfWork applicationUnitOfWork,
+            IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql,
             ILogService logService)
         {
             _currentUserService = currentUserService;
-            _userRepository = userRepository;
+            _applicationUnitOfWork = applicationUnitOfWork;
+            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
             _logService = logService;
         }
 
-        public async Task<ObservableCollection<ObservableUser>> GetUsers()
+        public async Task<ObservableCollection<ObservableUser>> GetUsersFromSqLite()
         {
             try
             {
-                var users = _userRepository.GetAll();
+                var users = _applicationUnitOfWork.UserRepository.GetAll();
 
                 if (!users.Any())
                 {
-                    await _logService.LogMessage(new LogEntryEntity
+                    await _logService.LogMessageSqLite(new LogEntryEntity
                     {
                         Message = "Could not find any users in database!",
                         ExceptionMessage = string.Empty,
@@ -62,7 +64,55 @@ namespace Logic.Shared.Services
             }
             catch (Exception exception)
             {
-                await _logService.LogMessage(new LogEntryEntity
+                await _logService.LogMessageSqLite(new LogEntryEntity
+                {
+                    Message = "Could not load users from database!",
+                    ExceptionMessage = exception.Message,
+                    Stacktrace = exception?.StackTrace ?? string.Empty,
+                    LogLevel = LogLevelEnum.Error
+                });
+
+                return new ObservableCollection<ObservableUser>();
+            }
+
+        }
+
+        public async Task<ObservableCollection<ObservableUser>> GetUsersFromMySql()
+        {
+            try
+            {
+                var users = _applicationUnitOfWorkMySql.UserRepository.GetAll();
+
+                if (!users.Any())
+                {
+                    await _logService.LogMessageMySql(new LogEntryEntity
+                    {
+                        Message = "Could not find any users in database!",
+                        ExceptionMessage = string.Empty,
+                        Stacktrace = string.Empty,
+                        LogLevel = LogLevelEnum.Info
+                    });
+
+                    return new ObservableCollection<ObservableUser>();
+                }
+
+                var userList = new List<ObservableUser> {
+                    new ObservableUser
+                    {
+                        Username = "Neuer Benutzer",
+                        UserRole = UserRoleEnum.None
+                    }
+                };
+
+                var observableUsers = users.Select(x => x.ToObservable()).ToList();
+
+                userList.AddRange(observableUsers);
+
+                return new ObservableCollection<ObservableUser>(userList);
+            }
+            catch (Exception exception)
+            {
+                await _logService.LogMessageMySql(new LogEntryEntity
                 {
                     Message = "Could not load users from database!",
                     ExceptionMessage = exception.Message,
@@ -79,7 +129,7 @@ namespace Logic.Shared.Services
         {
             try
             {
-                var user = _userRepository.Find(x => x.Username == userName);
+                var user = _applicationUnitOfWork.UserRepository.Find(x => x.Username == userName);
 
                 if (user == null)
                 {
@@ -108,7 +158,7 @@ namespace Logic.Shared.Services
             }
             catch (Exception exception)
             {
-                await _logService.LogMessage(new LogEntryEntity
+                await _logService.LogMessageSqLite(new LogEntryEntity
                 {
                     Message = "Authentication failed!",
                     ExceptionMessage = exception.Message,
@@ -135,7 +185,8 @@ namespace Logic.Shared.Services
             {
                 if (disposing)
                 {
-                    _userRepository.Dispose();
+                    _applicationUnitOfWork.Dispose();
+                    _applicationUnitOfWorkMySql.Dispose();
                     _logService.Dispose();
                 }
 

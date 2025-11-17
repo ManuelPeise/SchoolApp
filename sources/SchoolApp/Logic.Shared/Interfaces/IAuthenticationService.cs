@@ -6,7 +6,8 @@ namespace Logic.Shared.Interfaces
 {
     public interface IAuthenticationService: IDisposable
     {
-        Task<ObservableCollection<ObservableUser>> GetUsers();
+        Task<ObservableCollection<ObservableUser>> GetUsersFromSqLite();
+        Task<ObservableCollection<ObservableUser>> GetUsersFromMySql();
         Task<AuthenticationResult> Login(string userName, string password);
         void LogOut();
     }

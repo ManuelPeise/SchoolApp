@@ -6,7 +6,7 @@ namespace Data.Context
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<LogEntryEntity> LogTable { get; set; }
         public DbSet<AppUserEntity> AppUsers { get; set; }

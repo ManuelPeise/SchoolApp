@@ -1,20 +1,19 @@
-﻿using Data.Context;
+﻿using Data.ContextMysql;
 using Data.Entities;
 using Logic.Shared.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Shared
 {
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
-    where TEntity : AEntityBase
+    public class RepositoryBaseMysql<TEntity> : IRepositoryBaseMySql<TEntity> where TEntity : AEntityBase
     {
-        protected readonly AppDbContext _dbContext;
-
+        protected readonly MySqlDbContext _dbContext;
+      
         private bool _disposed;
 
-        public RepositoryBase(AppDbContext dbContext)
+        public RepositoryBaseMysql(MySqlDbContext dbContext)
         {
             _dbContext = dbContext;
+           
         }
 
         public List<TEntity> GetAll() => _dbContext.Set<TEntity>().ToList();
@@ -35,7 +34,7 @@ namespace Logic.Shared
         public async Task AddAsync(TEntity entity, Func<TEntity, bool>? predicate)
         {
             bool exists = predicate == null ? false : _dbContext.Set<TEntity>().Any(predicate);
-            
+
             if (!exists)
             {
                 await _dbContext.Set<TEntity>().AddAsync(entity);
@@ -63,6 +62,5 @@ namespace Logic.Shared
                 _disposed = true;
             }
         }
-
     }
 }

@@ -1,9 +1,7 @@
 ﻿using Data.Context;
 using Data.Entities.User;
 using Logic.Shared;
-using Microsoft.EntityFrameworkCore;
 using Shared.Enums;
-using System.Globalization;
 
 namespace Web.App.Bundels
 {
@@ -19,8 +17,9 @@ namespace Web.App.Bundels
                 {
                     var userName = app.Configuration["DefaultAdmin:UserName"];
                     var dateOfBirth = app.Configuration["DefaultAdmin:DateOfBirth"];
+                    var password = app.Configuration["DefaultAdmin:Password"];
 
-                    if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(dateOfBirth)) 
+                    if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(dateOfBirth) || string.IsNullOrEmpty(password)) 
                     {
                         throw new Exception("Username and date of birth could not be empty!");
                     }
@@ -29,7 +28,7 @@ namespace Web.App.Bundels
                     {
                         Id = 1,
                         Username = userName,
-                        Password = app.Configuration["DefaultAdmin:Password"],
+                        Password = password,
                         Salt = Guid.NewGuid().ToString(),
                         DateOfBirth = DateTime.Parse(dateOfBirth),
                         UserRole = UserRoleEnum.Admin,

@@ -1,8 +1,13 @@
 ﻿using Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Logic.Shared.Interfaces
 {
-    public interface IRepositoryBase<TEntity> : IDisposable where TEntity : AEntityBase
+    public interface IRepositoryBaseMySql<TEntity> : IDisposable where TEntity : AEntityBase
     {
         List<TEntity> GetAll();
         TEntity? Find(Func<TEntity, bool> predicate);

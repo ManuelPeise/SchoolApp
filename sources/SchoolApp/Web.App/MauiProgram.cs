@@ -9,6 +9,7 @@ using Web.App.Bundels;
 using Web.App.Services;
 using Web.App.Views.Authentication;
 using Logic.Shared;
+using Data.ContextMysql;
 
 namespace Web.App
 {
@@ -32,18 +33,33 @@ namespace Web.App
 
             builder.Services.AddDbContext<AppDbContext>(opt =>
             {
-                // var dbPath = Path.Combine(FileSystem.AppDataDirectory, "applicationDb.db");
-
                 var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "applicationDb.db");
                 opt.UseSqlite($"Data Source={dbPath}");
             });
 
+            builder.Services.AddDbContext<MySqlDbContext>(options =>
+            {
+                var connection = builder.Configuration.GetConnectionString("SchoolDb");
+
+                if (string.IsNullOrEmpty(connection))
+                {
+                    throw new Exception("Could not find connection string for mysql db.");
+                }
+
+                options.UseMySQL(connection);
+            });
+
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            builder.Services.AddScoped(typeof(IRepositoryBaseMySql<>), typeof(RepositoryBaseMysql<>));
+            builder.Services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork>();
+            builder.Services.AddScoped<IApplicationUnitOfWorkMySql, ApplicationUnitOfWorkMySql>();
             builder.Services.AddScoped<ILogService, LogService>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            
+          
+            
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
