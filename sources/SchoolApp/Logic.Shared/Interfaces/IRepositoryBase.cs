@@ -1,16 +1,16 @@
-﻿
-
-using Data.Entities;
+﻿using Data.Entities;
 
 namespace Logic.Shared.Interfaces
 {
-    public interface IRepositoryBase<T>: IDisposable where T : AEntityBase
+    public interface IRepositoryBase<TEntity> : IDisposable where TEntity : AEntityBase
     {
-        Task<List<T>> GetAllAsync();
-        Task<List<T>> GetAsync(Func<T, bool> predicate);
-        Task InsertAsync(T entity, Func<T, bool> predicate);
-        Task Update(T entity);
-        Task DeleteAsync(int id);
-        Task SaveChanges();
+        List<TEntity> GetAll();
+        TEntity? Find(Func<TEntity, bool> predicate);
+        List<TEntity> GetBy(Func<TEntity, bool> predicate);
+        Task<TEntity?> GetByIdAsync(int id);
+        Task AddAsync(TEntity entity, Func<TEntity, bool>? predicate);
+        void Update(TEntity entity);
+        Task RemoveAsync(int id);
+        Task SaveChangesAsync(string? currentUserName = null);
     }
 }

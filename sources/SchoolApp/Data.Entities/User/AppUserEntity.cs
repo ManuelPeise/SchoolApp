@@ -1,0 +1,13 @@
+﻿using Shared.Enums;
+
+namespace Data.Entities.User
+{
+    public class AppUserEntity: AEntityBase
+    {
+        public string Username { get; set; } = string.Empty;
+        public DateTime DateOfBirth { get; set; }
+        public string Salt { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public UserRoleEnum UserRole { get; set; }
+    }
+}

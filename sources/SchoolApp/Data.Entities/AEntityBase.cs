@@ -2,7 +2,7 @@
 
 namespace Data.Entities
 {
-    public class AEntityBase
+    public abstract class AEntityBase
     {
         [Key]
         public int Id { get; set; }

@@ -1,0 +1,37 @@
+Solution
+│
+├── Core (MAUI Root Project)        ← UI, Startup, AppShell
+│   ├── App.xaml / App.xaml.cs
+│   ├── MauiProgram.cs             ← DI + Startup
+│   ├── Pages/
+│   │   ├── MainPage.xaml
+│   │   ├── TopicPage.xaml
+│   │   └── VocabularyPage.xaml
+│   └── Resources/
+│       ├── Fonts
+│       ├── Images
+│       └── Styles
+│
+├── Shared (oder ViewModels-Projekt)
+│   └── ViewModels/
+│       ├── MainViewModel.cs
+│       ├── TopicViewModel.cs
+│       ├── VocabularyViewModel.cs
+│       └── UserViewModel.cs
+│
+├── Service
+│   └── Services/
+│       ├── UserService.cs
+│       ├── VocabularyService.cs
+│       └── TopicService.cs
+│
+├── Data
+│   ├── AppDbContext.cs
+│   ├── Entities/
+│   │   ├── User.cs
+│   │   ├── Topic.cs
+│   │   └── Vocabulary.cs
+│   └── Migrations/
+│
+└── Logic (optional, für Business Rules)
+    └── Example: QuizLogic.cs, ImportExportLogic.cs

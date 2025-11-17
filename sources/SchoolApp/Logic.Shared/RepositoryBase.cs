@@ -1,139 +1,101 @@
-﻿using Data.DbAccessLayer;
+﻿using Data.Context;
 using Data.Entities;
 using Logic.Shared.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic.Shared
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : AEntityBase
+    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
+    where TEntity : AEntityBase
     {
-        private bool disposedValue;
-        private SchoolContext _context;
-        
-        public RepositoryBase(SchoolContext context)
+        protected readonly AppDbContext _dbContext;
+        private readonly ICurrentUserService _currentUserService;
+        private bool _disposed;
+
+        public RepositoryBase(AppDbContext dbContext, ICurrentUserService currentUserService)
         {
-            _context = context;
+            _dbContext = dbContext;
+            _currentUserService = currentUserService;
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public List<TEntity> GetAll() => _dbContext.Set<TEntity>().ToList();
+
+        public TEntity? Find(Func<TEntity, bool> predicate)
         {
-            var entities = await _context.Set<T>().AsNoTracking().ToListAsync();
-            return entities;
+            return _dbContext.Set<TEntity>().FirstOrDefault(predicate);
         }
 
-        public async Task<List<T>> GetAsync(Func<T, bool> predicate)
+        public List<TEntity> GetBy(Func<TEntity, bool> predicate)
         {
-            var entities = await _context.Set<T>().AsNoTracking().ToListAsync();
+            return _dbContext.Set<TEntity>().Where(predicate).ToList();
+        }
+
+        public async Task<TEntity?> GetByIdAsync(int id)
+            => await _dbContext.Set<TEntity>().FindAsync(id);
+
+        public async Task AddAsync(TEntity entity, Func<TEntity, bool>? predicate)
+        {
+            bool exists = predicate == null ? false : _dbContext.Set<TEntity>().Any(predicate);
             
-            return entities.ToList();
-        }
-
-
-        public async Task InsertAsync(T entity, Func<T, bool> predicate)
-        {
-            var entities = await _context.Set<T>().AsNoTracking().ToListAsync();
-
-            if (!entities.Any()) 
-            { 
-                await _context.AddAsync(entity);
-                _context.Entry(entity).State = EntityState.Added;
-            }
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var entityToDelete = await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-
-            if(entityToDelete != null)
+            if (!exists)
             {
-                _context.Remove(entityToDelete);
-                _context.Entry(entityToDelete).State = EntityState.Deleted;
+                await _dbContext.Set<TEntity>().AddAsync(entity);
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public async Task Update(T entity)
-        {
-            var entityToUpdate = await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.Id);
+        public void Update(TEntity entity)
+            => _dbContext.Set<TEntity>().Update(entity);
 
-            if (entityToUpdate == null)
+        public async Task RemoveAsync(int id)
+        {
+            var entity = await _dbContext.Set<TEntity>().FindAsync(id);
+            if (entity != null)
             {
-                return;
+                _dbContext.Set<TEntity>().Remove(entity);
             }
-
-            _context.Attach(entityToUpdate);
-            _context.Entry(entityToUpdate).State = EntityState.Modified;
-
-            entityToUpdate = entity;
-            _context.Update(entityToUpdate);
-
         }
 
-        public async Task SaveChanges()
+        public async Task SaveChangesAsync(string? currentUserName = null)
         {
-            var modifiedEntries = _context.ChangeTracker
+            var userName = _currentUserService.CurrentUser?.Username ?? "System";
+
+            var modifiedEntries = _dbContext.ChangeTracker
                 .Entries()
-                .Where(x => x.State != EntityState.Unchanged);
-
-            var hasModifications = modifiedEntries.Any();
-
-            modifiedEntries = _context.ChangeTracker
-              .Entries()
-              .Where(x => x.State == EntityState.Modified ||
-              x.State == EntityState.Added);
+                .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
 
             foreach (var entry in modifiedEntries)
             {
-                if (entry != null)
+                if (entry.Entity is AEntityBase entity)
                 {
+                    var now = DateTime.UtcNow;
+
                     if (entry.State == EntityState.Added)
                     {
-                        ((AEntityBase)entry.Entity).CreatedBy = "";
-                        ((AEntityBase)entry.Entity).CreatedAt = DateTime.UtcNow;
-                        ((AEntityBase)entry.Entity).UpdatedBy = "";
-                        ((AEntityBase)entry.Entity).UpdatedAt = DateTime.UtcNow;
-
+                        entity.CreatedAt = now;
+                        entity.CreatedBy = userName;
+                        entity.UpdatedAt = now;
+                        entity.UpdatedBy = userName;
                     }
                     else if (entry.State == EntityState.Modified)
                     {
-                        ((AEntityBase)entry.Entity).UpdatedBy = "";
-                        ((AEntityBase)entry.Entity).UpdatedAt = DateTime.UtcNow;
+                        entity.UpdatedAt = now;
+                        entity.UpdatedBy = userName;
                     }
                 }
             }
 
-            if (hasModifications)
-            {
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        #region dispose
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-
-                disposedValue = true;
-            }
+            await _dbContext.SaveChangesAsync();
         }
 
         public void Dispose()
         {
-            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            if (!_disposed)
+            {
+                _dbContext.Dispose();
+                _disposed = true;
+            }
         }
 
-        #endregion
     }
 }

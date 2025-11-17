@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Web.App.Views.Authentication.AuthenticationPage"
+             xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
+             Title="AuthenticationPage">
+    <VerticalStackLayout Padding="20">
+
+        <Picker
+            Title="Select User"
+            ItemsSource="{Binding Users}"
+            ItemDisplayBinding="{Binding Username}"
+            SelectedItem="{Binding SelectedUser}" />
+        <Entry
+            Placeholder="Password"
+            IsPassword="True"
+            Text="{Binding Password}"
+            />
+
+        <Button
+            Text="Login"
+            Command="{Binding LoginCommand}"
+            IsEnabled="{Binding CanLogin}"/>
+    </VerticalStackLayout>
+</ContentPage>
