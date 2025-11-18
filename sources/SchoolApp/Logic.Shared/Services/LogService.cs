@@ -17,7 +17,7 @@ namespace Logic.Shared.Services
 
         public async Task<List<LogEntryEntity>> GetLogMessagesFromSqLite()
         {
-            return await Task.FromResult(_applicationUnitOfWork.LogRepository.GetAll());
+            return await _applicationUnitOfWork.LogRepository.GetAll();
         }
 
         public async Task<List<LogEntryEntity>> GetLogMessagesFromMySql()

@@ -58,6 +58,119 @@ namespace Data.ContextMysql.Migrations
                     b.ToTable("LogTable");
                 });
 
+            modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TopicDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TopicName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LearnTopics");
+                });
+
+            modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopic", b =>
+                {
+                    b.Property<int>("TopicId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("CanEdit")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("CanView")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Deny")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("TopicId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLearnTopics");
+                });
+
+            modelBuilder.Entity("Data.Entities.LearnContent.VocabularyEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Danish")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("English")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("German")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("Vocabularys");
+                });
+
             modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -98,6 +211,48 @@ namespace Data.ContextMysql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers");
+                });
+
+            modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopic", b =>
+                {
+                    b.HasOne("Data.Entities.LearnContent.LearnTopicEntity", "Topic")
+                        .WithMany("LearnTopics")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.User.AppUserEntity", "User")
+                        .WithMany("UserLearnTopics")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Data.Entities.LearnContent.VocabularyEntity", b =>
+                {
+                    b.HasOne("Data.Entities.LearnContent.LearnTopicEntity", "Topic")
+                        .WithMany("Vocabulary")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>
+                {
+                    b.Navigation("LearnTopics");
+
+                    b.Navigation("Vocabulary");
+                });
+
+            modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
+                {
+                    b.Navigation("UserLearnTopics");
                 });
 #pragma warning restore 612, 618
         }

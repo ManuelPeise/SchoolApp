@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Entities;
+using Logic.Shared.Models;
 
 namespace Logic.Shared.Interfaces
 {
-    public interface IUserAdministrationService
+    public interface IUserAdministrationService: IDisposable
     {
+        Task<DatabaseModel?> RegisterUser(UserRegistrationRequestModel model);
     }
 }

@@ -5,12 +5,14 @@ namespace Logic.Shared.Services
 {
     public class CurrentUserService : ICurrentUserService
     {
-        private AppUserEntity? _currentUser;
-        public AppUserEntity? CurrentUser { get => _currentUser; }
+        public AppUserEntity? CurrentUser { get; private set; }
 
-        public void SetCurrentUser(AppUserEntity? currentUser)
+        public event Action<AppUserEntity?>? CurrentUserChanged;
+
+        public void SetCurrentUser(AppUserEntity? user)
         {
-            _currentUser = currentUser;
+            CurrentUser = user;
+            CurrentUserChanged?.Invoke(user);
         }
     }
 }

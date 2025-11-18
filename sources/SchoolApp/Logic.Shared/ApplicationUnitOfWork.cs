@@ -1,6 +1,7 @@
 ﻿using Data.Context;
 using Data.Entities;
 using Data.Entities.Administration;
+using Data.Entities.LearnContent;
 using Data.Entities.User;
 using Logic.Shared.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +15,24 @@ namespace Logic.Shared
         private readonly ICurrentUserService _currentUserService;
         private readonly IRepositoryBase<AppUserEntity> _userRepository;
         private readonly IRepositoryBase<LogEntryEntity> _logRepository;
+        private readonly IRepositoryBase<LearnTopicEntity> _learnTopicRepository;
+        private readonly IRepositoryBase<UserLearnTopicEntity> _userLearnTopicRepository;
+        private readonly IRepositoryBase<VocabularyEntity> _vocabularyRepository;
 
         public IRepositoryBase<AppUserEntity> UserRepository => _userRepository ?? new RepositoryBase<AppUserEntity>(_dbContext);
         public IRepositoryBase<LogEntryEntity> LogRepository => _logRepository ?? new RepositoryBase<LogEntryEntity>(_dbContext);
+        public IRepositoryBase<LearnTopicEntity> LearnTopicRepository => _learnTopicRepository ?? new RepositoryBase<LearnTopicEntity>(_dbContext);
+        public IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository => _userLearnTopicRepository ?? new RepositoryBase<UserLearnTopicEntity>(_dbContext);
+        public IRepositoryBase<VocabularyEntity> VocabularyRepository => _vocabularyRepository ?? new RepositoryBase<VocabularyEntity>(_dbContext);
 
         public ApplicationUnitOfWork(AppDbContext dbContext, ICurrentUserService currentUserService)
         {
             _dbContext = dbContext;
             _userRepository = new RepositoryBase<AppUserEntity>(_dbContext);
             _logRepository = new RepositoryBase<LogEntryEntity>(_dbContext);
+            _learnTopicRepository = new RepositoryBase<LearnTopicEntity>(_dbContext);
+            _userLearnTopicRepository = new RepositoryBase<UserLearnTopicEntity>(_dbContext);
+            _vocabularyRepository =  new RepositoryBase<VocabularyEntity>(_dbContext);
             _currentUserService = currentUserService;
         }
 
@@ -77,5 +87,6 @@ namespace Logic.Shared
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
     }
 }

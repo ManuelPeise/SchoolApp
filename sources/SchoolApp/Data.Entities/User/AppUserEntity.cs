@@ -1,6 +1,5 @@
 ﻿using Data.Entities.LearnContent;
 using Shared.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities.User
 {
@@ -11,8 +10,6 @@ namespace Data.Entities.User
         public string Salt { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public UserRoleEnum UserRole { get; set; }
-        public int LernTopicId { get; set; }
-        [ForeignKey("LernTopicId")]
-        public ICollection<UserLearnTopic> UserLearnTopics { get; set; } = new List<UserLearnTopic>();
+        public List<UserLearnTopicEntity> UserLearnTopics { get; set; } = [];
     }
 }

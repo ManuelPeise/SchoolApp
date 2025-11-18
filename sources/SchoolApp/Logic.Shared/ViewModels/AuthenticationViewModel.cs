@@ -2,55 +2,87 @@
 using CommunityToolkit.Mvvm.Input;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
-using System.Collections.ObjectModel;
+using Shared.Models;
 
 namespace Logic.Shared.ViewModels
 {
     public partial class AuthenticationViewModel : BaseViewModel
     {
+        private ICurrentUserService _currentUserService;
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
+        private readonly IApiHttpClient<LoginRequestModel, AuthenticationResult> _apiHttpClient;
 
         [ObservableProperty]
-        private ObservableCollection<ObservableUser> _users = new();
-
-        [ObservableProperty]
-        private ObservableUser _SelectedUser = new();
+        private string _userName = string.Empty;
 
         [ObservableProperty]
         private string _password = string.Empty;
-        
+
         [ObservableProperty]
         private bool _canLogin = false;
 
         public AuthenticationViewModel(
             IAuthenticationService authenticationService,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            ICurrentUserService currentUserService,
+            IApiHttpClient<LoginRequestModel, AuthenticationResult> apiHttpClient)
         {
             _authenticationService = authenticationService;
             _navigationService = navigationService;
-            _ = InitializeAsync();
+            _currentUserService = currentUserService;
+            _apiHttpClient = apiHttpClient;
         }
 
         [RelayCommand]
         private async Task LoginAsync()
         {
-            if(IsBusy)
+            if (IsBusy)
             {
                 return;
             }
 
             SetBusy(true);
 
-            if(SelectedUser == null)
+            if (UserName == null || Password == null)
             {
                 SetBusy(false);
                 return;
             }
-            var authenticationResult = await _authenticationService.Login(SelectedUser.Username, Password);
 
-            if (authenticationResult.Success)
+            var userFromSqLite = await _authenticationService.GetUserFromSqLite(UserName);
+
+            AuthenticationResult? authenticationResult;
+
+            if (userFromSqLite != null)
             {
+                authenticationResult = await _authenticationService.LoginLocalAsync(new LoginRequestModel
+                {
+                    UserName = UserName,
+                    Password = Password
+                });
+            }
+            else
+            {
+                if(_apiHttpClient == null)
+                {
+                    return;
+                }
+
+                var model = new LoginRequestModel
+                {
+                    UserName = UserName,
+                    Password = Password
+                };
+
+
+                authenticationResult = await _apiHttpClient.PostAsync("/test", model);
+            }
+
+            if (authenticationResult != null && authenticationResult.Success)
+            {
+                _currentUserService.SetCurrentUser(authenticationResult.User);
+
                 await _navigationService.NavigateToAsync("///home");
             }
             else
@@ -67,23 +99,14 @@ namespace Logic.Shared.ViewModels
             await _navigationService.NavigateToAsync("///register");
         }
 
-        partial void OnSelectedUserChanged(ObservableUser value)
+        partial void OnUserNameChanged(string value)
         {
-            UpdateCanLogin(!string.IsNullOrEmpty(SelectedUser.Username) && !string.IsNullOrEmpty(Password));
+            UpdateCanLogin(!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password));
         }
 
         partial void OnPasswordChanged(string value)
         {
-            UpdateCanLogin(!string.IsNullOrEmpty(SelectedUser.Username) && !string.IsNullOrEmpty(value));
-        }
-
-        private async Task InitializeAsync()
-        {
-            SetBusy(true);
-
-            Users = await _authenticationService.GetUsersFromSqLite();
-            SelectedUser = Users.First();
-            SetBusy(false);
+            UpdateCanLogin(!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(value));
         }
 
         private void UpdateCanLogin(bool value)

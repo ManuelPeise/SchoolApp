@@ -1,11 +1,13 @@
-﻿namespace Web.App
+﻿using Logic.Shared.ViewModels;
+
+namespace Web.App
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        public AppShell(AppShellViewModel vm)
         {
             InitializeComponent();
-            
+            BindingContext = vm;
         }
     }
 }

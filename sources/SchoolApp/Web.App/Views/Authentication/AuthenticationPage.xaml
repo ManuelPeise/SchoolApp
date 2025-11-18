@@ -46,11 +46,11 @@
                         HorizontalOptions="Center"
                         TextColor="{StaticResource PrimaryColor}" />
 
-                    <!-- Actual Picker -->
-                    <Picker
-                        ItemsSource="{Binding Users}"
-                        ItemDisplayBinding="{Binding Username}"
-                        SelectedItem="{Binding SelectedUser}" />
+                    <!-- USERNAME ENTRY -->
+                    <Entry
+                         Placeholder="Passwort"
+                         Text="{Binding UserName}"
+                         IsPassword="True" />
 
                     <!-- PASSWORD ENTRY -->
                     <Entry
@@ -61,21 +61,21 @@
                     <Grid Grid.Row="1" Grid.Column="2" ColumnDefinitions="*,*" ColumnSpacing="20">
                         <!-- LOGIN BUTTON -->
                         <Button
-                            Text="Anmelden"
-                            Command="{Binding LoginCommand}"
-                            IsEnabled="{Binding CanLogin}"
-                            BackgroundColor="Blue"
-                            FontSize="{OnPlatform WinUI=20, Android= 14}"
-                            TextColor="White"
-                            Grid.Column="0"/>
-                        <!-- LOGIN BUTTON -->
-                        <Button
                              Text="Registrieren"
                              Command="{Binding NavigateToRegisterCommand}"
                              BackgroundColor="Blue"
                              FontSize="{OnPlatform WinUI=20, Android= 14}"
                              TextColor="White"
-                             Grid.Column="1"/>       
+                             Grid.Column="0"/>
+                        <!-- LOGIN BUTTON -->
+                        <Button
+                             Text="Anmelden"
+                             Command="{Binding LoginCommand}"
+                             IsEnabled="{Binding CanLogin}"
+                             BackgroundColor="Blue"
+                             FontSize="{OnPlatform WinUI=20, Android= 14}"
+                             TextColor="White"
+                             Grid.Column="1"/>
                     </Grid>
                 </VerticalStackLayout>
             </Border>

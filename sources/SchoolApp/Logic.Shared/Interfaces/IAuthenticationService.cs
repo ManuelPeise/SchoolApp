@@ -8,7 +8,9 @@ namespace Logic.Shared.Interfaces
     {
         Task<ObservableCollection<ObservableUser>> GetUsersFromSqLite();
         Task<ObservableCollection<ObservableUser>> GetUsersFromMySql();
-        Task<AuthenticationResult> Login(string userName, string password);
+        Task<AuthenticationResult> LoginAsync(LoginRequestModel model);
+        Task<AuthenticationResult> LoginLocalAsync(LoginRequestModel model);
+        Task<ObservableUser?> GetUserFromSqLite(string username);
         void LogOut();
     }
 }

@@ -30,6 +30,11 @@ namespace Logic.Shared
 
         public async Task<TEntity?> GetByIdAsync(int id)
             => await _dbContext.Set<TEntity>().FindAsync(id);
+        
+        public async Task<int?> GetEntityId(Func<TEntity, bool> predicate)
+        {
+            return await Task.FromResult(_dbContext.Set<TEntity>().Where(predicate).FirstOrDefault()?.Id);
+        }
 
         public async Task AddAsync(TEntity entity, Func<TEntity, bool>? predicate)
         {

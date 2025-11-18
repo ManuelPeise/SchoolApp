@@ -10,7 +10,6 @@ namespace Logic.Shared.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly ICurrentUserService _currentUserService;
         private readonly IApplicationUnitOfWork _applicationUnitOfWork;
         private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
         private readonly ILogService _logService;
@@ -18,12 +17,10 @@ namespace Logic.Shared.Services
         private bool disposedValue;
 
         public AuthenticationService(
-            ICurrentUserService currentUserService,
             IApplicationUnitOfWork applicationUnitOfWork,
             IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql,
             ILogService logService)
         {
-            _currentUserService = currentUserService;
             _applicationUnitOfWork = applicationUnitOfWork;
             _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
             _logService = logService;
@@ -33,7 +30,7 @@ namespace Logic.Shared.Services
         {
             try
             {
-                var users = _applicationUnitOfWork.UserRepository.GetAll();
+                var users = await _applicationUnitOfWork.UserRepository.GetAll();
 
                 if (!users.Any())
                 {
@@ -125,11 +122,20 @@ namespace Logic.Shared.Services
 
         }
 
-        public async Task<AuthenticationResult> Login(string userName, string password)
+        public async Task<ObservableUser?> GetUserFromSqLite(string username)
+        {
+            var user = await _applicationUnitOfWork.UserRepository.Find(x => x.Username.ToLower() == username.ToLower());
+
+            if(user == null) { return null; }
+
+            return user.ToObservable();
+        }
+
+        public async Task<AuthenticationResult> LoginAsync(LoginRequestModel model)
         {
             try
             {
-                var user = _applicationUnitOfWork.UserRepository.Find(x => x.Username == userName);
+                var user = _applicationUnitOfWorkMySql.UserRepository.Find(x => x.Username == model.UserName);
 
                 if (user == null)
                 {
@@ -140,7 +146,7 @@ namespace Logic.Shared.Services
                     };
                 }
 
-                if (user.Password != PasswordHelper.HashPassword(password, user.Salt))
+                if (user.Password != PasswordHelper.HashPassword(model.Password, user.Salt))
                 {
                     return new AuthenticationResult
                     {
@@ -149,11 +155,61 @@ namespace Logic.Shared.Services
                     };
                 }
 
-                _currentUserService.SetCurrentUser(user);
+                return new AuthenticationResult
+                {
+                    Success = true,
+                    User = user
+                };
+            }
+            catch (Exception exception)
+            {
+                await _logService.LogMessageSqLite(new LogEntryEntity
+                {
+                    Message = "Authentication failed!",
+                    ExceptionMessage = exception.Message,
+                    Stacktrace = exception?.StackTrace ?? string.Empty,
+                    LogLevel = LogLevelEnum.Info
+                });
 
                 return new AuthenticationResult
                 {
-                    Success = true
+                    Success = false,
+                    ErrorMessage = "Login failed!"
+                };
+            }
+        }
+
+        public async Task<AuthenticationResult> LoginLocalAsync(LoginRequestModel model)
+        {
+            try
+            {
+                var user = await _applicationUnitOfWork.UserRepository.Find(x => x.Username == model.UserName);
+
+                if (user == null)
+                {
+                    return new AuthenticationResult
+                    {
+                        Success = false,
+                        ErrorMessage = "Could not find user for authentication."
+                        
+                    };
+                }
+
+                if (user.Password != PasswordHelper.HashPassword(model.Password, user.Salt))
+                {
+                    return new AuthenticationResult
+                    {
+                        Success = false,
+                        ErrorMessage = "Could not authenticate user check username and password."
+                    };
+                }
+
+                
+
+                return new AuthenticationResult
+                {
+                    Success = true,
+                    User = user
                 };
             }
             catch (Exception exception)
@@ -176,7 +232,7 @@ namespace Logic.Shared.Services
 
         public void LogOut()
         {
-            _currentUserService?.SetCurrentUser(null);
+            throw new NotImplementedException();
         }
 
         protected virtual void Dispose(bool disposing)

@@ -35,7 +35,9 @@ namespace Web.App
 
             builder.Services.AddDbContext<AppDbContext>(opt =>
             {
-                var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "applicationDb.db");
+                var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                
+                var dbPath = Path.Combine(folderPath, "applicationDb.db");
                 opt.UseSqlite($"Data Source={dbPath}");
             });
 
@@ -55,6 +57,7 @@ namespace Web.App
             builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            builder.Services.AddScoped(typeof(IApiHttpClient<,>), typeof(ApiHttpClient<,>));
             builder.Services.AddScoped(typeof(IRepositoryBaseMySql<>), typeof(RepositoryBaseMysql<>));
             builder.Services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork>();
             builder.Services.AddScoped<IApplicationUnitOfWorkMySql, ApplicationUnitOfWorkMySql>();
@@ -67,11 +70,17 @@ namespace Web.App
 
             // Views and view models
 
+            builder.Services.AddTransient<AppShellViewModel>();
+            builder.Services.AddTransient<AppShell>();
+
             builder.Services.AddTransient<AuthenticationViewModel>();
             builder.Services.AddTransient<AuthenticationPage>();
             
             builder.Services.AddTransient<RegistrationViewModel>();
             builder.Services.AddTransient<RegisterPage>();
+
+            builder.Services.AddTransient<MainViewModel>();
+            builder.Services.AddTransient<MainPage>();
 
             builder.ConfigureLifecycleEvents(events =>
             {

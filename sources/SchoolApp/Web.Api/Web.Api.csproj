@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data.ContextMysql\Data.ContextMysql.csproj" />
+    <ProjectReference Include="..\Logic.Administration\Logic.Administration.csproj" />
     <ProjectReference Include="..\Logic.Shared\Logic.Shared.csproj" />
     <ProjectReference Include="..\Service.Api\Service.Api.csproj" />
   </ItemGroup>
