@@ -61,6 +61,12 @@ namespace Logic.Shared.ViewModels
             SetBusy(false);
         }
 
+        [RelayCommand]
+        private async Task NavigateToRegisterAsync()
+        {
+            await _navigationService.NavigateToAsync("///register");
+        }
+
         partial void OnSelectedUserChanged(ObservableUser value)
         {
             UpdateCanLogin(!string.IsNullOrEmpty(SelectedUser.Username) && !string.IsNullOrEmpty(Password));
@@ -76,7 +82,7 @@ namespace Logic.Shared.ViewModels
             SetBusy(true);
 
             Users = await _authenticationService.GetUsersFromSqLite();
-
+            SelectedUser = Users.First();
             SetBusy(false);
         }
 

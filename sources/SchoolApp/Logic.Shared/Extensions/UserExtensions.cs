@@ -17,7 +17,7 @@ namespace Logic.Shared.Extensions
             };
         }
 
-        public static AppUserEntity ToObservable(this ObservableUser user)
+        public static AppUserEntity ToEntity(this ObservableUser user)
         {
             return new AppUserEntity
             {

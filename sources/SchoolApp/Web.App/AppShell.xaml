@@ -5,22 +5,26 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Web.App"
     xmlns:auth="clr-namespace:Web.App.Views.Authentication"
+    Shell.NavBarHasShadow="False"
+    Shell.BackgroundColor="Transparent"
+    Shell.NavBarIsVisible="False"
     Title="School App">
-
-    <Shell.FlyoutHeader>
-        <Grid Padding="20">
-            <Label Text="My App"
-                   FontSize="24"
-                   HorizontalOptions="Center" />
-        </Grid>
-    </Shell.FlyoutHeader>
 
     <!-- Side menu pages -->
     <FlyoutItem Title="Home" Route="home">
         <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Authentication" Route="auth">
-        <ShellContent ContentTemplate="{DataTemplate auth:AuthenticationPage}" />
+    <FlyoutItem Title="Login" Route="account">
+        <ShellContent 
+            Title="Login"
+            Route="login"
+            ContentTemplate="{DataTemplate auth:AuthenticationPage}" />
     </FlyoutItem>
+    
+    <!-- pages without flyout item-->
+    <ShellContent 
+      Route="register"
+      ContentTemplate="{DataTemplate auth:RegisterPage}" />
+
 </Shell>

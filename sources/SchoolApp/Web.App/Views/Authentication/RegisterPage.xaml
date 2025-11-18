@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Web.App.Views.Authentication.RegisterPage"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
+             BackgroundColor="Blue">
+    <Grid
+     RowDefinitions="*,Auto,*"
+     ColumnDefinitions="*,Auto,*">
+
+        <!-- Centering container -->
+        <Grid Grid.Row="1" Grid.Column="1">
+
+            <!-- Card Container -->
+            <Border
+             Stroke="#cccccc"
+             StrokeThickness="1"
+             BackgroundColor="WhiteSmoke"
+             Padding="30"
+             StrokeShape="RoundRectangle 12"
+             Shadow="5"
+             HorizontalOptions="Center"
+             VerticalOptions="Center"
+            >
+
+                <!-- Force max width on desktop -->
+                <Border.WidthRequest>
+                    <OnIdiom
+                     x:TypeArguments="x:Double"
+                     Phone="350"
+                     Tablet="400"
+                     Desktop="{OnPlatform WinUI=600}" />
+                </Border.WidthRequest>
+
+                <VerticalStackLayout Spacing="30">
+                    <Image
+                      Source="dotnet_bot.png"
+                      HeightRequest="140"
+                      WidthRequest="400"
+                      Aspect="AspectFit"
+                      SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+                    <Label
+                     Text="Registrierung"
+                     FontSize="28"
+                     HorizontalOptions="Center"
+                     TextColor="{StaticResource PrimaryColor}" />
+
+                    <!-- Username -->
+                    <Entry
+                      Placeholder="Benutzername"
+                      Text="{Binding UserName}"
+                      IsPassword="False" />
+
+                    <!-- DateOfBirth -->
+                    <Grid 
+                        RowDefinitions="Auto"
+                        ColumnDefinitions="Auto,*"
+                        ColumnSpacing="50"
+                        RowSpacing="8">
+                        <Label
+                            Text="Geburtsdatum"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            VerticalOptions="Center"/>
+
+                        <DatePicker
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Date="{Binding DateOfBirth}"
+                            MaximumDate="{x:Static sys:DateTime.Today}"
+                            Format="dd.MM.yyyy"
+                            WidthRequest="400"
+                          
+                            />
+                    </Grid>
+
+                    <!-- PASSWORD ENTRY -->
+                    <Entry
+                     Placeholder="Passwort"
+                     Text="{Binding Password}"
+                     IsPassword="True" />
+
+                    <Entry
+                      Placeholder="Passwort (Wiederholung)"
+                      Text="{Binding PasswordReplication }"
+                      IsPassword="True" />
+
+                    <Grid Grid.Row="1" Grid.Column="2" ColumnDefinitions="*,*" ColumnSpacing="20">
+                        <!-- LOGIN BUTTON -->
+                        <Button
+                         Text="Zurück zum Login"
+                         Command="{Binding NavigateToLoginCommand}"
+                         IsEnabled="{Binding CanLogin}"
+                         BackgroundColor="Blue"
+                         FontSize="{OnPlatform WinUI=20, Android= 14}"
+                         TextColor="White"
+                         Grid.Column="0"/>
+                        <!-- LOGIN BUTTON -->
+                        <Button
+                          Text="Registrieren"
+                          Command="{Binding RegisterUserCommand}"
+                          BackgroundColor="Blue"
+                          FontSize="{OnPlatform WinUI=20, Android= 14}"
+                          TextColor="White"
+                          Grid.Column="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

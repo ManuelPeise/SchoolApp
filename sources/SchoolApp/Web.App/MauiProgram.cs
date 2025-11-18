@@ -1,15 +1,17 @@
 ﻿using Data.Context;
+using Data.ContextMysql;
+using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Services;
 using Logic.Shared.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
 using Web.App.Bundels;
 using Web.App.Services;
 using Web.App.Views.Authentication;
-using Logic.Shared;
-using Data.ContextMysql;
+using WinRT.Interop;
 
 namespace Web.App
 {
@@ -63,10 +65,18 @@ namespace Web.App
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-            // Views
+            // Views and view models
 
             builder.Services.AddTransient<AuthenticationViewModel>();
             builder.Services.AddTransient<AuthenticationPage>();
+            
+            builder.Services.AddTransient<RegistrationViewModel>();
+            builder.Services.AddTransient<RegisterPage>();
+
+            builder.ConfigureLifecycleEvents(events =>
+            {
+
+            });
 
             var app = builder.Build();
 

@@ -51,7 +51,7 @@ namespace Logic.Shared.Services
                 var userList = new List<ObservableUser> {
                     new ObservableUser
                     {
-                        Username = "Neuer Benutzer",
+                        Username = "Benutzer wählen",
                         UserRole = UserRoleEnum.None
                     }
                 };
