@@ -16,7 +16,7 @@ namespace Data.Context
 
             modelBuilder.Entity<UserLearnTopicEntity>()
                 .HasOne(e => e.Topic)
-                .WithMany(e => e.LearnTopics)
+                .WithMany(e => e.UserLearnTopics)
                 .HasForeignKey(e => e.TopicId);
 
             modelBuilder.Entity<UserLearnTopicEntity>()

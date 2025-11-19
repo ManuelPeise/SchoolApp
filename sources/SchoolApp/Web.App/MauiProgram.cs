@@ -1,5 +1,7 @@
-﻿using Data.Context;
+﻿using CommunityToolkit.Maui;
+using Data.Context;
 using Data.ContextMysql;
+using Logic.Administration;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Services;
@@ -11,7 +13,6 @@ using Microsoft.Maui.LifecycleEvents;
 using Web.App.Bundels;
 using Web.App.Services;
 using Web.App.Views.Authentication;
-using WinRT.Interop;
 
 namespace Web.App
 {
@@ -53,6 +54,7 @@ namespace Web.App
                 options.UseMySQL(connection);
             });
 
+            builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
@@ -62,6 +64,7 @@ namespace Web.App
             builder.Services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork>();
             builder.Services.AddScoped<IApplicationUnitOfWorkMySql, ApplicationUnitOfWorkMySql>();
             builder.Services.AddScoped<ILogService, LogService>();
+            builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             
           
             
@@ -90,7 +93,7 @@ namespace Web.App
             var app = builder.Build();
 
             DatabaseMigrator.Migrate(app);
-            DefaultAdminSeed.Seed(app);
+            //DefaultAdminSeed.Seed(app);
             return app;
         }
     }

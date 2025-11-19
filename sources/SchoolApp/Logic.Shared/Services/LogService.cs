@@ -22,7 +22,7 @@ namespace Logic.Shared.Services
 
         public async Task<List<LogEntryEntity>> GetLogMessagesFromMySql()
         {
-            return await Task.FromResult(_applicationUnitOfWorkMySql.LogRepository.GetAll());
+            return await _applicationUnitOfWorkMySql.LogRepository.GetAll();
         }
 
         public async Task LogMessageSqLite(LogEntryEntity entity)

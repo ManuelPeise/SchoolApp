@@ -1,16 +1,13 @@
-﻿using Logic.Shared.Models;
-using Shared.Models;
-using System.Collections.ObjectModel;
+﻿using Data.Entities;
+using Logic.Shared.Models.Authentication;
 
 namespace Logic.Shared.Interfaces
 {
     public interface IAuthenticationService: IDisposable
     {
-        Task<ObservableCollection<ObservableUser>> GetUsersFromSqLite();
-        Task<ObservableCollection<ObservableUser>> GetUsersFromMySql();
-        Task<AuthenticationResult> LoginAsync(LoginRequestModel model);
-        Task<AuthenticationResult> LoginLocalAsync(LoginRequestModel model);
-        Task<ObservableUser?> GetUserFromSqLite(string username);
+        Task<LoginResult> LoginAsync(LoginRequestModel model);
+        Task<LoginResult> LoginLocalAsync(LoginRequestModel model);
+
         void LogOut();
     }
 }

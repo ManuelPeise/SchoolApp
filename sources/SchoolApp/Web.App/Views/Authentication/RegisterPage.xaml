@@ -19,7 +19,6 @@
              BackgroundColor="WhiteSmoke"
              Padding="30"
              StrokeShape="RoundRectangle 12"
-             Shadow="5"
              HorizontalOptions="Center"
              VerticalOptions="Center"
             >
@@ -44,7 +43,7 @@
                      Text="Registrierung"
                      FontSize="28"
                      HorizontalOptions="Center"
-                     TextColor="{StaticResource PrimaryColor}" />
+                     TextColor="Black" />
 
                     <!-- Username -->
                     <Entry
@@ -91,7 +90,7 @@
                         <Button
                          Text="Zurück zum Login"
                          Command="{Binding NavigateToLoginCommand}"
-                         IsEnabled="{Binding CanLogin}"
+                         IsEnabled="{Binding CanRegister}"
                          BackgroundColor="Blue"
                          FontSize="{OnPlatform WinUI=20, Android= 14}"
                          TextColor="White"

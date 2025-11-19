@@ -90,7 +90,7 @@ namespace Data.ContextMysql.Migrations
                     b.ToTable("LearnTopics");
                 });
 
-            modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopic", b =>
+            modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>
                 {
                     b.Property<int>("TopicId")
                         .HasColumnType("int");
@@ -187,7 +187,14 @@ namespace Data.ContextMysql.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -213,10 +220,10 @@ namespace Data.ContextMysql.Migrations
                     b.ToTable("AppUsers");
                 });
 
-            modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopic", b =>
+            modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>
                 {
                     b.HasOne("Data.Entities.LearnContent.LearnTopicEntity", "Topic")
-                        .WithMany("LearnTopics")
+                        .WithMany("UserLearnTopics")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -245,7 +252,7 @@ namespace Data.ContextMysql.Migrations
 
             modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>
                 {
-                    b.Navigation("LearnTopics");
+                    b.Navigation("UserLearnTopics");
 
                     b.Navigation("Vocabulary");
                 });

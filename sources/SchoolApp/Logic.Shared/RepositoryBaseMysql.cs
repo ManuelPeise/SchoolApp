@@ -1,6 +1,8 @@
 ﻿using Data.ContextMysql;
 using Data.Entities;
 using Logic.Shared.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Logic.Shared
 {
@@ -16,24 +18,26 @@ namespace Logic.Shared
            
         }
 
-        public List<TEntity> GetAll() => _dbContext.Set<TEntity>().ToList();
+        public async Task<List<TEntity>> GetAll() => await _dbContext.Set<TEntity>().ToListAsync();
 
-        public TEntity? Find(Func<TEntity, bool> predicate)
+        public async Task<TEntity?> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return _dbContext.Set<TEntity>().FirstOrDefault(predicate);
+            return await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
-        public List<TEntity> GetBy(Func<TEntity, bool> predicate)
+        public async Task<List<TEntity>> GetBy(Expression<Func<TEntity, bool>> predicate)
         {
-            return _dbContext.Set<TEntity>().Where(predicate).ToList();
+            return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity?> GetByIdAsync(int id)
             => await _dbContext.Set<TEntity>().FindAsync(id);
-        
-        public async Task<int?> GetEntityId(Func<TEntity, bool> predicate)
+
+        public async Task<int?> GetEntityId(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Task.FromResult(_dbContext.Set<TEntity>().Where(predicate).FirstOrDefault()?.Id);
+            var entry = await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
+
+            return entry?.Id;
         }
 
         public async Task AddAsync(TEntity entity, Func<TEntity, bool>? predicate)

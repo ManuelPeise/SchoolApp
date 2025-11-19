@@ -185,7 +185,14 @@ namespace Data.Context.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -214,7 +221,7 @@ namespace Data.Context.Migrations
             modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>
                 {
                     b.HasOne("Data.Entities.LearnContent.LearnTopicEntity", "Topic")
-                        .WithMany("LearnTopics")
+                        .WithMany("UserLearnTopics")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -243,7 +250,7 @@ namespace Data.Context.Migrations
 
             modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>
                 {
-                    b.Navigation("LearnTopics");
+                    b.Navigation("UserLearnTopics");
 
                     b.Navigation("Vocabulary");
                 });

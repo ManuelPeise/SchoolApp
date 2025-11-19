@@ -11,23 +11,23 @@
     xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
     Title="School App">
 
+    <ShellContent 
+       Title="Login"
+       Route="login"
+       ContentTemplate="{DataTemplate auth:AuthenticationPage}" />
+
+    <ShellContent
+       Title="Register"
+       Route="register"
+       ContentTemplate="{DataTemplate auth:RegisterPage}" />
+ 
     <!-- Side menu pages -->
     <FlyoutItem Title="Home" Route="home">
         <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Login" Route="login" FlyoutDisplayOptions="AsSingleItem">
-        <ShellContent 
-            Title="Login"
-            Route="login"
-            ContentTemplate="{DataTemplate auth:AuthenticationPage}" />
-    </FlyoutItem>
 
-    <FlyoutItem Title="Register" Route="register" FlyoutDisplayOptions="AsSingleItem">
-        <ShellContent
-            Title="Register"
-            Route="register"
-            ContentTemplate="{DataTemplate auth:RegisterPage}" />
-    </FlyoutItem>
+   
+
     <!-- pages without flyout item-->
 </Shell>

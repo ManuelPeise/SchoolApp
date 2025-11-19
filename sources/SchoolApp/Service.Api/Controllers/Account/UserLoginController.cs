@@ -1,7 +1,6 @@
 ﻿using Logic.Shared.Interfaces;
-using Logic.Shared.Models;
+using Logic.Shared.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Models;
 
 namespace Service.Api.Controllers.Account
 {
@@ -14,11 +13,13 @@ namespace Service.Api.Controllers.Account
            _authenticationService = authenticationService;
         }
 
+        //api/userloginC/login
         [HttpPost(Name = "Login")]
-        public async Task<AuthenticationResult> Login(LoginRequestModel model)
+        public async Task<LoginResult> Login([FromBody]LoginRequestModel model)
         {
             return await _authenticationService.LoginAsync(model);
         }
+
 
         [HttpPost(Name = "Logout")]
         public async Task Logout()

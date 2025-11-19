@@ -8,20 +8,20 @@ namespace Logic.Shared.Services
 {
     public class DbSycronisationService : IDbSycronisationService
     {
-        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
+        //private readonly IApplicationUnitOfWork _applicationUnitOfWork;
         private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
         private bool disposedValue;
 
         public DbSycronisationService(IApplicationUnitOfWork applicationUnitOfWork, IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql)
         {
-            _applicationUnitOfWork = applicationUnitOfWork;
+
             _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
         }
 
         public async Task<DatabaseModel?> GetMySqlDbModel(List<int> userIds)
         {
-            var userEntities = await _applicationUnitOfWork.UserRepository.GetBy(x => userIds.Contains(x.Id));
-            
+            var userEntities = await _applicationUnitOfWorkMySql.UserRepository.GetBy(x => userIds.Contains(x.Id));
+
 
             if (!userEntities.Any())
             {
@@ -38,9 +38,9 @@ namespace Logic.Shared.Services
                 return null;
             }
 
-            var topics = _applicationUnitOfWorkMySql.LearnTopicRepository.GetAll();
-            var userTopics = _applicationUnitOfWorkMySql.UserLearnTopicRepository.GetBy(x => userIds.Contains(x.UserId));
-            var vocabulary = _applicationUnitOfWorkMySql.VocabularyRepository.GetAll();
+            var topics = await _applicationUnitOfWorkMySql.LearnTopicRepository.GetAll();
+            var userTopics = await _applicationUnitOfWorkMySql.UserLearnTopicRepository.GetBy(x => userIds.Contains(x.UserId));
+            var vocabulary = await _applicationUnitOfWorkMySql.VocabularyRepository.GetAll();
 
             return new DatabaseModel
             {
@@ -55,7 +55,7 @@ namespace Logic.Shared.Services
         public async Task CreateUserRelatedMySqlTableEntries(int userId)
         {
             var hasChanges = false;
-            var topics = _applicationUnitOfWorkMySql.LearnTopicRepository.GetAll();
+            var topics = await _applicationUnitOfWorkMySql.LearnTopicRepository.GetAll();
 
             foreach (var topic in topics)
             {
@@ -86,7 +86,7 @@ namespace Logic.Shared.Services
             {
                 if (disposing)
                 {
-                    _applicationUnitOfWork.Dispose();
+                    //_applicationUnitOfWork.Dispose();
                     _applicationUnitOfWorkMySql.Dispose();
                 }
 

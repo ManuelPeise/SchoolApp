@@ -1,4 +1,4 @@
-﻿namespace Logic.Shared.Models
+﻿namespace Logic.Shared.Models.Authentication
 {
     public class LoginRequestModel
     {

@@ -60,6 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.11" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.11">
@@ -88,6 +89,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Resources\Styles\Colors.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ViewComponents\LoadingOverlay.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Authentication\AuthenticationPage.xaml">

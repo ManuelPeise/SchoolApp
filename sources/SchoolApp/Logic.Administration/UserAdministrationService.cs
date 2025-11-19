@@ -1,5 +1,4 @@
-﻿using Data.Entities;
-using Data.Entities.Administration;
+﻿using Data.Entities.Administration;
 using Logic.Shared;
 using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
@@ -16,8 +15,8 @@ namespace Logic.Administration
         private bool disposedValue;
 
         public UserAdministrationService(
-            IApplicationUnitOfWork applicationUnitOfWork, 
-            IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql, 
+            IApplicationUnitOfWork applicationUnitOfWork,
+            IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql,
             IDbSycronisationService dbSycronisationService)
         {
             _applicationUnitOfWork = applicationUnitOfWork;
@@ -26,11 +25,11 @@ namespace Logic.Administration
         }
 
 
-        public async Task<DatabaseModel?> RegisterUser(UserRegistrationRequestModel model)
+        public async Task<ResponseModelBase> RegisterUser(UserRegistrationRequestModel model)
         {
             try
             {
-                if (model.User == null) 
+                if (model.User == null)
                 {
                     await _applicationUnitOfWorkMySql.LogRepository.AddAsync(new LogEntryEntity
                     {
@@ -42,7 +41,11 @@ namespace Logic.Administration
 
                     await _applicationUnitOfWorkMySql.SaveChangesAsync();
 
-                    return null;
+                    return new ResponseModelBase
+                    {
+                        Success = false,
+                        Message = "Could not register user, user is null"
+                    };
                 }
 
                 var entity = model.User.ToEntity();
@@ -58,7 +61,7 @@ namespace Logic.Administration
                 var userId = await _applicationUnitOfWorkMySql.UserRepository
                     .GetEntityId(x => x.Username == model.User.Username && x.DateOfBirth == entity.DateOfBirth);
 
-                if(userId == null)
+                if (userId == null)
                 {
                     await _applicationUnitOfWorkMySql.LogRepository.AddAsync(new LogEntryEntity
                     {
@@ -70,12 +73,20 @@ namespace Logic.Administration
 
                     await _applicationUnitOfWorkMySql.SaveChangesAsync();
 
-                    return null;
+                    return new ResponseModelBase
+                    {
+                        Success = false,
+                        Message = "Could not find user in from database"
+                    };
                 }
 
                 await _dbSycronisationService.CreateUserRelatedMySqlTableEntries((int)userId);
 
-                return await _dbSycronisationService.GetMySqlDbModel(model.UserIds);
+                 return new ResponseModelBase
+                {
+                    Success = true,
+                    Message = "Registration successful!"
+                };
             }
             catch (Exception exception)
             {
@@ -89,7 +100,11 @@ namespace Logic.Administration
 
                 await _applicationUnitOfWorkMySql.SaveChangesAsync();
 
-                return null;
+                return new ResponseModelBase
+                {
+                    Success = false,
+                    Message = "User registration failed."
+                }; ;
             }
         }
 

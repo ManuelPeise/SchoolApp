@@ -21,7 +21,7 @@ namespace Logic.Shared
             _httpClient = new HttpClient
             {
                 BaseAddress = !string.IsNullOrEmpty(apiBaseAddress) ?
-                new Uri(apiBaseAddress) : throw new ArgumentNullException(nameof(apiBaseAddress)),
+                new Uri(apiBaseAddress, UriKind.Absolute) : throw new ArgumentNullException(nameof(apiBaseAddress)),
             };
         }
 
@@ -76,7 +76,6 @@ namespace Logic.Shared
                 var requestMessage = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    Version = HttpVersion.Version20,
                     RequestUri = new Uri(url, UriKind.Relative),
                     Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json")
                 };

@@ -5,12 +5,12 @@ namespace Logic.Shared.ViewModels
     public partial class BaseViewModel : ObservableObject
     {
         [ObservableProperty]
-        private bool isBusy;
+        private bool _isLoading;
 
-        protected bool SetBusy(bool value)
+        protected void SetIsLoading(bool value)
         {
-            IsBusy = value;
-            return value;
+            IsLoading = value;
+           
         }
     }
 }

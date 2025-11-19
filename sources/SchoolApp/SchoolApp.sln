@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.ContextMysql", "Data.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Administration", "Logic.Administration\Logic.Administration.csproj", "{65771B8F-9852-487E-A7D4-8A3F7C28A2DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.UserService", "Logic.UserService\Logic.UserService.csproj", "{B1F202A0-35B9-41C8-A420-4D3D68B167D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{65771B8F-9852-487E-A7D4-8A3F7C28A2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65771B8F-9852-487E-A7D4-8A3F7C28A2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65771B8F-9852-487E-A7D4-8A3F7C28A2DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1F202A0-35B9-41C8-A420-4D3D68B167D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1F202A0-35B9-41C8-A420-4D3D68B167D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1F202A0-35B9-41C8-A420-4D3D68B167D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1F202A0-35B9-41C8-A420-4D3D68B167D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{BC93E001-6A21-47D0-87F3-391586B7BE65} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{95DB317E-25C5-4DAD-B63B-30B6ED8E39F9} = {5CF4B5F5-C463-4A18-A52B-C7ED901DE30C}
 		{65771B8F-9852-487E-A7D4-8A3F7C28A2DA} = {C93E264E-D549-4DDD-AD54-00AD49EC39F6}
+		{B1F202A0-35B9-41C8-A420-4D3D68B167D4} = {C93E264E-D549-4DDD-AD54-00AD49EC39F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F2BE4EC-476D-44A4-8167-B5CC52B0A259}
