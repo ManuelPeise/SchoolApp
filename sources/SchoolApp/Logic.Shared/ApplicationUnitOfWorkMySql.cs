@@ -13,12 +13,14 @@ namespace Logic.Shared
         private bool disposedValue;
         private readonly MySqlDbContext _mySqlDbContext;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IRepositoryBaseMySql<FamilyEntity> _familyRepository;
         private readonly IRepositoryBaseMySql<AppUserEntity> _userRepository;
         private readonly IRepositoryBaseMySql<LogEntryEntity> _logRepository;
         private readonly IRepositoryBaseMySql<LearnTopicEntity> _learnTopicRepository;
         private readonly IRepositoryBaseMySql<UserLearnTopicEntity> _userLearnTopicRepository;
         private readonly IRepositoryBaseMySql<VocabularyEntity> _vocabularyRepository;
 
+        public IRepositoryBaseMySql<FamilyEntity> FamilyRepository => _familyRepository ?? new RepositoryBaseMysql<FamilyEntity>(_mySqlDbContext);
         public IRepositoryBaseMySql<AppUserEntity> UserRepository => _userRepository ?? new RepositoryBaseMysql<AppUserEntity>(_mySqlDbContext);
         public IRepositoryBaseMySql<LogEntryEntity> LogRepository => _logRepository ?? new RepositoryBaseMysql<LogEntryEntity>(_mySqlDbContext);
         public IRepositoryBaseMySql<LearnTopicEntity> LearnTopicRepository => _learnTopicRepository ?? new RepositoryBaseMysql<LearnTopicEntity>(_mySqlDbContext);

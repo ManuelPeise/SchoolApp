@@ -184,11 +184,18 @@ namespace Data.ContextMysql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("FamilyId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -217,7 +224,41 @@ namespace Data.ContextMysql.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FamilyId");
+
                     b.ToTable("AppUsers");
+                });
+
+            modelBuilder.Entity("Data.Entities.User.FamilyEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FamilyDisplayName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FamilyName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Families");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>
@@ -250,6 +291,15 @@ namespace Data.ContextMysql.Migrations
                     b.Navigation("Topic");
                 });
 
+            modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
+                {
+                    b.HasOne("Data.Entities.User.FamilyEntity", "Family")
+                        .WithMany("FamilyMembers")
+                        .HasForeignKey("FamilyId");
+
+                    b.Navigation("Family");
+                });
+
             modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>
                 {
                     b.Navigation("UserLearnTopics");
@@ -260,6 +310,11 @@ namespace Data.ContextMysql.Migrations
             modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
                 {
                     b.Navigation("UserLearnTopics");
+                });
+
+            modelBuilder.Entity("Data.Entities.User.FamilyEntity", b =>
+                {
+                    b.Navigation("FamilyMembers");
                 });
 #pragma warning restore 612, 618
         }

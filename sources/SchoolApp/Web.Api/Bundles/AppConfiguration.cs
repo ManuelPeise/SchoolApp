@@ -1,12 +1,15 @@
 ﻿using Data.Context;
 using Data.ContextMysql;
+using Data.Entities.User;
 using Logic.Administration;
+using Logic.Import;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Enums;
 using Shared.Models;
 using System.Text;
 
@@ -52,6 +55,7 @@ namespace Web.Api.Bundles
             builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IJsonFileImporter, JsonFileImporter>();
         }
 
         internal static void ConfigureDatabases(WebApplicationBuilder builder)
@@ -81,6 +85,42 @@ namespace Web.Api.Bundles
             {
                 db.Database.Migrate();
             }
+
+            if(!db.AppUsers.Where(x => x.UserRole == UserRoleEnum.SystemAdmin).Any()){
+
+                var salt = Guid.NewGuid().ToString();
+
+                db.AppUsers.Add(new AppUserEntity
+                {
+                    Id = 1,
+                    FamilyId = null,
+                    LastName = "SystemAdmin",
+                    Username = "Admin",
+                    DateOfBirth = null,
+                    UserRole = UserRoleEnum.SystemAdmin,
+                    Salt = salt,
+                    Password = HashPassword("Pass@word", salt),
+                    RefreshToken = string.Empty,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = "System"
+                });
+
+                db.SaveChanges();
+            }
+        }
+
+        public static string HashPassword(string? password, string salt)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException(nameof(password));
+            }
+
+            var passwordBytes = Encoding.UTF8.GetBytes(password).ToList();
+            passwordBytes.AddRange(Encoding.UTF8.GetBytes(salt));
+
+            return Convert.ToBase64String(passwordBytes.ToArray());
         }
     }
 }

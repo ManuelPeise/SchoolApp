@@ -21,31 +21,23 @@ namespace Web.App
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
-
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
-
+            builder.UseMauiApp<App>().ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            }).UseMauiCommunityToolkit();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
             builder.Services.AddDbContext<AppDbContext>(opt =>
             {
                 var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                
                 var dbPath = Path.Combine(folderPath, "applicationDb.db");
                 opt.UseSqlite($"Data Source={dbPath}");
             });
-
             builder.Services.AddDbContext<MySqlDbContext>(options =>
             {
                 var connection = builder.Configuration.GetConnectionString("SchoolDb");
-
                 if (string.IsNullOrEmpty(connection))
                 {
                     throw new Exception("Could not find connection string for mysql db.");
@@ -53,45 +45,31 @@ namespace Web.App
 
                 options.UseMySQL(connection);
             });
-
             builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            builder.Services.AddScoped(typeof(IApiHttpClient<,>), typeof(ApiHttpClient<,>));
+            builder.Services.AddScoped(typeof(IApiHttpClient<, >), typeof(ApiHttpClient<, >));
             builder.Services.AddScoped(typeof(IRepositoryBaseMySql<>), typeof(RepositoryBaseMysql<>));
             builder.Services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork>();
             builder.Services.AddScoped<IApplicationUnitOfWorkMySql, ApplicationUnitOfWorkMySql>();
             builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
-            
-          
-            
-
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
             // Views and view models
-
             builder.Services.AddTransient<AppShellViewModel>();
             builder.Services.AddTransient<AppShell>();
-
             builder.Services.AddTransient<AuthenticationViewModel>();
             builder.Services.AddTransient<AuthenticationPage>();
-            
             builder.Services.AddTransient<RegistrationViewModel>();
             builder.Services.AddTransient<RegisterPage>();
-
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<MainPage>();
-
             builder.ConfigureLifecycleEvents(events =>
             {
-
             });
-
             var app = builder.Build();
-
             DatabaseMigrator.Migrate(app);
             //DefaultAdminSeed.Seed(app);
             return app;

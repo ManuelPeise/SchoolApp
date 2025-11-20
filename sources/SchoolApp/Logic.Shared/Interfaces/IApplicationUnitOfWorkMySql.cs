@@ -6,6 +6,7 @@ namespace Logic.Shared.Interfaces
 {
     public interface IApplicationUnitOfWorkMySql : IDisposable
     {
+        IRepositoryBaseMySql<FamilyEntity> FamilyRepository { get; }
         IRepositoryBaseMySql<AppUserEntity> UserRepository { get; }
         IRepositoryBaseMySql<LogEntryEntity> LogRepository { get; }
         IRepositoryBaseMySql<LearnTopicEntity> LearnTopicRepository { get; }

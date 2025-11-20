@@ -1,5 +1,4 @@
-﻿using Data.Entities;
-using Logic.Shared;
+﻿using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
 
@@ -14,8 +13,7 @@ namespace Logic.Administration
         
         public AuthenticationService(
             IApplicationUnitOfWork applicationUnitOfWork, 
-            IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql, 
-            IDbSycronisationService dbSycronisationService,
+            IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql,
             IJwtTokenService jwtTokenService)
         {
             _applicationUnitOfWork = applicationUnitOfWork;
@@ -131,6 +129,7 @@ namespace Logic.Administration
                 {
                     _applicationUnitOfWork.Dispose();
                     _applicationUnitOfWorkMySql.Dispose();
+                    _jwtTokenService.Dispose();
                 }
 
                 disposedValue = true;

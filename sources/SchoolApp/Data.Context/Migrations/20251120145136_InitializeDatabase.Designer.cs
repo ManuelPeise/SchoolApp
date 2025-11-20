@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Context.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251119193929_InitializeDatabase")]
+    [Migration("20251120145136_InitializeDatabase")]
     partial class InitializeDatabase
     {
         /// <inheritdoc />
@@ -188,8 +188,15 @@ namespace Data.Context.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("FamilyId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -218,7 +225,41 @@ namespace Data.Context.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FamilyId");
+
                     b.ToTable("AppUsers");
+                });
+
+            modelBuilder.Entity("Data.Entities.User.FamilyEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FamilyDisplayName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FamilyName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FamilyEntity");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>
@@ -251,6 +292,15 @@ namespace Data.Context.Migrations
                     b.Navigation("Topic");
                 });
 
+            modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
+                {
+                    b.HasOne("Data.Entities.User.FamilyEntity", "Family")
+                        .WithMany("FamilyMembers")
+                        .HasForeignKey("FamilyId");
+
+                    b.Navigation("Family");
+                });
+
             modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>
                 {
                     b.Navigation("UserLearnTopics");
@@ -261,6 +311,11 @@ namespace Data.Context.Migrations
             modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
                 {
                     b.Navigation("UserLearnTopics");
+                });
+
+            modelBuilder.Entity("Data.Entities.User.FamilyEntity", b =>
+                {
+                    b.Navigation("FamilyMembers");
                 });
 #pragma warning restore 612, 618
         }

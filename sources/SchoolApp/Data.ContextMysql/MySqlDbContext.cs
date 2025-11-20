@@ -14,6 +14,11 @@ namespace Data.ContextMysql
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AppUserEntity>()
+                .HasOne(x => x.Family)
+                .WithMany(x => x.FamilyMembers)
+                .HasForeignKey(x => x.FamilyId);
+
             modelBuilder.Entity<UserLearnTopicEntity>()
                  .HasKey(e => new { e.TopicId, e.UserId });
 
@@ -26,9 +31,12 @@ namespace Data.ContextMysql
                 .HasOne(e => e.User)
                 .WithMany(e => e.UserLearnTopics)
                 .HasForeignKey(e => e.UserId);
+
+            
         }
 
         public DbSet<LogEntryEntity> LogTable { get; set; }
+        public DbSet<FamilyEntity> Families { get; set; }
         public DbSet<AppUserEntity> AppUsers { get; set; }
         public DbSet<LearnTopicEntity> LearnTopics { get; set; }
         public DbSet<UserLearnTopicEntity> UserLearnTopics { get; set; }

@@ -1,5 +1,3 @@
-using Data.ContextMysql;
-using Microsoft.EntityFrameworkCore;
 using Web.Api.Bundles;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,5 +24,4 @@ app.MapControllers();
 
 AppConfiguration.EnsureDatabaseMigrated(app);
 
-//await DefaultUserSeed.SeedAdminAsync(db, config);
 app.Run();

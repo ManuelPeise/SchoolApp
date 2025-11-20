@@ -11,6 +11,7 @@ namespace Logic.Shared.Interfaces
         Task<TEntity?> GetByIdAsync(int id);
         Task<int?> GetEntityId(Expression<Func<TEntity, bool>> predicate);
         Task AddAsync(TEntity entity, Func<TEntity, bool>? predicate);
+        Task AddRangeAsync(List<TEntity> entities);
         void Update(TEntity entity);
         Task RemoveAsync(int id);
     }

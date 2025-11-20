@@ -47,8 +47,12 @@ namespace Logic.Shared
             if (!exists)
             {
                 await _dbContext.Set<TEntity>().AddAsync(entity);
-                await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task AddRangeAsync(List<TEntity> entities)
+        {
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities);
         }
 
         public void Update(TEntity entity)

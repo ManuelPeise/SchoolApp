@@ -10,5 +10,6 @@ namespace Data.Entities.LearnContent
         public int TopicId { get; set; }
         [ForeignKey("TopicId")]
         public LearnTopicEntity Topic { get; set; } = null!;
+
     }
 }

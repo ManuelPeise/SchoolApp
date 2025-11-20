@@ -8,7 +8,7 @@ namespace Logic.Shared.Models
         [ObservableProperty]
         private string _username = string.Empty;
         [ObservableProperty]
-        private DateTime _dateOfBirth;
+        private DateTime? _dateOfBirth;
         [ObservableProperty]
         private string _salt = string.Empty;
         [ObservableProperty]
