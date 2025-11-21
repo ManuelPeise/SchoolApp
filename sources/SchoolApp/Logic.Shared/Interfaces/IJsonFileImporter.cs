@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Shared.Models;
+using Shared.Models.Import;
 
 namespace Logic.Shared.Interfaces
 {
     public interface IJsonFileImporter: IDisposable
     {
-        Task ImportFamilyJsonTemplate(IFormFile file);
-        Task ImportVocabularyFile(IFormFile file);
+        Task<ResponseBaseModel> ImportJson(FileImportModel model);
     }
 }

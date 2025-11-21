@@ -18,25 +18,12 @@ public partial class LoadingOverlay : ContentView
 
     private static void OnIsLoadingChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        var control = (LoadingOverlay)bindable;
-        bool isVisible = (bool)newValue;
-
-        control.IsVisible = isVisible;
-
-        if (isVisible)
-        {
-            control.FadeTo(1, 200, Easing.CubicIn);
-        }
-        else
-        {
-            control.FadeTo(0, 200, Easing.CubicOut);
-        }
+        var view = (LoadingOverlay)bindable;
+        view.IsVisible = (bool)newValue;
     }
 
     public LoadingOverlay()
     {
         InitializeComponent();
-        IsVisible = false;
-        Opacity = 0;
     }
 }

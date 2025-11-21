@@ -1,4 +1,5 @@
 ﻿using Data.Entities.User;
+using Shared.Enums;
 
 namespace Logic.Shared.Interfaces
 {
@@ -9,7 +10,10 @@ namespace Logic.Shared.Interfaces
         event Action<AppUserEntity?>? CurrentUserChanged;
         event Action<string?>? JwtTokenChanged;
 
-        void SetCurrentUser(AppUserEntity? user);
-        void SetJwtToken(string? jwtToken);
+        void SetCurrentUser(AppUserEntity? user, string? jwtToken);
+       
+        bool IsAuthenticated();
+        bool UserIsInRole(UserRoleEnum userRole);
+        
     }
 }

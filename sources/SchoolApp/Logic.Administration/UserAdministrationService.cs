@@ -4,6 +4,7 @@ using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
 using Shared.Enums;
+using Shared.Models;
 
 namespace Logic.Administration
 {
@@ -25,7 +26,7 @@ namespace Logic.Administration
         }
 
 
-        public async Task<ResponseModelBase> RegisterUser(UserRegistrationRequestModel model)
+        public async Task<ResponseBaseModel> RegisterUser(UserRegistrationRequestModel model)
         {
             try
             {
@@ -41,7 +42,7 @@ namespace Logic.Administration
 
                     await _applicationUnitOfWorkMySql.SaveChangesAsync();
 
-                    return new ResponseModelBase
+                    return new ResponseBaseModel
                     {
                         Success = false,
                         Message = "Could not register user, user is null"
@@ -73,7 +74,7 @@ namespace Logic.Administration
 
                     await _applicationUnitOfWorkMySql.SaveChangesAsync();
 
-                    return new ResponseModelBase
+                    return new ResponseBaseModel
                     {
                         Success = false,
                         Message = "Could not find user in from database"
@@ -82,8 +83,8 @@ namespace Logic.Administration
 
                 await _dbSycronisationService.CreateUserRelatedMySqlTableEntries((int)userId);
 
-                 return new ResponseModelBase
-                {
+                 return new ResponseBaseModel
+                 {
                     Success = true,
                     Message = "Registration successful!"
                 };
@@ -100,7 +101,7 @@ namespace Logic.Administration
 
                 await _applicationUnitOfWorkMySql.SaveChangesAsync();
 
-                return new ResponseModelBase
+                return new ResponseBaseModel
                 {
                     Success = false,
                     Message = "User registration failed."

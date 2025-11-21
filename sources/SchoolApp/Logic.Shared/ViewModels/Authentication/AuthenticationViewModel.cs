@@ -4,7 +4,7 @@ using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
 using Shared.Models;
 
-namespace Logic.Shared.ViewModels
+namespace Logic.Shared.ViewModels.Authentication
 {
     public partial class AuthenticationViewModel : BaseViewModel
     {
@@ -105,17 +105,22 @@ namespace Logic.Shared.ViewModels
                     _applicationUnitOfWork.UserRepository.Update(userFromSqLite);
                 }
 
-               
+
                 await _applicationUnitOfWork.SaveChangesAsync();
 
-                _currentUserService.SetCurrentUser(userFromSqLite);
-                _currentUserService.SetJwtToken(authResult.JwtToken);
+                if (!string.IsNullOrWhiteSpace(authResult.JwtToken))
+                {
+                    _currentUserService.SetCurrentUser(userFromSqLite, authResult.JwtToken);
 
-                await _navigationService.NavigateToAsync("///home");
+                    await _navigationService.NavigateToAsync("///home");
+                }
+                else
+                {
+                    _currentUserService.SetCurrentUser(null, null);
+                }
             }
             finally
             {
-                // Ensure loading flag is always reset
                 SetIsLoading(false);
             }
         }

@@ -53,7 +53,7 @@ namespace Data.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs");
+                    b.ToTable("LogTable");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>
@@ -182,7 +182,7 @@ namespace Data.Context.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("FamilyId")
@@ -256,7 +256,7 @@ namespace Data.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FamilyEntity");
+                    b.ToTable("Families");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>

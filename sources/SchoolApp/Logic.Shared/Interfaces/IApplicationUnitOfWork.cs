@@ -6,6 +6,7 @@ namespace Logic.Shared.Interfaces
 {
     public interface IApplicationUnitOfWork: IDisposable
     {
+        IRepositoryBase<FamilyEntity> FamilyRepository { get; }
         IRepositoryBase<AppUserEntity> UserRepository { get; }
         IRepositoryBase<LogEntryEntity> LogRepository { get; }
         IRepositoryBase<LearnTopicEntity> LearnTopicRepository { get; }

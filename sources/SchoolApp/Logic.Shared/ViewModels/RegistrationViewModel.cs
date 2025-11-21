@@ -2,13 +2,14 @@
 using CommunityToolkit.Mvvm.Input;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
+using Shared.Models;
 
 namespace Logic.Shared.ViewModels
 {
     public partial class RegistrationViewModel : BaseViewModel
     {
         private readonly INavigationService _navigationService;
-        private readonly IApiHttpClient<UserRegistrationRequestModel, ResponseModelBase> _httpClient;
+        private readonly IApiHttpClient<UserRegistrationRequestModel, ResponseBaseModel> _httpClient;
 
         [ObservableProperty]
         private ObservableUser _user = new();
@@ -26,7 +27,7 @@ namespace Logic.Shared.ViewModels
         [ObservableProperty]
         private bool _canRegister = false;
 
-        public RegistrationViewModel(INavigationService navigationService, IApiHttpClient<UserRegistrationRequestModel, ResponseModelBase> httpClient)
+        public RegistrationViewModel(INavigationService navigationService, IApiHttpClient<UserRegistrationRequestModel, ResponseBaseModel> httpClient)
         {
             _navigationService = navigationService;
             _httpClient = httpClient;

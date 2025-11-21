@@ -6,12 +6,15 @@ using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Services;
 using Logic.Shared.ViewModels;
+using Logic.Shared.ViewModels.Administration;
+using Logic.Shared.ViewModels.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using Web.App.Bundels;
 using Web.App.Services;
+using Web.App.Views.Administration;
 using Web.App.Views.Authentication;
 
 namespace Web.App
@@ -57,21 +60,27 @@ namespace Web.App
             builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
             // Views and view models
             builder.Services.AddTransient<AppShellViewModel>();
             builder.Services.AddTransient<AppShell>();
+            builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<AuthenticationViewModel>();
             builder.Services.AddTransient<AuthenticationPage>();
             builder.Services.AddTransient<RegistrationViewModel>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
+            builder.Services.AddTransient<JsonImportAssistentPage>();
+
             builder.ConfigureLifecycleEvents(events =>
             {
             });
             var app = builder.Build();
+
             DatabaseMigrator.Migrate(app);
-            //DefaultAdminSeed.Seed(app);
+           
             return app;
         }
     }

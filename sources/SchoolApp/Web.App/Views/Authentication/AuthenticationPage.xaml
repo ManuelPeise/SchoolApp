@@ -1,83 +1,97 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Web.App.Views.Authentication.AuthenticationPage"
-             xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
-             xmlns:controls="clr-namespace:Web.App.ViewComponents"
-             BackgroundColor="Blue"
-             Title="AuthenticationPage">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Web.App.Views.Authentication.AuthenticationPage"
+    xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    BackgroundColor="{StaticResource ColorBackground}"
+    Title="AuthenticationPage">
+
     <Grid
         RowDefinitions="*,Auto,*"
         ColumnDefinitions="*,Auto,*">
-        <!-- Centering container -->
+
+        <!-- Center container -->
         <Grid Grid.Row="1" Grid.Column="1">
-            <!-- Card Container -->
+
             <Border
-                Stroke="#cccccc"
-                StrokeThickness="1"
-                BackgroundColor="WhiteSmoke"
+    Grid.Row="1"
+    Grid.Column="1"
+    Padding="0"
+    StrokeThickness="0"
+    BackgroundColor="{StaticResource ColorSurface}"
+    StrokeShape="RoundRectangle 20">
+                <!-- Card container (dark surface) -->
+                <Grid
+                BackgroundColor="{StaticResource ColorSurface}"
                 Padding="30"
-                StrokeShape="RoundRectangle 12"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-               >
+                MaximumWidthRequest="{OnIdiom Phone=350, Tablet=400, Desktop=600}">
 
-                <!-- Force max width on desktop -->
-                <Border.WidthRequest>
-                    <OnIdiom
-                        x:TypeArguments="x:Double"
-                        Phone="350"
-                        Tablet="400"
-                        Desktop="{OnPlatform WinUI=600}" />
-                </Border.WidthRequest>
+                    <Grid>
+                        <VerticalStackLayout Spacing="30">
 
-                <VerticalStackLayout Spacing="30">
-                    <Image
-                         Source="dotnet_bot.png"
-                         HeightRequest="140"
-                         WidthRequest="400"
-                         Aspect="AspectFit"
-                         SemanticProperties.Description="dot net bot in a hovercraft number nine" />
-                    <Label
-                        Text="Anmeldung"
-                        FontSize="28"
-                        HorizontalOptions="Center"
-                        TextColor="Black" />
+                            <Image
+                            Source="dotnet_bot.png"
+                            HeightRequest="140"
+                            WidthRequest="400"
+                            Aspect="AspectFit" />
 
-                    <!-- USERNAME ENTRY -->
-                    <Entry
-                         Placeholder="Benutzername"
-                         Text="{Binding UserName}"
-                         IsPassword="False" />
+                            <Label
+                            Text="Anmeldung"
+                            FontSize="28"
+                            HorizontalOptions="Center"
+                            TextColor="{StaticResource ColorTextPrimary}" />
 
-                    <!-- PASSWORD ENTRY -->
-                    <Entry
-                        Placeholder="Passwort"
-                        Text="{Binding Password}"
-                        IsPassword="True" />
+                            <!-- USERNAME ENTRY -->
+                            <controls:BorderlessEntry
+                                FontSize="{OnPlatform WinUI=16,Android=12}"
+                                Placeholder="Benutzername eingeben"
+                                Text="{Binding UserName}"
+                           />
 
-                    <Grid Grid.Row="1" Grid.Column="2" ColumnDefinitions="*,*" ColumnSpacing="20">
-                        <!-- LOGIN BUTTON -->
-                        <Button
-                             Text="Registrieren"
-                             Command="{Binding NavigateToRegisterCommand}"
-                             BackgroundColor="Blue"
-                             FontSize="{OnPlatform WinUI=20, Android= 14}"
-                             TextColor="White"
-                             Grid.Column="0"/>
-                        <!-- LOGIN BUTTON -->
-                        <Button
-                             Text="Anmelden"
-                             Command="{Binding LoginCommand}"
-                             IsEnabled="{Binding CanLogin}"
-                             BackgroundColor="Blue"
-                             FontSize="{OnPlatform WinUI=20, Android= 14}"
-                             TextColor="White"
-                             Grid.Column="1"/>
+                            <!-- PASSWORD ENTRY -->
+                            <controls:BorderlessEntry
+                                FontSize="{OnPlatform WinUI=16,Android=12}"
+                                Placeholder="Passwort"
+                                IsPassword="True"
+                                Text="{Binding Password}"
+                                />
+
+                            <!-- Buttons -->
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+
+                                <!-- REGISTER -->
+                                <Button
+                                Text="Registrieren"
+                                Command="{Binding NavigateToRegisterCommand}"
+                                BackgroundColor="{StaticResource ColorAccent}"
+                                TextColor="{StaticResource ColorTextPrimary}"
+                                FontSize="{OnPlatform WinUI=20, Android=14}"
+                                Grid.Column="0" />
+
+                                <!-- LOGIN -->
+                                <Button
+                                Text="Anmelden"
+                                Command="{Binding LoginCommand}"
+                                IsEnabled="{Binding CanLogin}"
+                                BackgroundColor="{StaticResource ColorAccent}"
+                                TextColor="{StaticResource ColorTextPrimary}"
+                                FontSize="{OnPlatform WinUI=20, Android=14}"
+                                Grid.Column="1" />
+                            </Grid>
+
+                        </VerticalStackLayout>
+
+                        <!-- Loading overlay -->
+                        <controls:LoadingOverlay IsLoading="{Binding IsLoading}"
+                                             HorizontalOptions="Fill"
+                                             VerticalOptions="Fill" />
                     </Grid>
-                </VerticalStackLayout>
+                </Grid>
             </Border>
-            <controls:LoadingOverlay IsLoading="{Binding IsLoading}"/>
         </Grid>
     </Grid>
 </ContentPage>

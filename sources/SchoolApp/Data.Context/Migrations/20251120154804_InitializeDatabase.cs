@@ -12,7 +12,7 @@ namespace Data.Context.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "FamilyEntity",
+                name: "Families",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -26,7 +26,7 @@ namespace Data.Context.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FamilyEntity", x => x.Id);
+                    table.PrimaryKey("PK_Families", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,7 +48,7 @@ namespace Data.Context.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Logs",
+                name: "LogTable",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -64,7 +64,7 @@ namespace Data.Context.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logs", x => x.Id);
+                    table.PrimaryKey("PK_LogTable", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,7 +75,7 @@ namespace Data.Context.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Salt = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     UserRole = table.Column<int>(type: "INTEGER", nullable: false),
@@ -91,9 +91,9 @@ namespace Data.Context.Migrations
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AppUsers_FamilyEntity_FamilyId",
+                        name: "FK_AppUsers_Families_FamilyId",
                         column: x => x.FamilyId,
-                        principalTable: "FamilyEntity",
+                        principalTable: "Families",
                         principalColumn: "Id");
                 });
 
@@ -175,7 +175,7 @@ namespace Data.Context.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Logs");
+                name: "LogTable");
 
             migrationBuilder.DropTable(
                 name: "UserLearnTopics");
@@ -190,7 +190,7 @@ namespace Data.Context.Migrations
                 name: "LearnTopics");
 
             migrationBuilder.DropTable(
-                name: "FamilyEntity");
+                name: "Families");
         }
     }
 }

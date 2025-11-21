@@ -1,4 +1,5 @@
 ﻿using Data.Context;
+using Data.ContextMysql;
 using Data.Entities;
 using Data.Entities.Administration;
 using Data.Entities.LearnContent;
@@ -13,12 +14,15 @@ namespace Logic.Shared
         private bool disposedValue;
         private readonly AppDbContext _dbContext;
         private readonly ICurrentUserService _currentUserService;
+
+        private readonly IRepositoryBase<FamilyEntity> _familyRepository;
         private readonly IRepositoryBase<AppUserEntity> _userRepository;
         private readonly IRepositoryBase<LogEntryEntity> _logRepository;
         private readonly IRepositoryBase<LearnTopicEntity> _learnTopicRepository;
         private readonly IRepositoryBase<UserLearnTopicEntity> _userLearnTopicRepository;
         private readonly IRepositoryBase<VocabularyEntity> _vocabularyRepository;
 
+        public IRepositoryBase<FamilyEntity> FamilyRepository => _familyRepository ?? new RepositoryBase<FamilyEntity>(_dbContext);
         public IRepositoryBase<AppUserEntity> UserRepository => _userRepository ?? new RepositoryBase<AppUserEntity>(_dbContext);
         public IRepositoryBase<LogEntryEntity> LogRepository => _logRepository ?? new RepositoryBase<LogEntryEntity>(_dbContext);
         public IRepositoryBase<LearnTopicEntity> LearnTopicRepository => _learnTopicRepository ?? new RepositoryBase<LearnTopicEntity>(_dbContext);
@@ -28,6 +32,7 @@ namespace Logic.Shared
         public ApplicationUnitOfWork(AppDbContext dbContext, ICurrentUserService currentUserService)
         {
             _dbContext = dbContext;
+            _familyRepository = new RepositoryBase<FamilyEntity>(_dbContext);
             _userRepository = new RepositoryBase<AppUserEntity>(_dbContext);
             _logRepository = new RepositoryBase<LogEntryEntity>(_dbContext);
             _learnTopicRepository = new RepositoryBase<LearnTopicEntity>(_dbContext);

@@ -7,7 +7,7 @@
             "name": "MyFamilyAdmin",
             "dateOfBirth": "1980-04-20T00:00:00",
             "password": "Pass@word",
-            "userrole": "localAdmin",
+            "userrole": 1,
             "isActive": true
         }, {
             "id": 0,
@@ -15,7 +15,7 @@
             "name": "MyUser1",
             "dateOfBirth": "1980-04-20T00:00:00",
             "password": "Pass@word",
-            "userrole": "user",
+            "userrole": 0,
             "isActive": true
         }
     ]

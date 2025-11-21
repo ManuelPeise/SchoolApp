@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ===================== -->
+    <!--      DARK COLORS      -->
+    <!-- ===================== -->
+
+    <!-- Hintergrund & Oberflächen -->
+    <Color x:Key="ColorBackground">#121212</Color>
+    <Color x:Key="ColorSurface">#232323</Color>
+    <Color x:Key="ColorSurfaceAlt">#1E1E1E</Color>
+    <Color x:Key="ColorBorder">#333333</Color>
+
+    <!-- Textfarben -->
+    <Color x:Key="ColorTextPrimary">#FFFFFF</Color>
+    <Color x:Key="ColorTextSecondary">#B5B5B5</Color>
+    <Color x:Key="ColorTextDisabled">#777777</Color>
+
+    <!-- Akzentfarben (Blau) -->
+    <Color x:Key="ColorAccent">#3D82F6</Color>
+    <Color x:Key="ColorAccentDark">#2C6CDD</Color>
+    <Color x:Key="ColorSelectedItem">#1A3B70</Color>
+
+    <Color x:Key="OverLayBackground">#AA000000</Color>
+    <Color x:Key="ColorOrange">#ffcc00</Color>
+
+    <!-- ===================== -->
+    <!--      GLOBAL STYLES     -->
+    <!-- ===================== -->
+
+    <!-- Standard-Seiten -->
+    <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorBackground}" />
+    </Style>
+
+    <!-- Labels -->
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource ColorTextPrimary}" />
+        <Setter Property="FontSize" Value="16" />
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorAccent}" />
+        <Setter Property="TextColor" Value="{StaticResource ColorTextPrimary}" />
+
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup>
+                    <VisualState Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorAccent}" />
+                            <Setter Property="TextColor" Value="{StaticResource ColorTextPrimary}" />
+                            <Setter Property="Opacity" Value="1"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="#404040" />
+                            <Setter Property="TextColor" Value="{StaticResource ColorTextDisabled}" />
+                            <Setter Property="Opacity" Value="0.6" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ImportItemContainerStyle" TargetType="Border">
+        <!-- Default (unselected) state -->
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurface}" />
+        <Setter Property="Stroke" Value="{StaticResource ColorBorder}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup>
+                    <VisualState Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource ColorSurface}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="#ffffff" />
+                            <Setter Property="Opacity" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    
+    <!-- TextBox / Entry -->
+    <Style TargetType="Entry">
+        <Setter Property="TextColor" Value="{StaticResource ColorTextPrimary}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource ColorTextSecondary}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurfaceAlt}" />
+        <Setter Property="Margin" Value="0,6" />
+    </Style>
+
+    <!-- CollectionView Selected Item -->
+    <Style TargetType="CollectionView">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorBackground}" />
+    </Style>
+
+    <!-- Eingebetteter Style für Item Template Nutzung (optional) -->
+    <Style x:Key="SelectableItemBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource ColorSurface}" />
+        <Setter Property="Stroke" Value="{StaticResource ColorBorder}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+        <Setter Property="Padding" Value="16" />
+    </Style>
+
+</ResourceDictionary>

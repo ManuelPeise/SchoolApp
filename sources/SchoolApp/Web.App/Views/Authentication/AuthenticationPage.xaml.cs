@@ -1,4 +1,6 @@
-using Logic.Shared.ViewModels;
+
+
+using Logic.Shared.ViewModels.Authentication;
 
 namespace Web.App.Views.Authentication;
 

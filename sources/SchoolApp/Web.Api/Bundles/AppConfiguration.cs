@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Shared.Enums;
 using Shared.Models;
 using System.Text;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace Web.Api.Bundles
 {
@@ -31,6 +32,13 @@ namespace Web.Api.Bundles
                 })
                 .AddJwtBearer(options =>
                 {
+                    if (jwtConfig == null || string.IsNullOrEmpty(jwtConfig.SecurityKey))
+                    {
+                        throw new ArgumentNullException("SecurityKey is not set!");
+                    }
+
+                    var key = jwtConfig?.SecurityKey ?? string.Empty;
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false,
@@ -38,7 +46,7 @@ namespace Web.Api.Bundles
                         ValidAudience = jwtConfig?.Audience,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwtConfig?.SecurityKey)),
+                            Encoding.UTF8.GetBytes(key)),
 
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero
@@ -86,7 +94,8 @@ namespace Web.Api.Bundles
                 db.Database.Migrate();
             }
 
-            if(!db.AppUsers.Where(x => x.UserRole == UserRoleEnum.SystemAdmin).Any()){
+            if (!db.AppUsers.Where(x => x.UserRole == UserRoleEnum.SystemAdmin).Any())
+            {
 
                 var salt = Guid.NewGuid().ToString();
 

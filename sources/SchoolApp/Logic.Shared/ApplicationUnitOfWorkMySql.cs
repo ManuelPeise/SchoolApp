@@ -30,6 +30,7 @@ namespace Logic.Shared
         public ApplicationUnitOfWorkMySql(MySqlDbContext mySqlDbContext, ICurrentUserService currentUserService)
         {
             _mySqlDbContext = mySqlDbContext;
+            _familyRepository = new RepositoryBaseMysql<FamilyEntity>(_mySqlDbContext);
             _userRepository = new RepositoryBaseMysql<AppUserEntity>(_mySqlDbContext);
             _logRepository = new RepositoryBaseMysql<LogEntryEntity>(_mySqlDbContext);
             _learnTopicRepository = new RepositoryBaseMysql<LearnTopicEntity>(_mySqlDbContext);

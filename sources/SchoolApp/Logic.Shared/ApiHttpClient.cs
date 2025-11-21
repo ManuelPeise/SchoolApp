@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shared.Enums;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Logic.Shared
@@ -25,7 +26,7 @@ namespace Logic.Shared
             };
         }
 
-        public async Task<TResponse?> GetAsync(Uri url, List<KeyValuePair<string, object>> parameters)
+        public async Task<TResponse?> GetAsync(Uri url, List<KeyValuePair<string, object>> parameters, string? token = null)
         {
             try
             {
@@ -37,6 +38,12 @@ namespace Logic.Shared
                     Version = HttpVersion.Version20,
                     RequestUri = new Uri($"{url}{urlParameters}")
                 };
+
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    requestMessage.Headers.Authorization =
+                        new AuthenticationHeaderValue("Bearer", token);
+                }
 
                 var response = await _httpClient.SendAsync(requestMessage);
 
@@ -64,7 +71,7 @@ namespace Logic.Shared
             }
         }
 
-        public async Task<TResponse?> PostAsync(string url, TRequest? model)
+        public async Task<TResponse?> PostAsync(string url, TRequest? model, string? token = null)
         {
             try
             {
@@ -79,6 +86,12 @@ namespace Logic.Shared
                     RequestUri = new Uri(url, UriKind.Relative),
                     Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json")
                 };
+
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    requestMessage.Headers.Authorization =
+                        new AuthenticationHeaderValue("Bearer", token);
+                }
 
                 var response = await _httpClient.SendAsync(requestMessage);
 

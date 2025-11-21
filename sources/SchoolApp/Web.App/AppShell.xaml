@@ -5,29 +5,34 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Web.App"
     xmlns:auth="clr-namespace:Web.App.Views.Authentication"
-    Shell.NavBarHasShadow="False"
-    Shell.BackgroundColor="Transparent"
-    Shell.NavBarIsVisible="False"
+    xmlns:admin="clr-namespace:Web.App.Views.Administration"
     xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
     Title="School App">
 
+    <ShellContent
+        Title="LoadingPage"
+        Route="loading"
+        Shell.NavBarIsVisible="False"
+        Shell.NavBarHasShadow="False"
+        Shell.FlyoutBehavior="Disabled"
+        ContentTemplate="{DataTemplate auth:LoadingPage}"/>
+
     <ShellContent 
-       Title="Login"
-       Route="login"
+       Title="AuthenticationPage"
+       Route="auth"
+       Shell.NavBarIsVisible="False"
+       Shell.NavBarHasShadow="False"
        ContentTemplate="{DataTemplate auth:AuthenticationPage}" />
 
-    <ShellContent
-       Title="Register"
-       Route="register"
-       ContentTemplate="{DataTemplate auth:RegisterPage}" />
- 
-    <!-- Side menu pages -->
-    <FlyoutItem Title="Home" Route="home">
-        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
-    </FlyoutItem>
-
-
-   
-
-    <!-- pages without flyout item-->
+    <ShellContent 
+        Title="MainPage"
+        Route="home"
+        ContentTemplate="{DataTemplate local:MainPage}" />
+    
+    <ShellContent 
+        Title="JSON-Datei Import"
+        Route="jsonImportAssistent"
+        Shell.NavBarIsVisible="False"
+        Shell.NavBarHasShadow="False"
+        ContentTemplate="{DataTemplate admin:JsonImportAssistentPage}" />
 </Shell>

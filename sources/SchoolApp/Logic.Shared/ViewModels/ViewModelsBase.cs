@@ -6,6 +6,8 @@ namespace Logic.Shared.ViewModels
     {
         [ObservableProperty]
         private bool _isLoading;
+        [ObservableProperty]
+        private string? _title;
 
         protected void SetIsLoading(bool value)
         {
