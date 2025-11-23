@@ -14,7 +14,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<AppShell>();
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<AuthenticationPage>();
-            builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<LogoutPage>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<JsonImportAssistentPage>();
         }
@@ -28,10 +28,9 @@ namespace Web.App.Bundels
         {
             builder.Services.AddTransient<AppShellViewModel>();
             builder.Services.AddTransient<AuthenticationViewModel>();
-            builder.Services.AddTransient<RegistrationViewModel>();
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
-          
+            builder.Services.AddTransient<LogoutPageViewModel>();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Logic.Shared.Interfaces;
 using Microsoft.Maui.Storage;
 using Shared.Enums;
+using System.Threading.Tasks;
 
 namespace Logic.Shared.Services
 {
@@ -61,8 +62,10 @@ namespace Logic.Shared.Services
             }
         }
 
-        public void DeleteUserData()
+        public void Logout()
         {
+            _currentUser = null;
+            _jwtToken = null;
             SecureStorage.Remove(CurrentUserIdKey);
             SecureStorage.Remove(JwtTokenKey);
         }

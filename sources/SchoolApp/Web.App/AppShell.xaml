@@ -49,14 +49,16 @@
             <!-- Logout Button -->
             <Button Grid.Column="2"
                 Grid.RowSpan="2"
-                IsVisible="{Binding ShowLogout}"
+                IsVisible="True"
                 Text="Abmelden"
                 WidthRequest="90"
                 HeightRequest="36"
                 BackgroundColor="Transparent"
                 BorderColor="Transparent"
                 TextColor="#FFFFFF"
-                VerticalOptions="End"/>
+                VerticalOptions="End"
+                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand}" 
+                   CommandParameter="///logout"/>
         </Grid>
     </Shell.FlyoutHeader>
     <Shell.FlyoutContent>
@@ -215,6 +217,14 @@
        Shell.NavBarIsVisible="False"
        Shell.NavBarHasShadow="False"
        ContentTemplate="{DataTemplate auth:AuthenticationPage}" />
+    
+    <ShellContent 
+        Title="LogoutPage"
+        Route="logout"
+        Shell.FlyoutItemIsVisible="True"
+        Shell.NavBarIsVisible="False"
+        Shell.NavBarHasShadow="False"
+        ContentTemplate="{DataTemplate auth:LogoutPage}" />
 
     <ShellContent 
         Title="MainPage"

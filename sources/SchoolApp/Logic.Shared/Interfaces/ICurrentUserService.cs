@@ -10,7 +10,7 @@ namespace Logic.Shared.Interfaces
 
         Task StoreUserData(int? userId = null, string? jwtToken = null);
         Task SetCurrentUser();
-        void DeleteUserData();
+        void Logout();
         bool IsAuthenticated();
         bool UserIsInRole(UserRoleEnum userRole);
         

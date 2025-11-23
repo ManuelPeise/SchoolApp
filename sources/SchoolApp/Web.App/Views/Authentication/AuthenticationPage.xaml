@@ -48,7 +48,7 @@
                             <!-- USERNAME ENTRY -->
                             <controls:BorderlessEntry
                                 FontSize="{OnPlatform WinUI=16,Android=12}"
-                                Placeholder="Benutzername eingeben"
+                                Placeholder="Benutzername"
                                 Text="{Binding UserName}"
                            />
 
