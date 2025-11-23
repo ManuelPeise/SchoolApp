@@ -1,5 +1,5 @@
-﻿using Logic.Shared.ViewModels;
-using Web.App.Factories;
+﻿using Web.App.Factories;
+using Web.App.Views;
 
 namespace Web.App
 {

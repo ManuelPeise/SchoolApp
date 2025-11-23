@@ -5,7 +5,7 @@ namespace Logic.Shared.Helpers
 {
     public static class FileImportHelper
     {
-        internal static List<FileImportItem> GetFileImportItemModels()
+        public static List<FileImportItem> GetFileImportItemModels()
         {
             return new List<FileImportItem>
             {

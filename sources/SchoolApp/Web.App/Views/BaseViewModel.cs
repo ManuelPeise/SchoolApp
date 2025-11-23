@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Logic.Shared.ViewModels
+namespace Web.App.Views
 {
     public partial class BaseViewModel : ObservableObject
     {
@@ -12,7 +12,7 @@ namespace Logic.Shared.ViewModels
         protected void SetIsLoading(bool value)
         {
             IsLoading = value;
-           
+
         }
     }
 }

@@ -1,20 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Logic.Shared;
 using Logic.Shared.Helpers;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
-using Microsoft.Maui.Storage;
 using Shared.Models;
 using Shared.Models.Import;
 using System.Collections.ObjectModel;
 
-
-namespace Logic.Shared.ViewModels.Administration
+namespace Web.App.Views.Administration
 {
     public partial class JsonImportAssistentPageViewModel : BaseViewModel
     {
         private readonly IApiHttpClient<FileImportModel, ResponseBaseModel> _httpClient;
         private readonly ICurrentUserService _currentUserService;
+        private readonly INavigationService _navigationService;
+
         private const string TitleJsonFileImporter = "Importassistent für JSON-Dateien";
         private const string MessageSelectFileToImport = "Wähle einen Dateityp zum importieren aus!";
         private const string MessageSelectFileTypeToImport = "Drücke den Button um Daten für {Placeholder} zu importieren!";
@@ -38,12 +39,13 @@ namespace Logic.Shared.ViewModels.Administration
 
         public JsonImportAssistentPageViewModel(
             IApiHttpClient<FileImportModel, ResponseBaseModel> httpClient,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            INavigationService navigationService)
         {
             _httpClient = httpClient;
             _currentUserService = currentUserService;
+            _navigationService = navigationService;
             _ = Initialize();
-
         }
 
         [RelayCommand]
@@ -138,18 +140,24 @@ namespace Logic.Shared.ViewModels.Administration
 
         private async Task Initialize()
         {
-            await _currentUserService.SetCurrentUser();
+            _navigationService.RedirectToLogin();
 
-            var fileImportItemModels = _currentUserService?.CurrentUser != null ?
-                FileImportHelper.GetFileImportItemModels()
-                .Where(model => _currentUserService.UserIsInRole(model.RequiredUserRole)).ToList() :
-                new List<FileImportItem>();
+            if (_currentUserService.CurrentUser != null)
+            {
+                await _currentUserService.SetCurrentUser();
 
-            ImportItems = new ObservableCollection<FileImportItem>(fileImportItemModels);
-            StatusMessage = MessageSelectFileToImport;
-            Title = TitleJsonFileImporter;
-            CanImportFile = false;
+
+
+                var fileImportItemModels = _currentUserService?.CurrentUser != null ?
+                    FileImportHelper.GetFileImportItemModels()
+                    .Where(model => _currentUserService.UserIsInRole(model.RequiredUserRole)).ToList() :
+                    new List<FileImportItem>();
+
+                ImportItems = new ObservableCollection<FileImportItem>(fileImportItemModels);
+                StatusMessage = MessageSelectFileToImport;
+                Title = TitleJsonFileImporter;
+                CanImportFile = false;
+            }
         }
     }
-
 }

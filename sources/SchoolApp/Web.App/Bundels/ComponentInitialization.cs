@@ -1,8 +1,7 @@
-﻿using Logic.Shared.ViewModels;
-using Logic.Shared.ViewModels.Administration;
-using Logic.Shared.ViewModels.Authentication;
+﻿using Web.App.Views;
 using Web.App.Views.Administration;
 using Web.App.Views.Authentication;
+using Web.App.Views.Home;
 
 namespace Web.App.Bundels
 {
@@ -15,7 +14,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<AuthenticationPage>();
             builder.Services.AddTransient<LogoutPage>();
-            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<JsonImportAssistentPage>();
         }
 
@@ -28,9 +27,10 @@ namespace Web.App.Bundels
         {
             builder.Services.AddTransient<AppShellViewModel>();
             builder.Services.AddTransient<AuthenticationViewModel>();
-            builder.Services.AddTransient<MainViewModel>();
-            builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
             builder.Services.AddTransient<LogoutPageViewModel>();
+            builder.Services.AddTransient<HomePageViewModel>();
+            builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
+            
         }
     }
 }

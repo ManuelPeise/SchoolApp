@@ -5,7 +5,7 @@ using Logic.Shared.Interfaces;
 using Shared.Models.UiModels;
 using System.Collections.ObjectModel;
 
-namespace Logic.Shared.ViewModels
+namespace Web.App.Views
 {
     public partial class AppShellViewModel : BaseViewModel
     {
@@ -22,17 +22,8 @@ namespace Logic.Shared.ViewModels
         {
             new ShellItemModel
             {
-                Title = "Log",
-                Route = "///home"
-            }
-        };
-
-        public ObservableCollection<ShellItemModel> SystemAdminSectionItems { get; set; } = new ObservableCollection<ShellItemModel>
-        {
-            new ShellItemModel
-            {
-                Title = "Test",
-                Route = "///home"
+                Title = "Json Import",
+                Route = "///jsonImportAssistent"
             }
         };
 
@@ -40,7 +31,7 @@ namespace Logic.Shared.ViewModels
         {
             _currentUserService = currentUserService;
             AppUser = _currentUserService.CurrentUser;
-            UserName = AppUser?.Username?? string.Empty;
+            UserName = AppUser?.Username ?? string.Empty;
             ShowLogout = !string.IsNullOrEmpty(UserName);
 
         }

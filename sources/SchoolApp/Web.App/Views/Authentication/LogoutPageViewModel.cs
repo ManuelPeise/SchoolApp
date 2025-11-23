@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Logic.Shared.Interfaces;
-using Logic.Shared.ViewModels;
-
 
 namespace Web.App.Views.Authentication
 {

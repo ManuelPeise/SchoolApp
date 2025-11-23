@@ -2,9 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
-using Shared.Models;
 
-namespace Logic.Shared.ViewModels.Authentication
+namespace Web.App.Views.Authentication
 {
     public partial class AuthenticationViewModel : BaseViewModel
     {

@@ -5,17 +5,12 @@ using Logic.Administration;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Services;
-using Logic.Shared.ViewModels;
-using Logic.Shared.ViewModels.Administration;
-using Logic.Shared.ViewModels.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using Web.App.Bundels;
 using Web.App.Services;
-using Web.App.Views.Administration;
-using Web.App.Views.Authentication;
 
 namespace Web.App
 {

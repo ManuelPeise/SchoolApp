@@ -4,11 +4,11 @@
     x:Name="ThisShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:ct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
-    xmlns:local="clr-namespace:Web.App"
+    xmlns:ct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:shellVm="clr-namespace:Web.App.Views"
+    xmlns:home="clr-namespace:Web.App.Views.Home"
     xmlns:auth="clr-namespace:Web.App.Views.Authentication"
     xmlns:admin="clr-namespace:Web.App.Views.Administration"
-    xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Shell.FlyoutBackdrop="Transparent"
     Shell.FlyoutBehavior="Flyout"
@@ -57,12 +57,13 @@
                 BorderColor="Transparent"
                 TextColor="#FFFFFF"
                 VerticalOptions="End"
-                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, Path=NavigateCommand}" 
+                   Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, Path=NavigateCommand}" 
                    CommandParameter="///logout"/>
         </Grid>
     </Shell.FlyoutHeader>
     <Shell.FlyoutContent>
         <VerticalStackLayout Spacing="0" Padding="0">
+            <!--HOME Page SIDE MENU ENTRY-->
             <Grid x:Name="HomeGrid" ColumnDefinitions="Auto, *" Padding="0,5" ColumnSpacing="10" Margin="0, 0">
                 <Image x:Name="HomeIcon" Grid.Column="0" 
                    HeightRequest="30" 
@@ -77,12 +78,13 @@
                    VerticalTextAlignment="Center">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer 
-                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, 
+                             Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, 
                              Path=NavigateCommand}"
                              CommandParameter="///home" />
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
+            <!--ADMIN SIDE MENU ITEM-->
             <toolkit:Expander>
                 <toolkit:Expander.Header>
                     <Grid x:Name="AdminHeaderGrid" ColumnDefinitions="Auto, *" 
@@ -117,53 +119,7 @@
                                            VerticalTextAlignment="Center">
                                         <Label.GestureRecognizers>
                                             <TapGestureRecognizer 
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, 
-                                                Path=NavigateCommand}" 
-                                                CommandParameter="{Binding Route}" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </toolkit:Expander.Content>
-            </toolkit:Expander>
-            <toolkit:Expander>
-                <toolkit:Expander.Header>
-                    <Grid x:Name="SystemAdminHeaderGrid" 
-                          ColumnDefinitions="Auto, *" 
-                          Padding="0,5"
-                          ColumnSpacing="10">
-                        <Image x:Name="SystemAdminIcon" Grid.Column="0" 
-                   HeightRequest="30" 
-                   WidthRequest="30" 
-                   Aspect="Fill"
-                   Source="dotnet_bot.png"/>
-                        <Label x:Name="SystemAdminLabel" Grid.Column="1" 
-                   Text="System Admin" 
-                   TextColor="White"
-                   FontSize="20"
-                   FontAttributes="Bold"
-                   VerticalTextAlignment="Center"/>
-                    </Grid>
-                </toolkit:Expander.Header>
-                <toolkit:Expander.Content>
-                    <CollectionView ItemsSource="{Binding SystemAdminSectionItems}" Margin="0, 0" BackgroundColor="Transparent">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ColumnDefinitions="Auto, *" Padding="0,0" ColumnSpacing="10">
-                                    <Image Grid.Column="0" 
-                                           HeightRequest="30" 
-                                           WidthRequest="30" 
-                                           Aspect="Fill"/>
-                                    <Label Grid.Column="1" 
-                                           Text="{Binding Title}" 
-                                           TextColor="White"
-                                           FontSize="18"
-                                           VerticalTextAlignment="Center">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer 
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AppShellViewModel}}, 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, 
                                                 Path=NavigateCommand}" 
                                                 CommandParameter="{Binding Route}" />
                                         </Label.GestureRecognizers>
@@ -212,7 +168,7 @@
 
     <ShellContent 
        Title="AuthenticationPage"
-       Route="auth"
+       Route="login"
        Shell.FlyoutItemIsVisible="False"
        Shell.NavBarIsVisible="False"
        Shell.NavBarHasShadow="False"
@@ -229,7 +185,7 @@
     <ShellContent 
         Title="MainPage"
         Route="home"
-        ContentTemplate="{DataTemplate local:MainPage}" />
+        ContentTemplate="{DataTemplate home:HomePage}" />
 
     <ShellContent 
         Title="JSON-Datei Import"

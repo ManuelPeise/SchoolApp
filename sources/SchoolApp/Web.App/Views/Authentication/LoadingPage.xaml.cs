@@ -1,5 +1,4 @@
 using Logic.Shared.Interfaces;
-using Logic.Shared.ViewModels.Authentication;
 
 namespace Web.App.Views.Authentication;
 
@@ -23,11 +22,11 @@ public partial class LoadingPage : ContentPage
 
         if (isAuthenticated)
         {
-            await _navigationService.NavigateToAsync("///main");
+            await _navigationService.NavigateToAsync("///home");
         }
         else
         {
-            await _navigationService.NavigateToAsync("///auth");
+            await _navigationService.NavigateToAsync("///login");
         }
     }
 }
