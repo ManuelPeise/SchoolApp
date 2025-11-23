@@ -39,7 +39,7 @@
             <!-- Subtitle -->
             <Label Grid.Row="1"
                Grid.Column="1"
-               Text="UserName"
+               Text="{Binding UserName}"
                VerticalOptions="End"
                Padding="10,0,0,0"
                FontSize="20"
@@ -49,7 +49,8 @@
             <!-- Logout Button -->
             <Button Grid.Column="2"
                 Grid.RowSpan="2"
-                Text="Logout"
+                IsVisible="{Binding ShowLogout}"
+                Text="Abmelden"
                 WidthRequest="90"
                 HeightRequest="36"
                 BackgroundColor="Transparent"
@@ -60,7 +61,7 @@
     </Shell.FlyoutHeader>
     <Shell.FlyoutContent>
         <VerticalStackLayout Spacing="0" Padding="0">
-            <Grid x:Name="HomeGrid" ColumnDefinitions="Auto, *" Padding="0,0" ColumnSpacing="10" Margin="0, 0">
+            <Grid x:Name="HomeGrid" ColumnDefinitions="Auto, *" Padding="0,5" ColumnSpacing="10" Margin="0, 0">
                 <Image x:Name="HomeIcon" Grid.Column="0" 
                    HeightRequest="30" 
                    WidthRequest="30" 
@@ -83,7 +84,7 @@
             <toolkit:Expander>
                 <toolkit:Expander.Header>
                     <Grid x:Name="AdminHeaderGrid" ColumnDefinitions="Auto, *" 
-                          Padding="0,0" 
+                          Padding="0,5" 
                           ColumnSpacing="10">
                         <Image x:Name="AdminIcon" Grid.Column="0" 
                                HeightRequest="30" 
@@ -127,9 +128,10 @@
             </toolkit:Expander>
             <toolkit:Expander>
                 <toolkit:Expander.Header>
-                    <Grid x:Name="SystemAdminHeaderGrid" ColumnDefinitions="Auto, *" 
-              Padding="0,0" 
-              ColumnSpacing="10">
+                    <Grid x:Name="SystemAdminHeaderGrid" 
+                          ColumnDefinitions="Auto, *" 
+                          Padding="0,5"
+                          ColumnSpacing="10">
                         <Image x:Name="SystemAdminIcon" Grid.Column="0" 
                    HeightRequest="30" 
                    WidthRequest="30" 

@@ -14,9 +14,9 @@ namespace Logic.Shared.ViewModels
         [ObservableProperty]
         private AppUserEntity? _appUser = null;
         [ObservableProperty]
-        private bool _showLoginItem;
+        private string _userName;
         [ObservableProperty]
-        private bool _showLogoutItem;
+        private bool _showLogout;
 
         public ObservableCollection<ShellItemModel> AdminSectionItems { get; set; } = new ObservableCollection<ShellItemModel>
         {
@@ -40,8 +40,8 @@ namespace Logic.Shared.ViewModels
         {
             _currentUserService = currentUserService;
             AppUser = _currentUserService.CurrentUser;
-            ShowLoginItem = AppUser == null;
-            ShowLogoutItem = AppUser != null;
+            UserName = AppUser?.Username?? string.Empty;
+            ShowLogout = !string.IsNullOrEmpty(UserName);
 
         }
 

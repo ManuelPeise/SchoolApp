@@ -17,26 +17,21 @@
                 {
                     case "Home":
                     {
-                        var grid = shell.FindByName<Grid>("HomeGrid");
-                        var label = shell.FindByName<Label>("HomeLabel");
-                        var icon = shell.FindByName<Image>("HomeIcon");
-                        registration.RegisterHover(grid, label, icon);
+                        var grid = shell.FindByName<Grid>("HomeGrid");       
+                        registration.RegisterHoverEvents(grid);
                         break;
                     }
                     case "Admin":
                     {
                         var grid = shell.FindByName<Grid>("AdminHeaderGrid");
-                        var label = shell.FindByName<Label>("AdminLabel");
-                        var icon = shell.FindByName<Image>("AdminIcon");
-                        registration.RegisterHover(grid, label, icon);
+                        registration.RegisterHoverEvents(grid);
                         break;
                     }
                     case "SystemAdmin":
                     {
                         var grid = shell.FindByName<Grid>("SystemAdminHeaderGrid");
-                        var label = shell.FindByName<Label>("SystemAdminLabel");
-                        var icon = shell.FindByName<Image>("SystemAdminIcon");
-                        registration.RegisterHover(grid, label, icon);
+                        
+                        registration.RegisterHoverEvents(grid);
                         break;
                     }
                     default:
