@@ -146,8 +146,6 @@ namespace Web.App.Views.Administration
             {
                 await _currentUserService.SetCurrentUser();
 
-
-
                 var fileImportItemModels = _currentUserService?.CurrentUser != null ?
                     FileImportHelper.GetFileImportItemModels()
                     .Where(model => _currentUserService.UserIsInRole(model.RequiredUserRole)).ToList() :

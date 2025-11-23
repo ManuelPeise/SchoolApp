@@ -27,6 +27,15 @@ namespace Web.App.Views
             }
         };
 
+        public ObservableCollection<ShellItemModel> AccountSectionItems { get; set; } = new ObservableCollection<ShellItemModel>
+        {
+            new ShellItemModel
+            {
+                Title = "Profil",
+                Route = "///profile"
+            }
+        };
+
         public AppShellViewModel(ICurrentUserService currentUserService)
         {
             _currentUserService = currentUserService;

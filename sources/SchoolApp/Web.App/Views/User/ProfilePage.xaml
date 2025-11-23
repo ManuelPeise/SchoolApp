@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Web.App.Views.User.ProfilePage"
+             xmlns:controls="clr-namespace:Web.App.ViewComponents"
+             xmlns:converters="clr-namespace:Web.App.Converters"
+             BackgroundColor="{StaticResource ColorBackground}"
+             Title="Profile">
+    <ContentPage.Resources>
+        <converters:DateTimeToStringConverter x:Key="dateConverter" />
+    </ContentPage.Resources>
+    <Grid RowDefinitions="*,Auto,*"
+          ColumnDefinitions="*,Auto,*">
+
+        <Grid Grid.Row="1" Grid.Column="1">
+
+            <Border Grid.Row="1"
+                Grid.Column="1"
+                Padding="0"
+                StrokeThickness="0"
+                BackgroundColor="{StaticResource ColorSurface}"
+                StrokeShape="RoundRectangle 20">
+                <Grid BackgroundColor="{StaticResource ColorSurface}"
+                      Padding="30"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center"
+                      MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
+                    <Grid RowSpacing="0">
+                        <VerticalStackLayout Spacing="30">
+                            <!--TODO SET PROFILE IMAGE-->
+                            <Image Source="dotnet_bot.png"
+                                   HeightRequest="140"
+                                   WidthRequest="400"
+                                   Aspect="AspectFit" />
+                            
+                            <Grid ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="0"
+                                  Padding="10,0"
+                                  MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
+                                
+                                <Label Grid.Column="0" 
+                                       Text="Profil"
+                                       FontSize="{OnPlatform WinUI=24,Android=14}"
+                                       TextColor="{StaticResource ColorTextPrimary}"
+                                       VerticalOptions="Center"/>
+                                
+                                <ImageButton Grid.Column="1" 
+                                             Source="{Binding ToggleButtonImage}"
+                                             HorizontalOptions="End"
+                                             HeightRequest="30"
+                                             WidthRequest="30"
+                                             Aspect="AspectFit"
+                                             BackgroundColor="Transparent"
+                                             Command="{Binding ToggleModeCommand}"/>
+                            </Grid>
+
+                            <controls:LabeledBorderlessEntry  Label="Vorname"
+                                                          FontSize="{OnPlatform WinUI=16,Android=12}"
+                                                          Placeholder="Benutzername"
+                                                          IsEnabled="{Binding IsEditMode}"
+                                                          Margin="0"  
+                                                          Text="{Binding User.Username}"/>
+
+                            <controls:LabeledBorderlessEntry  Label="Name"
+                                                           FontSize="{OnPlatform WinUI=16,Android=12}"
+                                                           Placeholder="Benutzername"
+                                                           IsEnabled="{Binding IsEditMode}"
+                                                           Margin="0"  
+                                                           Text="{Binding User.LastName}"/>
+
+                            <controls:LabeledBorderlessEntry  Label="Geburtsdatum"
+                                                           FontSize="{OnPlatform WinUI=16,Android=12}"
+                                                           Placeholder="Benutzername"
+                                                           IsEnabled="False"
+                                                           Margin="0"  
+                                                           Text="{Binding User.DateOfBirth, Converter={StaticResource dateConverter}}"/>
+                            
+                            <Grid ColumnDefinitions="*,*,*"
+                                  ColumnSpacing="20">
+                                <Grid Grid.Column="0" ColumnDefinitions="30, 150" Padding="0" >
+                                    <CheckBox IsChecked="{Binding IsUser}"
+                                              IsEnabled="False"
+                                              Color="{StaticResource ColorAccentDark}"
+                                              HorizontalOptions="Center"
+                                              VerticalOptions="Center"
+                                              Grid.Column="0"/>
+                                    <Label Grid.Column="1"
+                                           Text="User"
+                                           VerticalOptions="Center"
+                                           Margin="8,0,0,0"/>
+                                </Grid>
+                                <Grid Grid.Column="1" ColumnDefinitions="30, 150" Padding="0" >
+                                    <CheckBox Grid.Column="0"
+                                              Color="{StaticResource ColorAccentDark}"
+                                              IsChecked="{Binding IsAdminUser}"
+                                              IsEnabled="False"
+                                              HorizontalOptions="Center"
+                                              VerticalOptions="Center"
+                                              />
+                                    <Label Grid.Column="1"
+                                           Text="Admin"
+                                           VerticalOptions="Center"
+                                           Margin="8,0,0,0"/>
+                                </Grid>
+                                <Grid Grid.Column="2" ColumnDefinitions="30, 150" Padding="0" >
+                                    <CheckBox Grid.Column="0"
+                                              Color="{StaticResource ColorAccentDark}"
+                                              IsChecked="{Binding IsSystemAdminUser}"
+                                              IsEnabled="False"
+                                              HorizontalOptions="Center"
+                                              VerticalOptions="Center"
+                                              />
+                                    <Label Grid.Column="1"
+                                           Text="System Admin"
+                                           VerticalOptions="Center"
+                                           Margin="8,0,0,0"/>
+                                </Grid>
+                            </Grid>
+
+                            <Label 
+                                Text="{Binding LastUpdateText}"
+                                TextColor="{StaticResource ColorTextPrimary}"
+                                FontAttributes="Italic"
+                                FontSize="{OnPlatform WinUI=16,Android=12}"/>
+
+                            <Grid ColumnDefinitions="*,*"
+                                  ColumnSpacing="20">
+                                <Button Text="Abbrechen"
+                                        Command="{Binding RevertChangesCommand}"
+                                        IsVisible="{Binding IsEditMode}"
+                                        IsEnabled="{Binding IsModified}"
+                                        BackgroundColor="{StaticResource ColorAccent}"
+                                        TextColor="{StaticResource ColorTextPrimary}"
+                                        FontSize="{OnPlatform WinUI=20, Android=14}"
+                                        Grid.Column="0" />
+
+                                <Button Text="Speichern"
+                                        Command="{Binding SaveChangesCommand}"
+                                        IsVisible="{Binding IsEditMode}"
+                                        IsEnabled="{Binding IsModified}"
+                                        BackgroundColor="{StaticResource ColorAccent}"
+                                        TextColor="{StaticResource ColorTextPrimary}"
+                                        FontSize="{OnPlatform WinUI=20, Android=14}"
+                                        Grid.Column="1" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

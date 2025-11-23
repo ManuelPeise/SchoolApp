@@ -2,6 +2,7 @@
 using Web.App.Views.Administration;
 using Web.App.Views.Authentication;
 using Web.App.Views.Home;
+using Web.App.Views.User;
 
 namespace Web.App.Bundels
 {
@@ -16,6 +17,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<LogoutPage>();
             builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<JsonImportAssistentPage>();
+            builder.Services.AddTransient<ProfilePage>();
         }
 
         internal static void InitializeCustomComponents(MauiAppBuilder builder)
@@ -30,7 +32,8 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<LogoutPageViewModel>();
             builder.Services.AddTransient<HomePageViewModel>();
             builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
-            
+            builder.Services.AddTransient<ProfilePageViewModel>();
+
         }
     }
 }

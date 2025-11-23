@@ -19,6 +19,7 @@ namespace Web.App
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+            
             builder.UseMauiApp<App>().ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -33,6 +34,7 @@ namespace Web.App
                 var dbPath = Path.Combine(folderPath, "applicationDb.db");
                 opt.UseSqlite($"Data Source={dbPath}");
             });
+            
             builder.Services.AddDbContext<MySqlDbContext>(options =>
             {
                 var connection = builder.Configuration.GetConnectionString("SchoolDb");
@@ -65,6 +67,7 @@ namespace Web.App
             builder.ConfigureLifecycleEvents(events =>
             {
             });
+            
             var app = builder.Build();
 
             DatabaseMigrator.Migrate(app);

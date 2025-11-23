@@ -103,9 +103,9 @@ namespace Web.Api.Bundles
                 {
                     Id = 1,
                     FamilyId = null,
-                    LastName = "SystemAdmin",
-                    Username = "Admin",
-                    DateOfBirth = null,
+                    LastName = "Peise",
+                    Username = "Manuel",
+                    DateOfBirth = new DateTime(1980,4,20),
                     UserRole = UserRoleEnum.SystemAdmin,
                     Salt = salt,
                     Password = HashPassword("Pass@word", salt),

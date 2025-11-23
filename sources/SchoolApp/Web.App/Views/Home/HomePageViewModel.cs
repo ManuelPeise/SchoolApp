@@ -15,11 +15,12 @@ namespace Web.App.Views.Home
 
         private async void InitializeAsync()
         {
+            await _currentUserService.SetCurrentUser();
             _navigationService.RedirectToLogin();
 
             if(_currentUserService.CurrentUser != null)
             {
-                await _currentUserService.SetCurrentUser();
+                
             } 
         }
     }

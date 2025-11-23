@@ -9,11 +9,20 @@ namespace Logic.Shared.Extensions
         {
             return new ObservableUser
             {
+                Id = entity.Id,
+                FamilyId = entity.FamilyId,
+                LastName = entity.LastName,
                 Username = entity.Username,
+                DateOfBirth = entity.DateOfBirth,
                 Salt = entity.Salt,
                 Password = entity.Password,
-                DateOfBirth = entity.DateOfBirth,
-                UserRole = entity.UserRole
+                UserRole = entity.UserRole,
+                RefreshToken = entity.RefreshToken,
+                IsActive = entity.IsActive,
+                CreatedAt = entity.CreatedAt,
+                CreatedBy = entity.CreatedBy,
+                UpdatedAt = entity.UpdatedAt,
+                UpdatedBy = entity.UpdatedBy
             };
         }
 
@@ -21,11 +30,20 @@ namespace Logic.Shared.Extensions
         {
             return new AppUserEntity
             {
+                Id = user.Id,
+                FamilyId = user.FamilyId,
+                LastName = user.LastName,
                 Username = user.Username,
+                DateOfBirth = user.DateOfBirth,
                 Salt = user.Salt,
                 Password = user.Password,
-                DateOfBirth = user.DateOfBirth,
-                UserRole = user.UserRole
+                UserRole = user.UserRole,
+                RefreshToken = user.RefreshToken,
+                IsActive = user.IsActive,
+                CreatedAt = user.CreatedAt,
+                CreatedBy = user.CreatedBy,
+                UpdatedAt = user.UpdatedAt,
+                UpdatedBy = user.UpdatedBy
             };
         }
     }

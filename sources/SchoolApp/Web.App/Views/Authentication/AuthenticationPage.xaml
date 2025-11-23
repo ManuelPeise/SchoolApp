@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Web.App.Views.Authentication.AuthenticationPage"
-    xmlns:vm="clr-namespace:Logic.Shared.ViewModels;assembly=Logic.Shared"
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
     BackgroundColor="{StaticResource ColorBackground}"
     Title="AuthenticationPage">
@@ -15,13 +14,12 @@
         <!-- Center container -->
         <Grid Grid.Row="1" Grid.Column="1">
 
-            <Border
-    Grid.Row="1"
-    Grid.Column="1"
-    Padding="0"
-    StrokeThickness="0"
-    BackgroundColor="{StaticResource ColorSurface}"
-    StrokeShape="RoundRectangle 20">
+            <Border Grid.Row="1"
+                    Grid.Column="1"
+                    Padding="0"
+                    StrokeThickness="0"
+                    BackgroundColor="{StaticResource ColorSurface}"
+                    StrokeShape="RoundRectangle 20">
                 <!-- Card container (dark surface) -->
                 <Grid
                 BackgroundColor="{StaticResource ColorSurface}"
@@ -62,16 +60,6 @@
 
                             <!-- Buttons -->
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-
-                                <!-- REGISTER -->
-                                <Button
-                                Text="Registrieren"
-                                Command="{Binding NavigateToRegisterCommand}"
-                                BackgroundColor="{StaticResource ColorAccent}"
-                                TextColor="{StaticResource ColorTextPrimary}"
-                                FontSize="{OnPlatform WinUI=20, Android=14}"
-                                Grid.Column="0" />
-
                                 <!-- LOGIN -->
                                 <Button
                                 Text="Anmelden"

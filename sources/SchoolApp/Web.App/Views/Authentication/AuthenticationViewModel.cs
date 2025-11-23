@@ -13,10 +13,10 @@ namespace Web.App.Views.Authentication
         private readonly IApiHttpClient<LoginRequestModel, LoginResult> _apiHttpClient;
         private readonly IApplicationUnitOfWork _applicationUnitOfWork;
         [ObservableProperty]
-        private string _userName = string.Empty;
+        private string _userName = "Manuel";
 
         [ObservableProperty]
-        private string _password = string.Empty;
+        private string _password = "Pass@word";
 
         [ObservableProperty]
         private bool _canLogin = false;
@@ -115,13 +115,6 @@ namespace Web.App.Views.Authentication
             {
                 SetIsLoading(false);
             }
-        }
-
-
-        [RelayCommand]
-        private async Task NavigateToRegisterAsync()
-        {
-            await _navigationService.NavigateToAsync("///register");
         }
 
         partial void OnUserNameChanged(string value)
