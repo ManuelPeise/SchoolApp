@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Logic.Shared.Helpers;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
 using Microsoft.Maui.Storage;
-using Shared.Enums;
 using Shared.Models;
 using Shared.Models.Import;
 using System.Collections.ObjectModel;
@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace Logic.Shared.ViewModels.Administration
 {
-    public partial class JsonImportAssistentPageViewModel: BaseViewModel
+    public partial class JsonImportAssistentPageViewModel : BaseViewModel
     {
         private readonly IApiHttpClient<FileImportModel, ResponseBaseModel> _httpClient;
         private readonly ICurrentUserService _currentUserService;
@@ -37,12 +37,13 @@ namespace Logic.Shared.ViewModels.Administration
         public ObservableCollection<FileImportItem> ImportItems { get; private set; } = new ObservableCollection<FileImportItem>();
 
         public JsonImportAssistentPageViewModel(
-            IApiHttpClient<FileImportModel, ResponseBaseModel> httpClient, 
+            IApiHttpClient<FileImportModel, ResponseBaseModel> httpClient,
             ICurrentUserService currentUserService)
         {
             _httpClient = httpClient;
-            Initialize();
             _currentUserService = currentUserService;
+            _ = Initialize();
+
         }
 
         [RelayCommand]
@@ -53,7 +54,7 @@ namespace Logic.Shared.ViewModels.Administration
             try
             {
                 IsLoading = true;
-                
+
                 StatusMessage = MessagePickFileToImport.Replace("{Placeholder}", SelectedItem.Label);
 
                 var file = await FilePicker.PickAsync(new PickOptions
@@ -68,7 +69,7 @@ namespace Logic.Shared.ViewModels.Administration
                     return;
                 }
 
-                StatusMessage = MessageFileSelected.Replace("{Placeholder}",file.FileName);
+                StatusMessage = MessageFileSelected.Replace("{Placeholder}", file.FileName);
 
                 using (var stream = await file.OpenReadAsync())
                 using (var reader = new StreamReader(stream))
@@ -130,23 +131,25 @@ namespace Logic.Shared.ViewModels.Administration
                 FileContent = importItem.FileContent,
             };
 
-            // TODO set URL and modify the endpoint and logic of jsonimporter.cs
             var response = await _httpClient.PostAsync("api/jsonimport/importjsonfile", importModel, _currentUserService.JwtToken);
 
             return response?.Success ?? false;
         }
 
-        private void Initialize()
+        private async Task Initialize()
         {
+            await _currentUserService.SetCurrentUser();
+
+            var fileImportItemModels = _currentUserService?.CurrentUser != null ?
+                FileImportHelper.GetFileImportItemModels()
+                .Where(model => _currentUserService.UserIsInRole(model.RequiredUserRole)).ToList() :
+                new List<FileImportItem>();
+
+            ImportItems = new ObservableCollection<FileImportItem>(fileImportItemModels);
             StatusMessage = MessageSelectFileToImport;
             Title = TitleJsonFileImporter;
             CanImportFile = false;
-            ImportItems = new ObservableCollection<FileImportItem>
-            {
-                new FileImportItem{ FileType = FileTypeEnum.FamilyJsonFile, Label = "Famile & Benutzer", Description = "Familie oder Benutzer importieren."},
-                new FileImportItem{ FileType = FileTypeEnum.VocabularyJsonFile, Label = "Vokabeln", Description = "Vokabeldatensatz für Vokabeltraining importieren."},
-            };
         }
     }
-    
+
 }

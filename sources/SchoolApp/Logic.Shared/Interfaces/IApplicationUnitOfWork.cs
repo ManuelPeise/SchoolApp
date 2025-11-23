@@ -12,6 +12,6 @@ namespace Logic.Shared.Interfaces
         IRepositoryBase<LearnTopicEntity> LearnTopicRepository { get; }
         IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository { get; }
         IRepositoryBase<VocabularyEntity> VocabularyRepository { get; }
-        Task SaveChangesAsync();
+        Task SaveChangesAsync(string? currentUser = null);
     }
 }

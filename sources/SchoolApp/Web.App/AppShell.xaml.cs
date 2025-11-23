@@ -1,4 +1,5 @@
 ﻿using Logic.Shared.ViewModels;
+using Web.App.Factories;
 
 namespace Web.App
 {
@@ -8,6 +9,10 @@ namespace Web.App
         {
             InitializeComponent();
             BindingContext = vm;
+
+            HoverHandlerFactory.Execute("Home", this);
+            HoverHandlerFactory.Execute("Admin", this);
+            HoverHandlerFactory.Execute("SystemAdmin", this);
         }
     }
 }

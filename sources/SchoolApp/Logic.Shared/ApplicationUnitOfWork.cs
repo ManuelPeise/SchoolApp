@@ -13,7 +13,7 @@ namespace Logic.Shared
     {
         private bool disposedValue;
         private readonly AppDbContext _dbContext;
-        private readonly ICurrentUserService _currentUserService;
+       
 
         private readonly IRepositoryBase<FamilyEntity> _familyRepository;
         private readonly IRepositoryBase<AppUserEntity> _userRepository;
@@ -29,7 +29,7 @@ namespace Logic.Shared
         public IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository => _userLearnTopicRepository ?? new RepositoryBase<UserLearnTopicEntity>(_dbContext);
         public IRepositoryBase<VocabularyEntity> VocabularyRepository => _vocabularyRepository ?? new RepositoryBase<VocabularyEntity>(_dbContext);
 
-        public ApplicationUnitOfWork(AppDbContext dbContext, ICurrentUserService currentUserService)
+        public ApplicationUnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
             _familyRepository = new RepositoryBase<FamilyEntity>(_dbContext);
@@ -38,12 +38,11 @@ namespace Logic.Shared
             _learnTopicRepository = new RepositoryBase<LearnTopicEntity>(_dbContext);
             _userLearnTopicRepository = new RepositoryBase<UserLearnTopicEntity>(_dbContext);
             _vocabularyRepository =  new RepositoryBase<VocabularyEntity>(_dbContext);
-            _currentUserService = currentUserService;
         }
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(string? currentUser = null)
         {
-            var userName = _currentUserService.CurrentUser?.Username ?? "System";
+            var userName = currentUser ?? "System";
 
             var modifiedEntries = _dbContext.ChangeTracker
                 .Entries()

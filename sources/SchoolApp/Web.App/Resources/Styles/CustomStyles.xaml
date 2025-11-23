@@ -3,29 +3,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <!-- ===================== -->
-    <!--      DARK COLORS      -->
-    <!-- ===================== -->
-
-    <!-- Hintergrund & Oberflächen -->
-    <Color x:Key="ColorBackground">#121212</Color>
-    <Color x:Key="ColorSurface">#232323</Color>
-    <Color x:Key="ColorSurfaceAlt">#1E1E1E</Color>
-    <Color x:Key="ColorBorder">#333333</Color>
-
-    <!-- Textfarben -->
-    <Color x:Key="ColorTextPrimary">#FFFFFF</Color>
-    <Color x:Key="ColorTextSecondary">#B5B5B5</Color>
-    <Color x:Key="ColorTextDisabled">#777777</Color>
-
-    <!-- Akzentfarben (Blau) -->
-    <Color x:Key="ColorAccent">#3D82F6</Color>
-    <Color x:Key="ColorAccentDark">#2C6CDD</Color>
-    <Color x:Key="ColorSelectedItem">#1A3B70</Color>
-
-    <Color x:Key="OverLayBackground">#AA000000</Color>
-    <Color x:Key="ColorOrange">#ffcc00</Color>
-
-    <!-- ===================== -->
     <!--      GLOBAL STYLES     -->
     <!-- ===================== -->
 

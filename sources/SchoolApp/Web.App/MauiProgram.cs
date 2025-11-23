@@ -48,10 +48,11 @@ namespace Web.App
 
                 options.UseMySQL(connection);
             });
+
             builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddSingleton<INavigationService, NavigationService>();
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddScoped<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             builder.Services.AddScoped(typeof(IApiHttpClient<, >), typeof(ApiHttpClient<, >));
             builder.Services.AddScoped(typeof(IRepositoryBaseMySql<>), typeof(RepositoryBaseMysql<>));
@@ -62,17 +63,9 @@ namespace Web.App
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             // Views and view models
-            builder.Services.AddTransient<AppShellViewModel>();
-            builder.Services.AddTransient<AppShell>();
-            builder.Services.AddTransient<LoadingPage>();
-            builder.Services.AddTransient<AuthenticationViewModel>();
-            builder.Services.AddTransient<AuthenticationPage>();
-            builder.Services.AddTransient<RegistrationViewModel>();
-            builder.Services.AddTransient<RegisterPage>();
-            builder.Services.AddTransient<MainViewModel>();
-            builder.Services.AddTransient<MainPage>();
-            builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
-            builder.Services.AddTransient<JsonImportAssistentPage>();
+            ComponentInitialization.InitializeViewModels(builder);
+            ComponentInitialization.InitializeViews(builder);
+            ComponentInitialization.InitializeCustomComponents(builder);
 
             builder.ConfigureLifecycleEvents(events =>
             {

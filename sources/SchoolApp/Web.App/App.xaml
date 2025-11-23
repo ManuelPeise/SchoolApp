@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <converters:NullToBoolConverter x:Key="NullToBoolConverter"/>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/Colors.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/CustomStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -5,6 +5,10 @@ namespace Web.App.Services
     internal class NavigationService : INavigationService
     {
 
+        public NavigationService()
+        {
+            
+        }
 
         public bool IsNavigating { get; set; }
 

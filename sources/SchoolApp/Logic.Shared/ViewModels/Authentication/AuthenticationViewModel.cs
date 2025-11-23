@@ -64,7 +64,7 @@ namespace Logic.Shared.ViewModels.Authentication
 
                     if (authResult.Success)
                     {
-                        SetIsLoading(false);
+                        await _currentUserService.StoreUserData(userFromSqLite.Id, authResult.JwtToken);
                         await _navigationService.NavigateToAsync("///home");
                     }
                 }
@@ -83,14 +83,12 @@ namespace Logic.Shared.ViewModels.Authentication
                 if (authResult == null || !authResult.Success)
                 {
                     Password = string.Empty;
-                    SetIsLoading(false);
                     return;
                 }
 
                 if (authResult.AppUser == null)
                 {
                     Password = string.Empty;
-                    SetIsLoading(false);
                     return;
                 }
 
@@ -98,26 +96,21 @@ namespace Logic.Shared.ViewModels.Authentication
                 {
                     userFromSqLite = authResult.AppUser;
                     await _applicationUnitOfWork.UserRepository.AddAsync(userFromSqLite, null);
+                    await _applicationUnitOfWork.SaveChangesAsync(userFromSqLite.Username);
+
+                    await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
                 }
                 else
                 {
                     userFromSqLite.RefreshToken = authResult.AppUser.RefreshToken;
                     _applicationUnitOfWork.UserRepository.Update(userFromSqLite);
+
+                    await _applicationUnitOfWork.SaveChangesAsync(userFromSqLite.Username);
+
+                    await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
                 }
 
-
-                await _applicationUnitOfWork.SaveChangesAsync();
-
-                if (!string.IsNullOrWhiteSpace(authResult.JwtToken))
-                {
-                    _currentUserService.SetCurrentUser(userFromSqLite, authResult.JwtToken);
-
-                    await _navigationService.NavigateToAsync("///home");
-                }
-                else
-                {
-                    _currentUserService.SetCurrentUser(null, null);
-                }
+                await _navigationService.NavigateToAsync("///home");
             }
             finally
             {
