@@ -1,33 +1,37 @@
 ﻿using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
+using Shared.Enums;
 
 namespace Logic.Administration
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private bool disposedValue;
-        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
-        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IJwtTokenService _jwtTokenService;
-        
+        private bool disposedValue;
+
         public AuthenticationService(
-            IApplicationUnitOfWork applicationUnitOfWork, 
-            IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql,
+           IDbContextFactory dbContextFactory,
+           ICurrentUserService currentUserService,
             IJwtTokenService jwtTokenService)
         {
-            _applicationUnitOfWork = applicationUnitOfWork;
-            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
+            _dbContextFactory = dbContextFactory;
+            _currentUserService = currentUserService;
             _jwtTokenService = jwtTokenService;
         }
 
         public async Task<LoginResult> LoginAsync(LoginRequestModel model)
         {
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
+
             try
             {
-                var user = await _applicationUnitOfWorkMySql.UserRepository.Find(x => x.Username.ToLower() == model.UserName.ToLower());
 
-                if(user == null)
+                var user = await unitOfWork.UserRepository.Find(x => x.Username.ToLower() == model.UserName.ToLower());
+
+                if (user == null)
                 {
                     return new LoginResult
                     {
@@ -38,7 +42,7 @@ namespace Logic.Administration
 
                 var encriptedPassword = PasswordHelper.HashPassword(model.Password, user.Salt);
 
-                if(encriptedPassword != user.Password)
+                if (encriptedPassword != user.Password)
                 {
                     return new LoginResult
                     {
@@ -50,10 +54,11 @@ namespace Logic.Administration
                 var tokenData = _jwtTokenService.GenerateTokens(user);
 
                 user.RefreshToken = tokenData.RefreshToken;
+                user.IsInSync = true;
 
-                _applicationUnitOfWorkMySql.UserRepository.Update(user);
+                unitOfWork.UserRepository.Update(user);
 
-                await _applicationUnitOfWorkMySql.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                 return new LoginResult
                 {
@@ -63,7 +68,7 @@ namespace Logic.Administration
                     AppUser = user
                 };
             }
-            catch (Exception) 
+            catch (Exception)
             {
                 return new LoginResult
                 {
@@ -75,9 +80,11 @@ namespace Logic.Administration
 
         public async Task<LoginResult> LoginLocalAsync(LoginRequestModel model)
         {
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.SqLite, _dbContextFactory, _currentUserService);
+
             try
             {
-                var user = await _applicationUnitOfWork.UserRepository.Find(x => x.Username.ToLower() == model.UserName.ToLower());
+                var user = await unitOfWork.UserRepository.Find(x => x.Username.ToLower() == model.UserName.ToLower());
 
                 if (user == null)
                 {
@@ -102,7 +109,7 @@ namespace Logic.Administration
                 return new LoginResult
                 {
                     Success = true,
-                    
+
                     Message = "Login success!"
                 };
             }
@@ -127,8 +134,8 @@ namespace Logic.Administration
             {
                 if (disposing)
                 {
-                    _applicationUnitOfWork.Dispose();
-                    _applicationUnitOfWorkMySql.Dispose();
+                    _dbContextFactory.Dispose();
+                    _currentUserService.Dispose();
                     _jwtTokenService.Dispose();
                 }
 
@@ -142,7 +149,5 @@ namespace Logic.Administration
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-
-        
     }
 }

@@ -1,19 +1,18 @@
 ﻿using Data.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.ContextMysql
+namespace Data.Context
 {
-    public class MySqlDbContext : ADatabaseContext
+    public class SqLiteDbContext : ADatabaseContext
     {
-        public MySqlDbContext(DbContextOptions<MySqlDbContext> options) : base(options) { }
-      
+        public SqLiteDbContext(DbContextOptions<SqLiteDbContext> options) : base(options) { }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    modelBuilder.Entity<AppUserEntity>()
-        //        .HasOne(x => x.Family)
-        //        .WithMany(x => x.FamilyMembers)
-        //        .HasForeignKey(x => x.FamilyId);
+        //       .HasOne(x => x.Family)
+        //       .WithMany(x => x.FamilyMembers)
+        //       .HasForeignKey(x => x.FamilyId);
 
         //    modelBuilder.Entity<UserLearnTopicEntity>()
         //         .HasKey(e => new { e.TopicId, e.UserId });
@@ -27,8 +26,6 @@ namespace Data.ContextMysql
         //        .HasOne(e => e.User)
         //        .WithMany(e => e.UserLearnTopics)
         //        .HasForeignKey(e => e.UserId);
-
-            
         //}
     }
 }

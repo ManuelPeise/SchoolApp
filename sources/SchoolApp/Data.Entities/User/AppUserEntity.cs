@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities.User
 {
+    // refactor this or AEntityBase add property isModified to detect changes.
     public class AppUserEntity: AEntityBase
     {
         public string LastName { get; set; } = string.Empty;

@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Logic.Shared.Interfaces
 {
-    public interface IRepositoryBase<TEntity> : IDisposable where TEntity : AEntityBase
+    public interface IRepositoryBase<TEntity>: IDisposable where TEntity : AEntityBase
     {
         Task<List<TEntity>> GetAll();
         Task<TEntity?> Find(Expression<Func<TEntity, bool>> predicate);
@@ -11,6 +11,7 @@ namespace Logic.Shared.Interfaces
         Task<TEntity?> GetByIdAsync(int id);
         Task<int?> GetEntityId(Expression<Func<TEntity, bool>> predicate);
         Task AddAsync(TEntity entity, Func<TEntity, bool>? predicate);
+        Task AddRangeAsync(List<TEntity> entities);
         void Update(TEntity entity);
         Task RemoveAsync(int id);
     }

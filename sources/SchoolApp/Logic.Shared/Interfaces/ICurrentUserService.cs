@@ -3,7 +3,7 @@ using Shared.Enums;
 
 namespace Logic.Shared.Interfaces
 {
-    public interface ICurrentUserService
+    public interface ICurrentUserService: IDisposable
     {
         AppUserEntity? CurrentUser { get; }
         string? JwtToken { get; }

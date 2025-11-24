@@ -6,14 +6,14 @@ namespace Logic.Import
 {
     internal static class FileImportFactory
     {
-        internal static AFileImporter Execute(FileImportModel model, IApplicationUnitOfWorkMySql unitOfWork)
+        internal static AFileImporter Execute(FileImportModel model, IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
         {
             switch (model.FileType)
             {
                 case FileTypeEnum.FamilyJsonFile:
-                    return new FamilyFileImporter(model, unitOfWork);
+                    return new FamilyFileImporter(model, dbContextFactory, currentUserService);
                 case FileTypeEnum.VocabularyJsonFile:
-                    return new VocabularyFileImporter(model, unitOfWork);
+                    return new VocabularyFileImporter(model, dbContextFactory, currentUserService);
                 default: throw new ArgumentOutOfRangeException(nameof(model.FileType));
             }
         }

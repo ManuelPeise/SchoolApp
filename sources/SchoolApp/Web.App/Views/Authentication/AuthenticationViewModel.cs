@@ -1,17 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
+using Shared.Enums;
 
 namespace Web.App.Views.Authentication
 {
     public partial class AuthenticationViewModel : BaseViewModel
     {
-        private ICurrentUserService _currentUserService;
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
         private readonly IApiHttpClient<LoginRequestModel, LoginResult> _apiHttpClient;
-        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
+
+
         [ObservableProperty]
         private string _userName = "Manuel";
 
@@ -25,21 +29,20 @@ namespace Web.App.Views.Authentication
             IAuthenticationService authenticationService,
             INavigationService navigationService,
             ICurrentUserService currentUserService,
-            IApplicationUnitOfWork applicationUnitOfWork,
+            IDbContextFactory dbContextFactory,
             IApiHttpClient<LoginRequestModel, LoginResult> apiHttpClient)
         {
             _authenticationService = authenticationService;
             _navigationService = navigationService;
             _currentUserService = currentUserService;
-            _applicationUnitOfWork = applicationUnitOfWork;
+            _dbContextFactory = dbContextFactory;
             _apiHttpClient = apiHttpClient;
         }
 
         [RelayCommand]
         private async Task LoginAsync()
         {
-            if (IsLoading)
-                return;
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.SqLite, _dbContextFactory, _currentUserService);
 
             SetIsLoading(true);
 
@@ -48,7 +51,7 @@ namespace Web.App.Views.Authentication
                 if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(Password))
                     return;
 
-                var userFromSqLite = await _applicationUnitOfWork.UserRepository
+                var userFromSqLite = await unitOfWork.UserRepository
                     .Find(x => x.Username.ToLower() == UserName.ToLower());
 
                 LoginResult? authResult;
@@ -94,17 +97,17 @@ namespace Web.App.Views.Authentication
                 if (userFromSqLite == null)
                 {
                     userFromSqLite = authResult.AppUser;
-                    await _applicationUnitOfWork.UserRepository.AddAsync(userFromSqLite, null);
-                    await _applicationUnitOfWork.SaveChangesAsync(userFromSqLite.Username);
+                    await unitOfWork.UserRepository.AddAsync(userFromSqLite, null);
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.SqLite, _currentUserService.CurrentUser?.Username);
 
                     await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
                 }
                 else
                 {
                     userFromSqLite.RefreshToken = authResult.AppUser.RefreshToken;
-                    _applicationUnitOfWork.UserRepository.Update(userFromSqLite);
+                    unitOfWork.UserRepository.Update(userFromSqLite);
 
-                    await _applicationUnitOfWork.SaveChangesAsync(userFromSqLite.Username);
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.SqLite, _currentUserService.CurrentUser?.Username);
 
                     await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
                 }

@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data.Entities\Data.Entities.csproj" />
+    <ProjectReference Include="..\Data.Shared\Data.Shared.csproj" />
   </ItemGroup>
 
 </Project>

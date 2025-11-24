@@ -2,6 +2,7 @@
 using Data.Context;
 using Data.ContextMysql;
 using Logic.Administration;
+using Logic.Profile;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Services;
@@ -28,7 +29,7 @@ namespace Web.App
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-            builder.Services.AddDbContext<AppDbContext>(opt =>
+            builder.Services.AddDbContext<SqLiteDbContext>(opt =>
             {
                 var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                 var dbPath = Path.Combine(folderPath, "applicationDb.db");
@@ -46,17 +47,19 @@ namespace Web.App
                 options.UseMySQL(connection);
             });
 
+            builder.Services.AddScoped(typeof(IDbContextFactory), typeof(DbContextFactory));
+            builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+
             builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<INavigationService, NavigationService>();
-            builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             builder.Services.AddScoped(typeof(IApiHttpClient<, >), typeof(ApiHttpClient<, >));
-            builder.Services.AddScoped(typeof(IRepositoryBaseMySql<>), typeof(RepositoryBaseMysql<>));
-            builder.Services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork>();
-            builder.Services.AddScoped<IApplicationUnitOfWorkMySql, ApplicationUnitOfWorkMySql>();
+            
             builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
+
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             // Views and view models

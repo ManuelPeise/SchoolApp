@@ -1,8 +1,6 @@
 ﻿using Data.Entities.User;
 using Logic.Shared.Interfaces;
-using Microsoft.Maui.Storage;
 using Shared.Enums;
-using System.Threading.Tasks;
 
 namespace Logic.Shared.Services
 {
@@ -10,9 +8,11 @@ namespace Logic.Shared.Services
     {
         private const string CurrentUserIdKey = "CurrentUserId";
         private const string JwtTokenKey = "JwtToken";
-        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
+        private readonly IDbContextFactory _dbContextFactory;
+
         private AppUserEntity? _currentUser = null;
         private string? _jwtToken = null;
+        private bool disposedValue;
 
         public AppUserEntity? CurrentUser { get => _currentUser; }
         public string? JwtToken => _jwtToken ?? null;
@@ -20,9 +20,9 @@ namespace Logic.Shared.Services
         public event Action<AppUserEntity?>? CurrentUserChanged;
         public event Action<string?>? JwtTokenChanged;
 
-        public CurrentUserService(IApplicationUnitOfWork applicationUnitOfWork)
+        public CurrentUserService(IDbContextFactory dbContextFactory)
         {
-           _applicationUnitOfWork = applicationUnitOfWork;
+            _dbContextFactory = dbContextFactory;
         }
 
         public bool IsAuthenticated()
@@ -44,18 +44,18 @@ namespace Logic.Shared.Services
 
             await SecureStorage.SetAsync(CurrentUserIdKey, userId?.ToString() ?? string.Empty);
 
-            if (!string.IsNullOrWhiteSpace(jwtToken)) 
+            if (!string.IsNullOrWhiteSpace(jwtToken))
             {
                 await SecureStorage.SetAsync(JwtTokenKey, jwtToken);
             }
-           
+
         }
 
         public async Task SetCurrentUser()
         {
             var userId = await SecureStorage.GetAsync(CurrentUserIdKey);
 
-            if(userId != null && !string.IsNullOrEmpty(userId))
+            if (userId != null && !string.IsNullOrEmpty(userId))
             {
                 _currentUser = await GetCurrentUser(userId);
                 _jwtToken = await SecureStorage.GetAsync(JwtTokenKey);
@@ -70,16 +70,38 @@ namespace Logic.Shared.Services
             SecureStorage.Remove(JwtTokenKey);
         }
 
-        private async Task<AppUserEntity?> GetCurrentUser(string? userIdString) 
+        private async Task<AppUserEntity?> GetCurrentUser(string? userIdString)
         {
             if (userIdString == null || string.IsNullOrWhiteSpace(userIdString))
             {
                 return null;
             }
 
-            var userIdentity = await _applicationUnitOfWork.UserRepository.GetByIdAsync(int.Parse(userIdString));
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.SqLite, _dbContextFactory, this);
 
+            var userIdentity = await unitOfWork.UserRepository.GetByIdAsync(int.Parse(userIdString));
             return userIdentity;
+
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _dbContextFactory.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

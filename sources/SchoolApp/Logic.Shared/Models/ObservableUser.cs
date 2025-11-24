@@ -26,6 +26,8 @@ namespace Logic.Shared.Models
         [ObservableProperty]
         private bool _isActive;
         [ObservableProperty]
+        private bool _isInSync;
+        [ObservableProperty]
         private DateTime _createdAt;
         [ObservableProperty]
         private string _createdBy = string.Empty;

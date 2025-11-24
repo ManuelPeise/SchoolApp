@@ -36,6 +36,9 @@ namespace Data.ContextMysql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("LogLevel")
                         .HasColumnType("int");
 
@@ -70,6 +73,9 @@ namespace Data.ContextMysql.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("TopicDescription")
                         .IsRequired()
@@ -117,6 +123,9 @@ namespace Data.ContextMysql.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -155,6 +164,9 @@ namespace Data.ContextMysql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("TopicId")
                         .HasColumnType("int");
 
@@ -191,6 +203,9 @@ namespace Data.ContextMysql.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsInSync")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastName")
@@ -249,6 +264,9 @@ namespace Data.ContextMysql.Migrations
                     b.Property<string>("FamilyName")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");

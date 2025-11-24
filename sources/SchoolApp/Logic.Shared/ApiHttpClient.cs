@@ -3,6 +3,7 @@ using Logic.Shared.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shared.Enums;
+using Shared.Models;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
@@ -116,6 +117,37 @@ namespace Logic.Shared
                 });
 
                 return null;
+            }
+        }
+
+        public async Task<ResponseBaseModel> ApiIsReachable(string url = "api/availability/isavailable")
+        {
+            var reponseBase = new ResponseBaseModel
+            {
+                Success = false
+            };
+
+            try
+            {
+                var requestMessage = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    Version = HttpVersion.Version20,
+                    RequestUri = new Uri($"{url}", UriKind.Relative)
+                };
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                if (response.IsSuccessStatusCode) 
+                {
+                    reponseBase.Success = true;
+                }
+
+                return await Task.FromResult(reponseBase);
+            }
+            catch (Exception)
+            {
+                return await Task.FromResult(reponseBase);
             }
         }
     }

@@ -1,19 +1,19 @@
-﻿using Data.Context;
-using Data.ContextMysql;
-using Data.Entities;
+﻿using Data.Entities;
 using Data.Entities.Administration;
 using Data.Entities.LearnContent;
 using Data.Entities.User;
+using Data.Shared;
 using Logic.Shared.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Shared.Enums;
 
 namespace Logic.Shared
 {
-    public class ApplicationUnitOfWork : IApplicationUnitOfWork
+    public class ApplicationUnitOfWork
     {
-        private bool disposedValue;
-        private readonly AppDbContext _dbContext;
-       
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ADatabaseContext _dbContext;
+        private readonly DatabaseProviderTypeEnum _providerType;
 
         private readonly IRepositoryBase<FamilyEntity> _familyRepository;
         private readonly IRepositoryBase<AppUserEntity> _userRepository;
@@ -22,16 +22,20 @@ namespace Logic.Shared
         private readonly IRepositoryBase<UserLearnTopicEntity> _userLearnTopicRepository;
         private readonly IRepositoryBase<VocabularyEntity> _vocabularyRepository;
 
-        public IRepositoryBase<FamilyEntity> FamilyRepository => _familyRepository ?? new RepositoryBase<FamilyEntity>(_dbContext);
-        public IRepositoryBase<AppUserEntity> UserRepository => _userRepository ?? new RepositoryBase<AppUserEntity>(_dbContext);
-        public IRepositoryBase<LogEntryEntity> LogRepository => _logRepository ?? new RepositoryBase<LogEntryEntity>(_dbContext);
-        public IRepositoryBase<LearnTopicEntity> LearnTopicRepository => _learnTopicRepository ?? new RepositoryBase<LearnTopicEntity>(_dbContext);
-        public IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository => _userLearnTopicRepository ?? new RepositoryBase<UserLearnTopicEntity>(_dbContext);
-        public IRepositoryBase<VocabularyEntity> VocabularyRepository => _vocabularyRepository ?? new RepositoryBase<VocabularyEntity>(_dbContext);
+        public IRepositoryBase<FamilyEntity> FamilyRepository => _familyRepository ?? new RepositoryBase<FamilyEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
+        public IRepositoryBase<AppUserEntity> UserRepository => _userRepository ?? new RepositoryBase<AppUserEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
+        public IRepositoryBase<LogEntryEntity> LogRepository => _logRepository ?? new RepositoryBase<LogEntryEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
+        public IRepositoryBase<LearnTopicEntity> LearnTopicRepository => _learnTopicRepository ?? new RepositoryBase<LearnTopicEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
+        public IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository => _userLearnTopicRepository ?? new RepositoryBase<UserLearnTopicEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
+        public IRepositoryBase<VocabularyEntity> VocabularyRepository => _vocabularyRepository ?? new RepositoryBase<VocabularyEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
 
-        public ApplicationUnitOfWork(AppDbContext dbContext)
+        public ApplicationUnitOfWork(DatabaseProviderTypeEnum providerType, IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
         {
-            _dbContext = dbContext;
+            _dbContextFactory = dbContextFactory;
+            _dbContext = _dbContextFactory.CreateDbContext(providerType);
+
+            _providerType = providerType;
+
             _familyRepository = new RepositoryBase<FamilyEntity>(_dbContext);
             _userRepository = new RepositoryBase<AppUserEntity>(_dbContext);
             _logRepository = new RepositoryBase<LogEntryEntity>(_dbContext);
@@ -40,7 +44,7 @@ namespace Logic.Shared
             _vocabularyRepository =  new RepositoryBase<VocabularyEntity>(_dbContext);
         }
 
-        public async Task SaveChangesAsync(string? currentUser = null)
+        public async Task SaveChangesAsync(DatabaseProviderTypeEnum providerType, string? currentUser = null)
         {
             var userName = currentUser ?? "System";
 
@@ -71,26 +75,5 @@ namespace Logic.Shared
 
             await _dbContext.SaveChangesAsync();
         }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _dbContext.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
     }
 }

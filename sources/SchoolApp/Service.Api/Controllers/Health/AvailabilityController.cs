@@ -2,15 +2,15 @@
 
 namespace Service.Api.Controllers.Health
 {
-    public class HealthCheckController: ApiControllerBase
+    public class AvailabilityController: ApiControllerBase
     {
-        public HealthCheckController()
+        public AvailabilityController()
         {
                 
         }
 
-        [HttpGet(Name = "CheckHealth")]
-        public async Task<bool> CheckHealth()
+        [HttpGet(Name = "IsAvailable")]
+        public async Task<bool> IsAvailable()
         {
             return await Task.FromResult(true);
         }

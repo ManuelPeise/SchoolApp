@@ -1,52 +1,63 @@
 ﻿using Data.Entities.Administration;
 using Logic.Shared.Interfaces;
+using Shared.Enums;
 
 namespace Logic.Shared.Services
 {
     public class LogService : ILogService
     {
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
         private bool disposedValue;
-        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
-        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
 
-        public LogService(IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql, IApplicationUnitOfWork applicationUnitOfWork)
+        public LogService(IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
         {
-            _applicationUnitOfWork = applicationUnitOfWork;
-            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
+            _currentUserService = currentUserService;
+            _dbContextFactory = dbContextFactory;
         }
 
         public async Task<List<LogEntryEntity>> GetLogMessagesFromSqLite()
         {
-            return await _applicationUnitOfWork.LogRepository.GetAll();
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.SqLite, _dbContextFactory, _currentUserService);
+
+            return await unitOfWork.LogRepository.GetAll();
+
         }
 
         public async Task<List<LogEntryEntity>> GetLogMessagesFromMySql()
         {
-            return await _applicationUnitOfWorkMySql.LogRepository.GetAll();
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
+
+            return await unitOfWork.LogRepository.GetAll();
         }
 
         public async Task LogMessageSqLite(LogEntryEntity entity)
         {
-            await _applicationUnitOfWork.LogRepository.AddAsync(entity, null);
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.SqLite, _dbContextFactory, _currentUserService);
 
-            await _applicationUnitOfWork.SaveChangesAsync();
+            await unitOfWork.LogRepository.AddAsync(entity, null);
+
+            await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.SqLite);
         }
 
 
         public async Task LogMessageMySql(LogEntryEntity entity)
         {
-            await _applicationUnitOfWorkMySql.LogRepository.AddAsync(entity, null);
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
 
-            await _applicationUnitOfWorkMySql.SaveChangesAsync();
+            await unitOfWork.LogRepository.AddAsync(entity, null);
+
+            await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
                 if (disposing)
                 {
-                    _applicationUnitOfWork.Dispose();
-                    _applicationUnitOfWorkMySql.Dispose();
+                    _currentUserService.Dispose();
+                    _dbContextFactory.Dispose();
                 }
 
                 disposedValue = true;

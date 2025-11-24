@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Context.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(SqLiteDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace Data.Context.Migrations
                     b.Property<string>("ExceptionMessage")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("LogLevel")
                         .HasColumnType("INTEGER");
@@ -68,6 +71,9 @@ namespace Data.Context.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("TopicDescription")
                         .IsRequired()
@@ -115,6 +121,9 @@ namespace Data.Context.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
@@ -153,6 +162,9 @@ namespace Data.Context.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TopicId")
                         .HasColumnType("INTEGER");
 
@@ -189,6 +201,9 @@ namespace Data.Context.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
@@ -247,6 +262,9 @@ namespace Data.Context.Migrations
                     b.Property<string>("FamilyName")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");

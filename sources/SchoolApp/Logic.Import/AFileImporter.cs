@@ -5,13 +5,16 @@ namespace Logic.Import
 {
     internal abstract class AFileImporter
     {
-        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
 
-        public IApplicationUnitOfWorkMySql UnitOfWork => _applicationUnitOfWorkMySql;
+        public IDbContextFactory DbContextFactory => _dbContextFactory;
+        public ICurrentUserService CurrentUserService => _currentUserService;
 
-        protected AFileImporter(IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql)
+        protected AFileImporter(IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
         {
-            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
+            _currentUserService = currentUserService;
+            _dbContextFactory = dbContextFactory;
         }
 
         public abstract Task<ResponseBaseModel> Execute();

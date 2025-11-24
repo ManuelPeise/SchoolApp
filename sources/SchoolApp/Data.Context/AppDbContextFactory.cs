@@ -3,17 +3,17 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Data.Context
 {
-    public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    public class AppDbContextFactory : IDesignTimeDbContextFactory<SqLiteDbContext>
     {
-        public AppDbContext CreateDbContext(string[] args)
+        public SqLiteDbContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<SqLiteDbContext>();
 
             // Pfad zur SQLite-Datei (Windows, PMC Design-Time)
             var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "app.db");
             optionsBuilder.UseSqlite($"Data Source={dbPath}");
 
-            return new AppDbContext(optionsBuilder.Options);
+            return new SqLiteDbContext(optionsBuilder.Options);
         }
     }
 }

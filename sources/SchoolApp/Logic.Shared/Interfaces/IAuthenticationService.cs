@@ -1,5 +1,4 @@
-﻿using Data.Entities;
-using Logic.Shared.Models.Authentication;
+﻿using Logic.Shared.Models.Authentication;
 
 namespace Logic.Shared.Interfaces
 {

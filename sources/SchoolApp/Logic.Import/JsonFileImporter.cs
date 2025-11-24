@@ -6,28 +6,22 @@ namespace Logic.Import
 {
     public class JsonFileImporter : IJsonFileImporter
     {
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
         private bool disposedValue;
-        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
 
-        public JsonFileImporter(IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql)
+        public JsonFileImporter(IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
         {
-            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
+            _dbContextFactory = dbContextFactory;
+            _currentUserService = currentUserService;
         }
 
         public async Task<ResponseBaseModel> ImportJson(FileImportModel model)
         {
-            var instance = FileImportFactory.Execute(model, _applicationUnitOfWorkMySql);
+            var instance = FileImportFactory.Execute(model, _dbContextFactory, _currentUserService);
 
             return await instance.Execute();
         }
-
-        
-
-  
-        
-       
-
-        
 
         protected virtual void Dispose(bool disposing)
         {
@@ -35,9 +29,9 @@ namespace Logic.Import
             {
                 if (disposing)
                 {
-                    _applicationUnitOfWorkMySql.Dispose();
+                    _currentUserService.Dispose();
+                    _dbContextFactory.Dispose();
                 }
-
 
                 disposedValue = true;
             }
@@ -45,7 +39,7 @@ namespace Logic.Import
 
         public void Dispose()
         {
-
+            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

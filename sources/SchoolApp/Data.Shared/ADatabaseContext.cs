@@ -3,11 +3,11 @@ using Data.Entities.LearnContent;
 using Data.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.Context
+namespace Data.Shared
 {
-    public class AppDbContext : DbContext
+    public abstract class ADatabaseContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        protected ADatabaseContext(DbContextOptions opt): base(opt) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

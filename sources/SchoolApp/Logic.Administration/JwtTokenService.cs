@@ -1,4 +1,5 @@
 ﻿using Data.Entities.User;
+using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -15,12 +16,14 @@ namespace Logic.Administration
     {
         private bool disposedValue;
         private readonly IOptions<JwtTokenModel> _jwtOptions;
-        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
-        
-        public JwtTokenService(IOptions<JwtTokenModel> jwtOptions, IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql)
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
+
+        public JwtTokenService(IOptions<JwtTokenModel> jwtOptions, IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
         {
             _jwtOptions = jwtOptions;
-            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
+            _dbContextFactory = dbContextFactory;
+            _currentUserService = currentUserService;
         }
 
         public (string Jwt, string RefreshToken) GenerateTokens(AppUserEntity user)
@@ -30,10 +33,11 @@ namespace Logic.Administration
 
         public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest request)
         {
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
             var principal = GetPrincipalFromExpiredToken(request.AccessToken);
             var username = principal.Identity!.Name;
-            
-            var user = await _applicationUnitOfWorkMySql.UserRepository.Find(x => x.Username == username);
+
+            var user = await unitOfWork.UserRepository.Find(x => x.Username == username);
 
             if (user == null || user.RefreshToken != request.RefreshToken)
             {
@@ -44,10 +48,10 @@ namespace Logic.Administration
             var newRefreshToken = GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
-            
-            _applicationUnitOfWorkMySql.UserRepository.Update(user);
 
-            await _applicationUnitOfWorkMySql.SaveChangesAsync();
+            unitOfWork.UserRepository.Update(user);
+
+            await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
             return new RefreshTokenResponse
             {
@@ -119,10 +123,11 @@ namespace Logic.Administration
             {
                 if (disposing)
                 {
-                   
+                    _currentUserService.Dispose();
+                    _dbContextFactory.Dispose();
                 }
 
-               
+
                 disposedValue = true;
             }
         }

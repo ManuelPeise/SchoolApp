@@ -8,24 +8,26 @@ namespace Logic.Shared.Services
 {
     public class DbSycronisationService : IDbSycronisationService
     {
-        //private readonly IApplicationUnitOfWork _applicationUnitOfWork;
-        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
         private bool disposedValue;
 
-        public DbSycronisationService(IApplicationUnitOfWork applicationUnitOfWork, IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql)
+        public DbSycronisationService(IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
         {
 
-            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
+            _dbContextFactory = dbContextFactory;
+            _currentUserService = currentUserService;
         }
 
         public async Task<DatabaseModel?> GetMySqlDbModel(List<int> userIds)
         {
-            var userEntities = await _applicationUnitOfWorkMySql.UserRepository.GetBy(x => userIds.Contains(x.Id));
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
 
+            var userEntities = await unitOfWork.UserRepository.GetBy(x => userIds.Contains(x.Id));
 
             if (!userEntities.Any())
             {
-                await _applicationUnitOfWorkMySql.LogRepository.AddAsync(new LogEntryEntity
+                await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                 {
                     Message = "Could not get user from database",
                     ExceptionMessage = string.Empty,
@@ -33,14 +35,14 @@ namespace Logic.Shared.Services
                     LogLevel = LogLevelEnum.Error
                 }, null);
 
-                await _applicationUnitOfWorkMySql.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                 return null;
             }
 
-            var topics = await _applicationUnitOfWorkMySql.LearnTopicRepository.GetAll();
-            var userTopics = await _applicationUnitOfWorkMySql.UserLearnTopicRepository.GetBy(x => userIds.Contains(x.UserId));
-            var vocabulary = await _applicationUnitOfWorkMySql.VocabularyRepository.GetAll();
+            var topics = await unitOfWork.LearnTopicRepository.GetAll();
+            var userTopics = await unitOfWork.UserLearnTopicRepository.GetBy(x => userIds.Contains(x.UserId));
+            var vocabulary = await unitOfWork.VocabularyRepository.GetAll();
 
             return new DatabaseModel
             {
@@ -55,11 +57,14 @@ namespace Logic.Shared.Services
         public async Task CreateUserRelatedMySqlTableEntries(int userId)
         {
             var hasChanges = false;
-            var topics = await _applicationUnitOfWorkMySql.LearnTopicRepository.GetAll();
+
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
+
+            var topics = await unitOfWork.LearnTopicRepository.GetAll();
 
             foreach (var topic in topics)
             {
-                await _applicationUnitOfWorkMySql.UserLearnTopicRepository.AddAsync(new UserLearnTopicEntity
+                await unitOfWork.UserLearnTopicRepository.AddAsync(new UserLearnTopicEntity
                 {
                     UserId = userId,
                     TopicId = topic.Id,
@@ -76,7 +81,7 @@ namespace Logic.Shared.Services
 
             if (hasChanges)
             {
-                await _applicationUnitOfWorkMySql.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
             }
         }
 
@@ -86,8 +91,8 @@ namespace Logic.Shared.Services
             {
                 if (disposing)
                 {
-                    //_applicationUnitOfWork.Dispose();
-                    _applicationUnitOfWorkMySql.Dispose();
+                    _currentUserService.Dispose();
+                    _dbContextFactory.Dispose();
                 }
 
                 disposedValue = true;
@@ -96,7 +101,6 @@ namespace Logic.Shared.Services
 
         public void Dispose()
         {
-
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }

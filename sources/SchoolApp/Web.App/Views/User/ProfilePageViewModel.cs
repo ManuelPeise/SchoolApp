@@ -1,18 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Data.Entities.User;
+using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
-using Logic.Shared.Extensions;
 using Shared.Enums;
+using Shared.Models;
 using System.ComponentModel;
 
 namespace Web.App.Views.User
 {
     public partial class ProfilePageViewModel : BaseViewModel
     {
-        private INavigationService _navigationService;
-        private ICurrentUserService _currentUserService;
-        private const string LastUpdateTemplate = "Letzte Aktualisierung: am {Date} von {User}";
+        private readonly IProfileService _profileService;
+        private readonly INavigationService _navigationService;
+        private readonly ICurrentUserService _currentUserService;
+        private readonly IApiHttpClient<AppUserEntity, ResponseBaseModel> _apiClient;
+        private const string LastUpdateTemplate = "Letzte Aktualisierung: am {TimeStamp} Uhr (UTC) von {User}";
 
         [ObservableProperty]
         private ObservableUser? _user = null;
@@ -34,12 +38,18 @@ namespace Web.App.Views.User
         // keeps reference to previously subscribed user so we can unsubscribe
         private ObservableUser? _subscribedUser = null;
 
-        public ProfilePageViewModel(INavigationService navigationService, ICurrentUserService currentUserService)
+        public ProfilePageViewModel(
+            IProfileService profileService,
+            INavigationService navigationService,
+            ICurrentUserService currentUserService,
+            IApiHttpClient<AppUserEntity, ResponseBaseModel> apiClient)
         {
+            _profileService = profileService;
             _navigationService = navigationService;
             _currentUserService = currentUserService;
-            Initialíze();
+            _apiClient = apiClient;
 
+            Initialíze();
         }
 
         private async void Initialíze()
@@ -52,7 +62,7 @@ namespace Web.App.Views.User
                 User = _currentUserService.CurrentUser.ToObservable();
 
                 LastUpdateText = LastUpdateTemplate
-                    .Replace("{Date}", User.UpdatedAt?.ToString("dd.MM.yyyy"))
+                    .Replace("{TimeStamp}", User.UpdatedAt?.ToString("dd.MM.yyyy HH:mm"))
                     .Replace("{User}", User.UpdatedBy);
 
                 IsUser = User.UserRole == UserRoleEnum.User;
@@ -89,9 +99,54 @@ namespace Web.App.Views.User
         }
 
         [RelayCommand]
-        private void SaveChanges()
+        private async Task SaveChanges()
         {
-            // TODO : implement save logic
+            SetIsLoading(true);
+
+            try
+            {
+                var user = User?.ToEntity();
+
+                if (user == null)
+                {
+                    return;
+                }
+
+                var apiHealthResponse = await _apiClient.ApiIsReachable();
+
+                if (apiHealthResponse == null || !apiHealthResponse.Success)
+                {
+                    return;
+                }
+
+                var result = await _apiClient.PostAsync("api/profile/updateprofile", user);
+
+                if (result == null || !result.Success)
+                {
+                    return;
+                }
+
+                var localUser = User?.ToEntity();
+                localUser!.IsInSync = result.Success ? true : false;
+
+                result = await _profileService.ChangeProfileLocal(localUser);
+
+                if (result.Success)
+                {
+
+                    await _currentUserService.SetCurrentUser();
+
+                    User = _currentUserService.CurrentUser?.ToObservable();
+                    LastUpdateText = LastUpdateTemplate
+                                   .Replace("{TimeStamp}", User?.UpdatedAt?.ToString("dd.MM.yyyy HH:mm"))
+                                   .Replace("{User}", User?.UpdatedBy);
+
+                }
+            }
+            finally
+            {
+                SetIsLoading(false);
+            }
         }
 
         partial void OnUserChanged(ObservableUser? value)

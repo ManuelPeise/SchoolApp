@@ -143,7 +143,12 @@
                                         FontSize="{OnPlatform WinUI=20, Android=14}"
                                         Grid.Column="1" />
                             </Grid>
+                            
+                           
                         </VerticalStackLayout>
+                        <controls:LoadingOverlay IsLoading="{Binding IsLoading}"
+                                                 HorizontalOptions="Fill"
+                                                 VerticalOptions="Fill" />
                     </Grid>
                 </Grid>
             </Border>

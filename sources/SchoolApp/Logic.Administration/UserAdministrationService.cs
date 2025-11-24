@@ -3,6 +3,7 @@ using Logic.Shared;
 using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
+using Logic.Shared.Services;
 using Shared.Enums;
 using Shared.Models;
 
@@ -10,29 +11,31 @@ namespace Logic.Administration
 {
     public class UserAdministrationService : IUserAdministrationService
     {
-        private readonly IApplicationUnitOfWork _applicationUnitOfWork;
-        private readonly IApplicationUnitOfWorkMySql _applicationUnitOfWorkMySql;
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IDbSycronisationService _dbSycronisationService;
         private bool disposedValue;
 
         public UserAdministrationService(
-            IApplicationUnitOfWork applicationUnitOfWork,
-            IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql,
+            IDbContextFactory dbContextFactory,
+            ICurrentUserService currentUserService,
             IDbSycronisationService dbSycronisationService)
         {
-            _applicationUnitOfWork = applicationUnitOfWork;
-            _applicationUnitOfWorkMySql = applicationUnitOfWorkMySql;
+            _dbContextFactory = dbContextFactory;
+            _currentUserService = currentUserService;
             _dbSycronisationService = dbSycronisationService;
         }
 
 
         public async Task<ResponseBaseModel> RegisterUser(UserRegistrationRequestModel model)
         {
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
+
             try
             {
                 if (model.User == null)
                 {
-                    await _applicationUnitOfWorkMySql.LogRepository.AddAsync(new LogEntryEntity
+                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                     {
                         Message = "Could not register user, user is null",
                         ExceptionMessage = string.Empty,
@@ -40,7 +43,7 @@ namespace Logic.Administration
                         LogLevel = LogLevelEnum.Error
                     }, null);
 
-                    await _applicationUnitOfWorkMySql.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                     return new ResponseBaseModel
                     {
@@ -54,17 +57,17 @@ namespace Logic.Administration
                 entity.Salt = Guid.NewGuid().ToString();
                 entity.Password = PasswordHelper.HashPassword(entity.Password, entity.Salt);
 
-                await _applicationUnitOfWorkMySql.UserRepository
+                await unitOfWork.UserRepository
                     .AddAsync(entity, x => x.Username == model.User.Username);
 
-                await _applicationUnitOfWorkMySql.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
-                var userId = await _applicationUnitOfWorkMySql.UserRepository
+                var userId = await unitOfWork.UserRepository
                     .GetEntityId(x => x.Username == model.User.Username && x.DateOfBirth == entity.DateOfBirth);
 
                 if (userId == null)
                 {
-                    await _applicationUnitOfWorkMySql.LogRepository.AddAsync(new LogEntryEntity
+                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                     {
                         Message = "Could not get user from database",
                         ExceptionMessage = string.Empty,
@@ -72,7 +75,7 @@ namespace Logic.Administration
                         LogLevel = LogLevelEnum.Error
                     }, null);
 
-                    await _applicationUnitOfWorkMySql.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                     return new ResponseBaseModel
                     {
@@ -83,15 +86,15 @@ namespace Logic.Administration
 
                 await _dbSycronisationService.CreateUserRelatedMySqlTableEntries((int)userId);
 
-                 return new ResponseBaseModel
-                 {
+                return new ResponseBaseModel
+                {
                     Success = true,
                     Message = "Registration successful!"
                 };
             }
             catch (Exception exception)
             {
-                await _applicationUnitOfWorkMySql.LogRepository.AddAsync(new LogEntryEntity
+                await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                 {
                     Message = "User registration failed",
                     ExceptionMessage = exception.Message,
@@ -99,7 +102,7 @@ namespace Logic.Administration
                     LogLevel = LogLevelEnum.Error
                 }, null);
 
-                await _applicationUnitOfWorkMySql.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                 return new ResponseBaseModel
                 {
@@ -115,8 +118,8 @@ namespace Logic.Administration
             {
                 if (disposing)
                 {
-                    _applicationUnitOfWork.Dispose();
-                    _applicationUnitOfWorkMySql.Dispose();
+                    _dbContextFactory.Dispose();
+                    _currentUserService.Dispose();
                     _dbSycronisationService.Dispose();
                 }
 

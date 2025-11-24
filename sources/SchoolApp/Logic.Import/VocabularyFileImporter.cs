@@ -1,6 +1,7 @@
 ﻿using Data.Entities.Administration;
 using Data.Entities.LearnContent;
 using Logic.Import.Models;
+using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Newtonsoft.Json;
 using Shared.Enums;
@@ -12,18 +13,21 @@ namespace Logic.Import
     internal class VocabularyFileImporter : AFileImporter
     {
         private readonly FileImportModel _fileImportModel;
-        public VocabularyFileImporter(FileImportModel fileImportModel, IApplicationUnitOfWorkMySql applicationUnitOfWorkMySql) : base(applicationUnitOfWorkMySql)
+        public VocabularyFileImporter(FileImportModel fileImportModel, IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
+            : base(dbContextFactory, currentUserService)
         {
             _fileImportModel = fileImportModel;
         }
 
         public override async Task<ResponseBaseModel> Execute()
         {
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, DbContextFactory, CurrentUserService);
+
             try
             {
                 if (string.IsNullOrEmpty(_fileImportModel.FileContent))
                 {
-                    await UnitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                     {
                         Message = $"Error: file: {_fileImportModel.FileName} is empty",
                         ExceptionMessage = string.Empty,
@@ -31,7 +35,7 @@ namespace Logic.Import
                         LogLevel = LogLevelEnum.Info
                     }, null);
 
-                    await UnitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                     return new ResponseBaseModel { Success = false, Message = $"Error: file: {_fileImportModel.FileName} is empty" };
                 }
@@ -40,7 +44,7 @@ namespace Logic.Import
 
                 if (model == null)
                 {
-                    await UnitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                     {
                         Message = $"Error, file: {_fileImportModel.FileName} is empty",
                         ExceptionMessage = string.Empty,
@@ -48,7 +52,7 @@ namespace Logic.Import
                         LogLevel = LogLevelEnum.Info
                     }, null);
 
-                    await UnitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                     return new ResponseBaseModel { Success = false, Message = $"Error: file: {_fileImportModel.FileName} is empty" };
                 }
@@ -56,7 +60,7 @@ namespace Logic.Import
 
                 if (!model.IsValidTopic())
                 {
-                    await UnitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                     {
                         Message = $"Error file: {_fileImportModel.FileName} could not be parsed.",
                         ExceptionMessage = string.Empty,
@@ -64,12 +68,12 @@ namespace Logic.Import
                         LogLevel = LogLevelEnum.Info
                     }, null);
 
-                    await UnitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                     return new ResponseBaseModel { Success = false, Message = $"Error file: {_fileImportModel.FileName} could not be parsed." };
                 }
 
-                var topicId = await UnitOfWork.LearnTopicRepository.GetEntityId(x => x.TopicName.ToLower() == model.TopicName.ToLower());
+                var topicId = await unitOfWork.LearnTopicRepository.GetEntityId(x => x.TopicName.ToLower() == model.TopicName.ToLower());
 
                 var importTimeStamp = DateTime.UtcNow;
 
@@ -86,9 +90,9 @@ namespace Logic.Import
                         CreatedBy = "System"
                     };
 
-                    await UnitOfWork.LearnTopicRepository.AddAsync(topicentity, null);
+                    await unitOfWork.LearnTopicRepository.AddAsync(topicentity, null);
 
-                    await UnitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                     {
                         Message = $"File: {_fileImportModel.FileName} imported with success.",
                         ExceptionMessage = string.Empty,
@@ -96,26 +100,26 @@ namespace Logic.Import
                         LogLevel = LogLevelEnum.Info
                     }, null);
 
-                    await UnitOfWork.SaveChangesAsync();
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                 }
 
-                var vocabulatyTopicId = topicId ?? await UnitOfWork.LearnTopicRepository.GetEntityId(x => x.TopicName.ToLower() == model.TopicName.ToLower());
+                var vocabulatyTopicId = topicId ?? await unitOfWork.LearnTopicRepository.GetEntityId(x => x.TopicName.ToLower() == model.TopicName.ToLower());
 
                 if (vocabulatyTopicId == null)
                 {
                     return new ResponseBaseModel { Success = false, Message = $"Could not import file: {_fileImportModel.FileName} - topic defined topic not found." };
                 }
 
-                var existingVocabularyEntities = await UnitOfWork.VocabularyRepository.GetBy(x => x.TopicId == vocabulatyTopicId);
+                var existingVocabularyEntities = await unitOfWork.VocabularyRepository.GetBy(x => x.TopicId == vocabulatyTopicId);
 
                 var vocabularyEntities = GetVocabulariesToImport(model.Vocabularies, importTimeStamp, existingVocabularyEntities);
 
                 vocabularyEntities.ForEach(e => e.TopicId = (int)vocabulatyTopicId);
 
-                await UnitOfWork.VocabularyRepository.AddRangeAsync(vocabularyEntities);
+                await unitOfWork.VocabularyRepository.AddRangeAsync(vocabularyEntities);
 
-                await UnitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                 {
                     Message = $"File: {_fileImportModel.FileName} imported with success.",
                     ExceptionMessage = string.Empty,
@@ -123,13 +127,13 @@ namespace Logic.Import
                     LogLevel = LogLevelEnum.Info
                 }, null);
 
-                await UnitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                 return new ResponseBaseModel { Success = true, Message = $"Import file: {_fileImportModel.FileName} with success." };
             }
             catch (Exception exception)
             {
-                await UnitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
                 {
                     Message = $"Could not import file: {_fileImportModel.FileName}",
                     ExceptionMessage = exception.Message,
@@ -137,7 +141,7 @@ namespace Logic.Import
                     LogLevel = LogLevelEnum.Error
                 }, null);
 
-                await UnitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                 return new ResponseBaseModel { Success = false, Message = $"Error: file: {_fileImportModel.FileName} is empty" };
             }

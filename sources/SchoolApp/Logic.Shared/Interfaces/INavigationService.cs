@@ -1,6 +1,6 @@
 ﻿namespace Logic.Shared.Interfaces
 {
-    public interface INavigationService
+    public interface INavigationService: IDisposable
     {
         bool IsNavigating { get; set; }
         Task NavigateToAsync(string route);
