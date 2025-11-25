@@ -33,6 +33,11 @@ namespace Web.App.Views
             {
                 Title = "Profil",
                 Route = "///profile"
+            },
+            new ShellItemModel
+            {
+                Title = "Passwort aktualisieren",
+                Route = "///changePassword"
             }
         };
 
