@@ -26,7 +26,7 @@
                       VerticalOptions="Center"
                       MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
                     <Grid RowSpacing="0">
-                        <VerticalStackLayout Spacing="30">
+                        <VerticalStackLayout Spacing="10">
                             <!--TODO SET PROFILE IMAGE-->
                             <Image Source="dotnet_bot.png"
                                    HeightRequest="140"
@@ -56,17 +56,24 @@
 
                             <controls:LabeledBorderlessEntry  Label="Vorname"
                                                           FontSize="{OnPlatform WinUI=16,Android=12}"
-                                                          Placeholder="Benutzername"
+                                                          Placeholder="Vorname"
                                                           IsEnabled="{Binding IsEditMode}"
                                                           Margin="0"  
-                                                          Text="{Binding User.Username}"/>
+                                                          Text="{Binding User.FirstName}"/>
 
                             <controls:LabeledBorderlessEntry  Label="Name"
                                                            FontSize="{OnPlatform WinUI=16,Android=12}"
-                                                           Placeholder="Benutzername"
+                                                           Placeholder="Name"
                                                            IsEnabled="{Binding IsEditMode}"
                                                            Margin="0"  
                                                            Text="{Binding User.LastName}"/>
+
+                            <controls:LabeledBorderlessEntry  Label="Benutzername"
+                                                           FontSize="{OnPlatform WinUI=16,Android=12}"
+                                                           Placeholder="Benutzername"
+                                                           IsEnabled="False"
+                                                           Margin="0"  
+                                                           Text="{Binding User.UserName}"/>
 
                             <controls:LabeledBorderlessEntry  Label="Geburtsdatum"
                                                            FontSize="{OnPlatform WinUI=16,Android=12}"
@@ -74,7 +81,17 @@
                                                            IsEnabled="False"
                                                            Margin="0"  
                                                            Text="{Binding User.DateOfBirth, Converter={StaticResource dateConverter}}"/>
-                            
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="20" Padding="10,15,0,15">
+                                <Button Text="Passwort Ändern"
+                                        Command="{Binding NavigateToChangePasswordCommand}"
+                                        IsVisible="True"
+                                        IsEnabled="True"
+                                        BackgroundColor="{StaticResource ColorAccent}"
+                                        TextColor="{StaticResource ColorTextPrimary}"
+                                        FontSize="{OnPlatform WinUI=20, Android=14}"
+                                        Grid.Column="1" />
+                            </Grid>
                             <Grid ColumnDefinitions="*,*,*"
                                   ColumnSpacing="20">
                                 <Grid Grid.Column="0" ColumnDefinitions="30, 150" Padding="0" >
@@ -121,7 +138,8 @@
                                 Text="{Binding LastUpdateText}"
                                 TextColor="{StaticResource ColorTextPrimary}"
                                 FontAttributes="Italic"
-                                FontSize="{OnPlatform WinUI=16,Android=12}"/>
+                                FontSize="{OnPlatform WinUI=16,Android=12}"
+                                Margin="5,15,0,0"/>
 
                             <Grid ColumnDefinitions="*,*"
                                   ColumnSpacing="20">

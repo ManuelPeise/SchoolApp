@@ -58,12 +58,12 @@ namespace Logic.Administration
                 entity.Credentials.Password = PasswordHelper.HashPassword(entity.Credentials.Password, entity.Credentials.Salt);
 
                 await unitOfWork.UserRepository
-                    .AddAsync(entity, x => x.UserName == model.User.Username);
+                    .AddAsync(entity, x => x.UserName == model.User.UserName);
 
                 await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
                 var userId = await unitOfWork.UserRepository
-                    .GetEntityId(x => x.UserName == model.User.Username && x.DateOfBirth == entity.DateOfBirth);
+                    .GetEntityId(x => x.UserName == model.User.UserName && x.DateOfBirth == entity.DateOfBirth);
 
                 if (userId == null)
                 {

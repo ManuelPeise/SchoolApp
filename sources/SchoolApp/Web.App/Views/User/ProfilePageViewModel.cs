@@ -64,7 +64,7 @@ namespace Web.App.Views.User
                 LastUpdateText = LastUpdateTemplate
                     .Replace("{TimeStamp}", User.UpdatedAt?.ToString("dd.MM.yyyy HH:mm"))
                     .Replace("{User}", User.UpdatedBy);
-
+           
                 IsUser = User.UserRole == UserRoleEnum.User;
                 IsAdminUser = User.UserRole == UserRoleEnum.Admin;
                 IsSystemAdminUser = User.UserRole == UserRoleEnum.SystemAdmin;
@@ -149,6 +149,12 @@ namespace Web.App.Views.User
             }
         }
 
+        [RelayCommand]
+        private async Task NavigateToChangePassword()
+        {
+            await _navigationService.NavigateToAsync("///changePassword");
+        }
+
         partial void OnUserChanged(ObservableUser? value)
         {
             // unsubscribe previous
@@ -181,10 +187,13 @@ namespace Web.App.Views.User
             if (current == null || obs == null)
                 return false;
 
+            if (!string.Equals(current.FirstName ?? string.Empty, obs.FirstName ?? string.Empty, StringComparison.Ordinal))
+                return true;
+
             if (!string.Equals(current.LastName ?? string.Empty, obs.LastName ?? string.Empty, StringComparison.Ordinal))
                 return true;
 
-            if (!string.Equals(current.UserName ?? string.Empty, obs.Username ?? string.Empty, StringComparison.Ordinal))
+            if (!string.Equals(current.UserName ?? string.Empty, obs.UserName ?? string.Empty, StringComparison.Ordinal))
                 return true;
 
             if (current.DateOfBirth != obs.DateOfBirth)
