@@ -1,4 +1,5 @@
 ﻿using Logic.Shared.Models.Authentication;
+using Shared.Models;
 
 namespace Logic.Shared.Interfaces
 {
@@ -6,7 +7,7 @@ namespace Logic.Shared.Interfaces
     {
         Task<LoginResult> LoginAsync(LoginRequestModel model);
         Task<LoginResult> LoginLocalAsync(LoginRequestModel model);
-
+        Task<ResponseBaseModel> ChangePassword(ChangePasswordRequest request);
         void LogOut();
     }
 }

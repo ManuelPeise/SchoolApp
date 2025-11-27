@@ -17,7 +17,7 @@ namespace Web.App.Views.Authentication
 
 
         [ObservableProperty]
-        private string _userName = "Manuel";
+        private string _userName = "Manuel.Peise";
 
         [ObservableProperty]
         private string _password = "Pass@word";
@@ -52,7 +52,7 @@ namespace Web.App.Views.Authentication
                     return;
 
                 var userFromSqLite = await unitOfWork.UserRepository
-                    .Find(x => x.Username.ToLower() == UserName.ToLower());
+                    .Find(x => x.UserName.ToLower() == UserName.ToLower());
 
                 LoginResult? authResult;
 
@@ -98,16 +98,17 @@ namespace Web.App.Views.Authentication
                 {
                     userFromSqLite = authResult.AppUser;
                     await unitOfWork.UserRepository.AddAsync(userFromSqLite, null);
-                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.SqLite, _currentUserService.CurrentUser?.Username);
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.SqLite, _currentUserService.CurrentUser?.UserName);
 
                     await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
                 }
                 else
                 {
-                    userFromSqLite.RefreshToken = authResult.AppUser.RefreshToken;
+                    await unitOfWork.UserCredentialsRepository.GetByIdAsync(userFromSqLite.Id);
+                    userFromSqLite.Credentials.RefreshToken = authResult.AppUser.Credentials.RefreshToken;
                     unitOfWork.UserRepository.Update(userFromSqLite);
 
-                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.SqLite, _currentUserService.CurrentUser?.Username);
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.SqLite, _currentUserService.CurrentUser?.UserName);
 
                     await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
                 }

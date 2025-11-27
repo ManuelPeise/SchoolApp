@@ -58,7 +58,6 @@ namespace Logic.Import
                     return new ResponseBaseModel { Success = false, Message = $"Error, file: {_fileImportModel.FileName} could not be parsed." };
                 }
 
-
                 if (!model.IsValidModel())
                 {
                     await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
@@ -80,7 +79,7 @@ namespace Logic.Import
 
                 if (familyId == null)
                 {
-                    var familyMembers = await GetFamilyMemberEntities(unitOfWork, model.FamilyMembers, model.FamilyName, importTimeStamp);
+                    var familyMembers = await GetFamilyMemberEntities(unitOfWork, model.FamilyMembers, importTimeStamp);
 
                     var adminUser = familyMembers.FirstOrDefault(x => x.UserRole == UserRoleEnum.Admin);
 
@@ -101,7 +100,7 @@ namespace Logic.Import
 
                     var familyEntity = new FamilyEntity
                     {
-                        FamilyName = $"{adminUser.Username}.{model.FamilyName}",
+                        FamilyName = $"{adminUser.FirstName}.{model.FamilyName}",
                         FamilyDisplayName = model.FamilyName,
                         FamilyMembers = familyMembers,
                         CreatedAt = importTimeStamp,
@@ -109,7 +108,6 @@ namespace Logic.Import
                     };
 
                     await unitOfWork.FamilyRepository.AddAsync(familyEntity, null);
-
                 }
 
                 await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
@@ -141,14 +139,14 @@ namespace Logic.Import
             }
         }
 
-        private async Task<List<AppUserEntity>> GetFamilyMemberEntities(ApplicationUnitOfWork unitOfWork, List<FamilyMemberImportModel> familyMembers, string familyName, DateTime timeStamp)
+        private async Task<List<AppUserEntity>> GetFamilyMemberEntities(ApplicationUnitOfWork unitOfWork, List<FamilyMemberImportModel> familyMembers, DateTime timeStamp)
         {
             var members = new List<AppUserEntity>();
 
             foreach (var familyMember in familyMembers)
             {
                 var userId = await unitOfWork.UserRepository.GetEntityId(x =>
-                    x.Username.ToLower() == familyMember.Name.ToLower() && x.LastName.ToLower() == familyName.ToLower());
+                    x.FirstName.ToLower() == familyMember.FirstName.ToLower() && x.LastName.ToLower() == familyMember.LastName.ToLower());
 
                 if (userId == null)
                 {
@@ -156,19 +154,24 @@ namespace Logic.Import
 
                     members.Add(new AppUserEntity
                     {
-                        LastName = familyName,
-                        Username = familyMember.Name,
+                        FirstName = familyMember.FirstName,
+                        LastName = familyMember.LastName,
                         DateOfBirth = familyMember.DateOfBirth,
                         UserRole = familyMember.UserRole,
-                        Salt = salt,
-                        Password = PasswordHelper.HashPassword(familyMember.Password, salt),
+                        IsInSync = true,
                         IsActive = familyMember.IsActive,
-                        RefreshToken = string.Empty,
+                        Credentials = new AppUserCredentialsEntity
+                        {
+                            Salt = salt,
+                            Password = PasswordHelper.HashPassword(familyMember.Password, salt),
+                            RefreshToken = string.Empty,
+                            CreatedAt = timeStamp,
+                            CreatedBy = "System"
+                        },
                         CreatedAt = timeStamp,
                         CreatedBy = "System"
                     });
                 }
-
             }
 
             return members;

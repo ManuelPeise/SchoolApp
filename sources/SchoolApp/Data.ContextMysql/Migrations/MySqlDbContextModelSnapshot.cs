@@ -183,7 +183,7 @@ namespace Data.ContextMysql.Migrations
                     b.ToTable("Vocabularys");
                 });
 
-            modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
+            modelBuilder.Entity("Data.Entities.User.AppUserCredentialsEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -196,21 +196,8 @@ namespace Data.ContextMysql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("FamilyId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<bool>("IsInSync")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -230,14 +217,63 @@ namespace Data.ContextMysql.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("UserRole")
+                    b.HasKey("Id");
+
+                    b.ToTable("AppUserCredentialsEntity");
+                });
+
+            modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Username")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("CredentialsId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("FamilyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CredentialsId");
 
                     b.HasIndex("FamilyId");
 
@@ -311,9 +347,17 @@ namespace Data.ContextMysql.Migrations
 
             modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
                 {
+                    b.HasOne("Data.Entities.User.AppUserCredentialsEntity", "Credentials")
+                        .WithMany()
+                        .HasForeignKey("CredentialsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Data.Entities.User.FamilyEntity", "Family")
                         .WithMany("FamilyMembers")
                         .HasForeignKey("FamilyId");
+
+                    b.Navigation("Credentials");
 
                     b.Navigation("Family");
                 });

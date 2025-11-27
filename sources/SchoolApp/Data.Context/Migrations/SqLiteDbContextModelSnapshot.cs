@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Context.Migrations
 {
     [DbContext(typeof(SqLiteDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    partial class SqLiteDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -181,7 +181,7 @@ namespace Data.Context.Migrations
                     b.ToTable("Vocabularys");
                 });
 
-            modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
+            modelBuilder.Entity("Data.Entities.User.AppUserCredentialsEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -194,21 +194,8 @@ namespace Data.Context.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("FamilyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -228,14 +215,63 @@ namespace Data.Context.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserRole")
+                    b.HasKey("Id");
+
+                    b.ToTable("AppUserCredentialsEntity");
+                });
+
+            modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Username")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("CredentialsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("FamilyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CredentialsId");
 
                     b.HasIndex("FamilyId");
 
@@ -309,9 +345,17 @@ namespace Data.Context.Migrations
 
             modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
                 {
+                    b.HasOne("Data.Entities.User.AppUserCredentialsEntity", "Credentials")
+                        .WithMany()
+                        .HasForeignKey("CredentialsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Data.Entities.User.FamilyEntity", "Family")
                         .WithMany("FamilyMembers")
                         .HasForeignKey("FamilyId");
+
+                    b.Navigation("Credentials");
 
                     b.Navigation("Family");
                 });

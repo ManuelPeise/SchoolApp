@@ -13,6 +13,8 @@ namespace Logic.Shared.Interfaces
         void Logout();
         bool IsAuthenticated();
         bool UserIsInRole(UserRoleEnum userRole);
-        
+        int? GetCurrentUserId();
+
+
     }
 }

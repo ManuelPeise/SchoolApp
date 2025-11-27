@@ -7,28 +7,5 @@ namespace Data.ContextMysql
     {
         public MySqlDbContext(DbContextOptions<MySqlDbContext> options) : base(options) { }
       
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<AppUserEntity>()
-        //        .HasOne(x => x.Family)
-        //        .WithMany(x => x.FamilyMembers)
-        //        .HasForeignKey(x => x.FamilyId);
-
-        //    modelBuilder.Entity<UserLearnTopicEntity>()
-        //         .HasKey(e => new { e.TopicId, e.UserId });
-
-        //    modelBuilder.Entity<UserLearnTopicEntity>()
-        //        .HasOne(e => e.Topic)
-        //        .WithMany(e => e.UserLearnTopics)
-        //        .HasForeignKey(e => e.TopicId);
-
-        //    modelBuilder.Entity<UserLearnTopicEntity>()
-        //        .HasOne(e => e.User)
-        //        .WithMany(e => e.UserLearnTopics)
-        //        .HasForeignKey(e => e.UserId);
-
-            
-        //}
     }
 }

@@ -16,6 +16,27 @@ namespace Data.ContextMysql.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "AppUserCredentialsEntity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Salt = table.Column<string>(type: "longtext", nullable: false),
+                    Password = table.Column<string>(type: "longtext", nullable: false),
+                    RefreshToken = table.Column<string>(type: "longtext", nullable: false),
+                    IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserCredentialsEntity", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Families",
                 columns: table => new
                 {
@@ -84,14 +105,13 @@ namespace Data.ContextMysql.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     LastName = table.Column<string>(type: "longtext", nullable: false),
-                    Username = table.Column<string>(type: "longtext", nullable: false),
+                    FirstName = table.Column<string>(type: "longtext", nullable: false),
+                    UserName = table.Column<string>(type: "longtext", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Salt = table.Column<string>(type: "longtext", nullable: false),
-                    Password = table.Column<string>(type: "longtext", nullable: false),
                     UserRole = table.Column<int>(type: "int", nullable: false),
-                    RefreshToken = table.Column<string>(type: "longtext", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     FamilyId = table.Column<int>(type: "int", nullable: true),
+                    CredentialsId = table.Column<int>(type: "int", nullable: false),
                     IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: false),
@@ -101,6 +121,12 @@ namespace Data.ContextMysql.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUsers_AppUserCredentialsEntity_CredentialsId",
+                        column: x => x.CredentialsId,
+                        principalTable: "AppUserCredentialsEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AppUsers_Families_FamilyId",
                         column: x => x.FamilyId,
@@ -172,6 +198,11 @@ namespace Data.ContextMysql.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppUsers_CredentialsId",
+                table: "AppUsers",
+                column: "CredentialsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AppUsers_FamilyId",
                 table: "AppUsers",
                 column: "FamilyId");
@@ -204,6 +235,9 @@ namespace Data.ContextMysql.Migrations
 
             migrationBuilder.DropTable(
                 name: "LearnTopics");
+
+            migrationBuilder.DropTable(
+                name: "AppUserCredentialsEntity");
 
             migrationBuilder.DropTable(
                 name: "Families");

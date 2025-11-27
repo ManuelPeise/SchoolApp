@@ -184,7 +184,7 @@ namespace Web.App.Views.User
             if (!string.Equals(current.LastName ?? string.Empty, obs.LastName ?? string.Empty, StringComparison.Ordinal))
                 return true;
 
-            if (!string.Equals(current.Username ?? string.Empty, obs.Username ?? string.Empty, StringComparison.Ordinal))
+            if (!string.Equals(current.UserName ?? string.Empty, obs.Username ?? string.Empty, StringComparison.Ordinal))
                 return true;
 
             if (current.DateOfBirth != obs.DateOfBirth)

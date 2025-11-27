@@ -25,7 +25,8 @@
 
     <Color x:Key="OverLayBackground">#AA000000</Color>
     <Color x:Key="ColorOrange">#ffcc00</Color>
-
+    <Color x:Key="ColorError">#ff0000</Color>
+    
     <!-- =============================== -->
     <!--       SHELL DARK THEME         -->
     <!-- =============================== -->

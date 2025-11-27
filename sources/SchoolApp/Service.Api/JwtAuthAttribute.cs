@@ -7,10 +7,12 @@ namespace Service.Api
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
     public class JwtAuthAttribute : Attribute, IAuthorizationFilter
     {
-        public UserRoleEnum UserRole { get; set; } = UserRoleEnum.None;
-
+        public string UserRoleString { get; set; } = string.Empty;
+        
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            var userRoles = GetUserRoles();
+
             var isAuthenticated = false;
 
             var user = context.HttpContext.User;
@@ -28,13 +30,9 @@ namespace Service.Api
             {
                 var role = (UserRoleEnum)Enum.Parse(typeof(UserRoleEnum), roleClaimValue);
 
-                if (role == UserRole)
+                if (userRoles.Contains(role))
                 {
                     isAuthenticated = true;
-                }
-                else
-                {
-                    isAuthenticated = UserRole == role;
                 }
             }
 
@@ -42,6 +40,26 @@ namespace Service.Api
             {
                 context.Result = new ForbidResult();
             }
+        }
+
+        private List<UserRoleEnum> GetUserRoles()
+        {
+            var userRoles = new List<UserRoleEnum>();
+
+            if (!string.IsNullOrEmpty(UserRoleString))
+            {
+                var roles = UserRoleString.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var role in roles)
+                {
+                    if (Enum.TryParse<UserRoleEnum>(role.Trim(), out var parsedRole))
+                    {
+                        userRoles.Add(parsedRole);
+                    }
+                }
+            }
+
+            return userRoles;
         }
     }
 }

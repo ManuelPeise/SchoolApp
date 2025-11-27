@@ -1,7 +1,17 @@
+using System.Windows.Input;
+
 namespace Web.App.ViewComponents;
 
 public partial class LabeledBorderlessEntry : ContentView
 {
+
+
+    public static readonly BindableProperty UnfocusedCommandProperty =
+    BindableProperty.Create(nameof(UnfocusedCommand),
+        typeof(ICommand),
+        typeof(LabeledBorderlessEntry),
+        default(ICommand));
+
     public static readonly BindableProperty TextProperty =
         BindableProperty.Create(nameof(Text), typeof(string), typeof(LabeledBorderlessEntry), defaultBindingMode: BindingMode.TwoWay);
 
@@ -14,6 +24,14 @@ public partial class LabeledBorderlessEntry : ContentView
     public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(int), typeof(LabeledBorderlessEntry), 12);
 
+    public static readonly BindableProperty IsPasswordProperty =
+       BindableProperty.Create(nameof(IsPassword), typeof(bool), typeof(LabeledBorderlessEntry), false);
+
+    public ICommand UnfocusedCommand
+    {
+        get => (ICommand)GetValue(UnfocusedCommandProperty);
+        set => SetValue(UnfocusedCommandProperty, value);
+    }
 
     public string Label
     {
@@ -39,8 +57,25 @@ public partial class LabeledBorderlessEntry : ContentView
         set => SetValue(PlaceholderProperty, value);
     }
 
+    public bool IsPassword
+    {
+        get => (bool)GetValue(IsPasswordProperty);
+        set => SetValue(IsPasswordProperty, value);
+    }
+    
     public LabeledBorderlessEntry()
 	{
-		InitializeComponent();
-	}
+        InitializeComponent();
+
+        ValueEntry.Unfocused += OnEntryFieldUnfocused;
+    }
+
+    private void OnEntryFieldUnfocused(object? sender, FocusEventArgs? e)
+    {
+        if (UnfocusedCommand?.CanExecute(null) ?? false)
+        {
+            UnfocusedCommand.Execute(null);
+        }
+            
+    }
 }

@@ -4,7 +4,7 @@
              xmlns:components="clr-namespace:Web.App.ViewComponents"
              x:Class="Web.App.ViewComponents.LabeledBorderlessEntry"
              x:Name="Root">
-    <VerticalStackLayout Spacing="3" BackgroundColor="Transparent" >
+    <VerticalStackLayout Spacing="3" BackgroundColor="Transparent" Margin="0" Padding="0">
 
         <Label x:Name="TitleLabel"
            FontSize="{Binding FontSize, Source={x:Reference Root}}"
@@ -21,6 +21,8 @@
                Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
                FontSize="{Binding FontSize, Source={x:Reference Root}}"
                Text="{Binding Text, Source={x:Reference Root}}"
-               IsEnabled="{Binding IsEnabled,Source={x:Reference Root}}" />
+               IsEnabled="{Binding IsEnabled,Source={x:Reference Root}}"
+               IsPassword="{Binding IsPassword, Source={x:Reference Root}}"
+               Unfocused="OnEntryFieldUnfocused"/>
     </VerticalStackLayout>
 </ContentView>

@@ -6,6 +6,7 @@ using Logic.Profile;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Services;
+using Logic.Shared.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -47,15 +48,18 @@ namespace Web.App
                 options.UseMySQL(connection);
             });
 
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped(typeof(IDbContextFactory), typeof(DbContextFactory));
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
+            builder.Services.AddScoped<ISqLiteService, SqLiteService>();
             builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IApiHttpClient<, >), typeof(ApiHttpClient<, >));
-            
+            builder.Services.AddScoped(typeof(IDbStorageHandler<>), typeof(DbStorageHandler<>));
+
             builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IProfileService, ProfileService>();

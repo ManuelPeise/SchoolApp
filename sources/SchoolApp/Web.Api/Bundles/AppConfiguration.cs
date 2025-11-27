@@ -56,9 +56,9 @@ namespace Web.Api.Bundles
 
         internal static void ConfigureServices(WebApplicationBuilder builder)
         {
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped(typeof(IDbContextFactory), typeof(DbContextFactory));
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IUserAdministrationService, UserAdministrationService>();
             builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
@@ -98,24 +98,33 @@ namespace Web.Api.Bundles
 
             if (!db.AppUsers.Where(x => x.UserRole == UserRoleEnum.SystemAdmin).Any())
             {
-
                 var salt = Guid.NewGuid().ToString();
 
-                db.AppUsers.Add(new AppUserEntity
+                var entity = new AppUserEntity
                 {
                     Id = 1,
                     FamilyId = null,
+                    FirstName = "Manuel",
                     LastName = "Peise",
-                    Username = "Manuel",
-                    DateOfBirth = new DateTime(1980,4,20),
+                    UserName = "Manuel.Peise",
+                    DateOfBirth = new DateTime(1980, 4, 20),
                     UserRole = UserRoleEnum.SystemAdmin,
-                    Salt = salt,
-                    Password = HashPassword("Pass@word", salt),
-                    RefreshToken = string.Empty,
+                    IsInSync = true,
                     IsActive = true,
+                    Credentials = new AppUserCredentialsEntity
+                    {
+                        Id = 1,
+                        Salt = salt,
+                        Password = HashPassword("Pass@word", salt),
+                        RefreshToken = string.Empty,
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = "System"
+                    },
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = "System"
-                });
+                };
+
+                db.AppUsers.Add(entity);
 
                 db.SaveChanges();
             }

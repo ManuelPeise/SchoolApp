@@ -243,7 +243,14 @@
         Shell.NavBarIsVisible="False"
         Shell.NavBarHasShadow="False"
         ContentTemplate="{DataTemplate user:ProfilePage}" />
-    
+
+    <ShellContent 
+        Title="ChangePasswordPage"
+        Route="changePassword"
+        Shell.NavBarIsVisible="False"
+        Shell.NavBarHasShadow="False"
+        ContentTemplate="{DataTemplate user:ChangePasswordPage}" />
+
     <ShellContent 
         Title="JSON-Datei Import"
         Route="jsonImportAssistent"

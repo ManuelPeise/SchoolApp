@@ -12,6 +12,8 @@ namespace Logic.Shared.Models
         [ObservableProperty]
         private string _lastName = string.Empty;
         [ObservableProperty]
+        private string _firstName = string.Empty;
+        [ObservableProperty]
         private string _username = string.Empty;
         [ObservableProperty]
         private DateTime? _dateOfBirth;

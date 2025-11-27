@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace Service.Api.Controllers.Health
 {
@@ -10,9 +11,13 @@ namespace Service.Api.Controllers.Health
         }
 
         [HttpGet(Name = "IsAvailable")]
-        public async Task<bool> IsAvailable()
+        public async Task<ResponseBaseModel> IsAvailable()
         {
-            return await Task.FromResult(true);
+            return await Task.FromResult(new ResponseBaseModel
+            {
+                Success = true,
+                Message = "Service is available"
+            });
         }
     }
 }

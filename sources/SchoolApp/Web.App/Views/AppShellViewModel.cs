@@ -45,7 +45,7 @@ namespace Web.App.Views
         {
             _currentUserService = currentUserService;
             AppUser = _currentUserService.CurrentUser;
-            UserName = AppUser?.Username ?? string.Empty;
+            UserName = AppUser?.UserName ?? string.Empty;
             ShowLogout = !string.IsNullOrEmpty(UserName);
 
         }

@@ -12,6 +12,26 @@ namespace Data.Context.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AppUserCredentialsEntity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Salt = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    RefreshToken = table.Column<string>(type: "TEXT", nullable: false),
+                    IsInSync = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserCredentialsEntity", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Families",
                 columns: table => new
                 {
@@ -77,14 +97,13 @@ namespace Data.Context.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Salt = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
                     UserRole = table.Column<int>(type: "INTEGER", nullable: false),
-                    RefreshToken = table.Column<string>(type: "TEXT", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     FamilyId = table.Column<int>(type: "INTEGER", nullable: true),
+                    CredentialsId = table.Column<int>(type: "INTEGER", nullable: false),
                     IsInSync = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
@@ -94,6 +113,12 @@ namespace Data.Context.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUsers_AppUserCredentialsEntity_CredentialsId",
+                        column: x => x.CredentialsId,
+                        principalTable: "AppUserCredentialsEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AppUsers_Families_FamilyId",
                         column: x => x.FamilyId,
@@ -162,6 +187,11 @@ namespace Data.Context.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppUsers_CredentialsId",
+                table: "AppUsers",
+                column: "CredentialsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AppUsers_FamilyId",
                 table: "AppUsers",
                 column: "FamilyId");
@@ -194,6 +224,9 @@ namespace Data.Context.Migrations
 
             migrationBuilder.DropTable(
                 name: "LearnTopics");
+
+            migrationBuilder.DropTable(
+                name: "AppUserCredentialsEntity");
 
             migrationBuilder.DropTable(
                 name: "Families");

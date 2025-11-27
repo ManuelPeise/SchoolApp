@@ -18,6 +18,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<JsonImportAssistentPage>();
             builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<ChangePasswordPage>();
         }
 
         internal static void InitializeCustomComponents(MauiAppBuilder builder)
@@ -33,6 +34,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<HomePageViewModel>();
             builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
             builder.Services.AddTransient<ProfilePageViewModel>();
+            builder.Services.AddTransient<ChangePasswordViewModel>();
 
         }
     }

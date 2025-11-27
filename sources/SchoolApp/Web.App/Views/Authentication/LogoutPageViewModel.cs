@@ -20,7 +20,7 @@ namespace Web.App.Views.Authentication
             _navigationService = navigationService;
 
             LogoutText = _currentUserService.CurrentUser != null ?
-                LogoutUserLabel.Replace("{User}", _currentUserService.CurrentUser.Username) :
+                LogoutUserLabel.Replace("{User}", _currentUserService.CurrentUser.UserName) :
                 LogoutLabel;
 
         }

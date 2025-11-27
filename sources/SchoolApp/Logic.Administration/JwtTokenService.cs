@@ -37,9 +37,16 @@ namespace Logic.Administration
             var principal = GetPrincipalFromExpiredToken(request.AccessToken);
             var username = principal.Identity!.Name;
 
-            var user = await unitOfWork.UserRepository.Find(x => x.Username == username);
+            var user = await unitOfWork.UserRepository.Find(x => x.UserName == username);
 
-            if (user == null || user.RefreshToken != request.RefreshToken)
+            if (user == null)
+            {
+                throw new SecurityTokenException("Invalid refresh token");
+            }
+
+            await unitOfWork.UserCredentialsRepository.GetByIdAsync(user.CredentialsId);
+
+            if(user.Credentials.RefreshToken != request.RefreshToken)
             {
                 throw new SecurityTokenException("Invalid refresh token");
             }
@@ -47,9 +54,9 @@ namespace Logic.Administration
             var newAccessToken = GenerateJwt(user);
             var newRefreshToken = GenerateRefreshToken();
 
-            user.RefreshToken = newRefreshToken;
+            user.Credentials.RefreshToken = newRefreshToken;
 
-            unitOfWork.UserRepository.Update(user);
+            unitOfWork.UserCredentialsRepository.Update(user.Credentials);
 
             await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
 
@@ -68,8 +75,8 @@ namespace Logic.Administration
             var claims = new List<Claim>
             {
                 new Claim("userId", appUserEntity.Id.ToString()),
-                new Claim(ClaimTypes.Name, appUserEntity.Username),
-                new Claim(ClaimTypes.Role, appUserEntity?.UserRole.ToString() ?? UserRoleEnum.None.ToString()),
+                new Claim("name", appUserEntity.UserName),
+                new Claim("userRole", appUserEntity?.UserRole.ToString() ?? UserRoleEnum.None.ToString()),
             };
 
             var token = new JwtSecurityToken(

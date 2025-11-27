@@ -2,7 +2,7 @@
 using Logic.Shared.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Service.Api.Controllers.Account
+namespace Service.Api.Controllers.Authentication
 {
     public class UserLoginController: ApiControllerBase
     {

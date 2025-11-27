@@ -17,6 +17,7 @@ namespace Logic.Shared
 
         private readonly IRepositoryBase<FamilyEntity> _familyRepository;
         private readonly IRepositoryBase<AppUserEntity> _userRepository;
+        private readonly IRepositoryBase<AppUserCredentialsEntity> _userCredentialsRepository;
         private readonly IRepositoryBase<LogEntryEntity> _logRepository;
         private readonly IRepositoryBase<LearnTopicEntity> _learnTopicRepository;
         private readonly IRepositoryBase<UserLearnTopicEntity> _userLearnTopicRepository;
@@ -24,6 +25,7 @@ namespace Logic.Shared
 
         public IRepositoryBase<FamilyEntity> FamilyRepository => _familyRepository ?? new RepositoryBase<FamilyEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
         public IRepositoryBase<AppUserEntity> UserRepository => _userRepository ?? new RepositoryBase<AppUserEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
+        public IRepositoryBase<AppUserCredentialsEntity> UserCredentialsRepository => _userCredentialsRepository ?? new RepositoryBase<AppUserCredentialsEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
         public IRepositoryBase<LogEntryEntity> LogRepository => _logRepository ?? new RepositoryBase<LogEntryEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
         public IRepositoryBase<LearnTopicEntity> LearnTopicRepository => _learnTopicRepository ?? new RepositoryBase<LearnTopicEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));
         public IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository => _userLearnTopicRepository ?? new RepositoryBase<UserLearnTopicEntity>(_dbContext ?? _dbContextFactory.CreateDbContext(_providerType));

@@ -1,11 +1,15 @@
-﻿using Logic.Shared;
+﻿using Data.Entities.Administration;
+using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
+using Microsoft.AspNetCore.Http;
 using Shared.Enums;
+using Shared.Models;
+
 
 namespace Logic.Administration
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : ALogicBase, IAuthenticationService
     {
         private readonly IDbContextFactory _dbContextFactory;
         private readonly ICurrentUserService _currentUserService;
@@ -15,7 +19,8 @@ namespace Logic.Administration
         public AuthenticationService(
            IDbContextFactory dbContextFactory,
            ICurrentUserService currentUserService,
-            IJwtTokenService jwtTokenService)
+            IJwtTokenService jwtTokenService,
+            IHttpContextAccessor httpContext) : base(httpContext)
         {
             _dbContextFactory = dbContextFactory;
             _currentUserService = currentUserService;
@@ -28,8 +33,9 @@ namespace Logic.Administration
 
             try
             {
-
-                var user = await unitOfWork.UserRepository.Find(x => x.Username.ToLower() == model.UserName.ToLower());
+                var user = await unitOfWork.UserRepository.Find(
+                    x => x.UserName.ToLower() == model.UserName.ToLower(),
+                    true, e => e.Credentials);
 
                 if (user == null)
                 {
@@ -40,9 +46,9 @@ namespace Logic.Administration
                     };
                 }
 
-                var encriptedPassword = PasswordHelper.HashPassword(model.Password, user.Salt);
+                var encriptedPassword = PasswordHelper.HashPassword(model.Password, user.Credentials.Salt);
 
-                if (encriptedPassword != user.Password)
+                if (encriptedPassword != user.Credentials.Password)
                 {
                     return new LoginResult
                     {
@@ -53,12 +59,12 @@ namespace Logic.Administration
 
                 var tokenData = _jwtTokenService.GenerateTokens(user);
 
-                user.RefreshToken = tokenData.RefreshToken;
-                user.IsInSync = true;
+                user.Credentials.RefreshToken = tokenData.RefreshToken;
+                user.Credentials.IsInSync = true;
 
-                unitOfWork.UserRepository.Update(user);
+                unitOfWork.UserCredentialsRepository.Update(user.Credentials);
 
-                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql, CurrentUser.UserName ?? "System");
 
                 return new LoginResult
                 {
@@ -84,7 +90,7 @@ namespace Logic.Administration
 
             try
             {
-                var user = await unitOfWork.UserRepository.Find(x => x.Username.ToLower() == model.UserName.ToLower());
+                var user = await unitOfWork.UserRepository.Find(x => x.UserName.ToLower() == model.UserName.ToLower());
 
                 if (user == null)
                 {
@@ -95,9 +101,11 @@ namespace Logic.Administration
                     };
                 }
 
-                var encriptedPassword = PasswordHelper.HashPassword(model.Password, user.Salt);
+                await unitOfWork.UserCredentialsRepository.GetEntityId(x => x.Id == user.CredentialsId);
 
-                if (encriptedPassword != user.Password)
+                var encriptedPassword = PasswordHelper.HashPassword(model.Password, user.Credentials.Salt);
+
+                if (encriptedPassword != user.Credentials.Password)
                 {
                     return new LoginResult
                     {
@@ -119,6 +127,77 @@ namespace Logic.Administration
                 {
                     Success = false,
                     Message = "Login failed!"
+                };
+            }
+        }
+
+        public async Task<ResponseBaseModel> ChangePassword(ChangePasswordRequest request)
+        {
+            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
+
+            try
+            {
+                if(CurrentUser == null)
+                {
+                    return new ResponseBaseModel
+                    {
+                        Success = false,
+                        Message = "Could not find user!"
+                    };
+                }
+
+                var userEntity = await unitOfWork.UserRepository.Find(x => x.Id == CurrentUser.UserId, true, x => x.Credentials);
+
+                if (userEntity == null || userEntity.Credentials == null)
+                {
+                    return new ResponseBaseModel
+                    {
+                        Success = false,
+                        Message = "Could not find User in database"
+                    };
+                }
+
+                var passwordHash = PasswordHelper.HashPassword(request.Password, userEntity.Credentials.Salt);
+
+                if (userEntity.Credentials.Password == request.Password)
+                {
+                    passwordHash = PasswordHelper.HashPassword(request.NewPassword, userEntity.Credentials.Salt);
+
+                    var credentialsEntity = userEntity.Credentials;
+
+                    credentialsEntity.Password = passwordHash;
+
+                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql, CurrentUser.UserName);
+
+                    return new ResponseBaseModel
+                    {
+                        Success = true,
+                        Message = "Password changed!"
+                    };
+                }
+
+                return new ResponseBaseModel
+                {
+                    Success = false,
+                    Message = "Incorrect password!"
+                };
+            }
+            catch (Exception exception)
+            {
+                await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                {
+                    Message = "Password validation failed.",
+                    ExceptionMessage = exception.Message,
+                    Stacktrace = exception.StackTrace ?? string.Empty,
+                    LogLevel = LogLevelEnum.Info
+                }, null);
+
+                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql, CurrentUser.UserName);
+
+                return new ResponseBaseModel
+                {
+                    Success = false,
+                    Message = "Password validation failed!"
                 };
             }
         }

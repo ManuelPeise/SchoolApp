@@ -62,6 +62,11 @@ namespace Logic.Shared.Services
             }
         }
 
+        public int? GetCurrentUserId()
+        {
+            return CurrentUser?.Id;
+        }
+
         public void Logout()
         {
             _currentUser = null;
