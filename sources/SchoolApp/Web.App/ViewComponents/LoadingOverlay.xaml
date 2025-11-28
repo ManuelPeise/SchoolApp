@@ -7,17 +7,19 @@
     IsVisible="{Binding IsLoading}">
 
     <Grid
-        BackgroundColor="{StaticResource OverLayBackground}"  
+        BackgroundColor="{StaticResource OverLayBackground}"
         HorizontalOptions="Fill"
         VerticalOptions="Fill">
 
-        <ActivityIndicator 
+        <ActivityIndicator
+            HeightRequest="{OnPlatform WinUI=200,
+                                       Android=100}"
+            HorizontalOptions="Center"
             IsRunning="True"
-            Color="{StaticResource ColorOrange}"
-            WidthRequest="{OnPlatform WinUI=200, Android=100}"
-            HeightRequest="{OnPlatform WinUI=200, Android=100}"
             VerticalOptions="Center"
-            HorizontalOptions="Center"/>
+            WidthRequest="{OnPlatform WinUI=200,
+                                      Android=100}"
+            Color="{StaticResource ColorOrange}" />
     </Grid>
 </ContentView>
 

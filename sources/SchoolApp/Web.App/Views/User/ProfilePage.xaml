@@ -1,172 +1,211 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Web.App.Views.User.ProfilePage"
-             xmlns:controls="clr-namespace:Web.App.ViewComponents"
-             xmlns:converters="clr-namespace:Web.App.Converters"
-             BackgroundColor="{StaticResource ColorBackground}"
-             Title="Profile">
+<ContentPage
+    x:Class="Web.App.Views.User.ProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    xmlns:converters="clr-namespace:Web.App.Converters"
+    Title="Profile"
+    BackgroundColor="{StaticResource ColorBackground}">
     <ContentPage.Resources>
         <converters:DateTimeToStringConverter x:Key="dateConverter" />
     </ContentPage.Resources>
-    <Grid RowDefinitions="*,Auto,*"
-          ColumnDefinitions="*,Auto,*">
+    <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*,Auto,*">
 
         <Grid Grid.Row="1" Grid.Column="1">
 
-            <Border Grid.Row="1"
+            <Border
+                Grid.Row="1"
                 Grid.Column="1"
                 Padding="0"
-                StrokeThickness="0"
                 BackgroundColor="{StaticResource ColorSurface}"
-                StrokeShape="RoundRectangle 20">
-                <Grid BackgroundColor="{StaticResource ColorSurface}"
-                      Padding="30"
-                      HorizontalOptions="Center"
-                      VerticalOptions="Center"
-                      MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="0">
+                <Grid
+                    Padding="30"
+                    BackgroundColor="{StaticResource ColorSurface}"
+                    HorizontalOptions="Center"
+                    MaximumWidthRequest="{OnPlatform WinUI=600,
+                                                     Android=350}"
+                    VerticalOptions="Center">
                     <Grid RowSpacing="0">
                         <VerticalStackLayout Spacing="10">
-                            <!--TODO SET PROFILE IMAGE-->
-                            <Image Source="dotnet_bot.png"
-                                   HeightRequest="140"
-                                   WidthRequest="400"
-                                   Aspect="AspectFit" />
-                            
-                            <Grid ColumnDefinitions="Auto,*"
-                                  ColumnSpacing="0"
-                                  Padding="10,0"
-                                  MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
-                                
-                                <Label Grid.Column="0" 
-                                       Text="Profil"
-                                       FontSize="{OnPlatform WinUI=24,Android=14}"
-                                       TextColor="{StaticResource ColorTextPrimary}"
-                                       VerticalOptions="Center"/>
-                                
-                                <ImageButton Grid.Column="1" 
-                                             Source="{Binding ToggleButtonImage}"
-                                             HorizontalOptions="End"
-                                             HeightRequest="30"
-                                             WidthRequest="30"
-                                             Aspect="AspectFit"
-                                             BackgroundColor="Transparent"
-                                             Command="{Binding ToggleModeCommand}"/>
+                            <!--  TODO SET PROFILE IMAGE  -->
+                            <Image
+                                Aspect="AspectFit"
+                                HeightRequest="140"
+                                Source="dotnet_bot.png"
+                                WidthRequest="400" />
+
+                            <Grid
+                                Padding="10,0"
+                                ColumnDefinitions="Auto,*"
+                                ColumnSpacing="0"
+                                MaximumWidthRequest="{OnPlatform WinUI=600,
+                                                                 Android=350}">
+
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="{OnPlatform WinUI=24,
+                                                          Android=14}"
+                                    Text="Profil"
+                                    TextColor="{StaticResource ColorTextPrimary}"
+                                    VerticalOptions="Center" />
+
+                                <ImageButton
+                                    Grid.Column="1"
+                                    Aspect="AspectFit"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding ToggleModeCommand}"
+                                    HeightRequest="30"
+                                    HorizontalOptions="End"
+                                    Source="{Binding ToggleButtonImage}"
+                                    WidthRequest="30" />
                             </Grid>
 
-                            <controls:LabeledBorderlessEntry  Label="Vorname"
-                                                          FontSize="{OnPlatform WinUI=16,Android=12}"
-                                                          Placeholder="Vorname"
-                                                          IsEnabled="{Binding IsEditMode}"
-                                                          Margin="0"  
-                                                          Text="{Binding User.FirstName}"/>
+                            <controls:LabeledBorderlessEntry
+                                Margin="0"
+                                FontSize="{OnPlatform WinUI=16,
+                                                      Android=12}"
+                                IsEnabled="{Binding IsEditMode}"
+                                Label="Vorname"
+                                Placeholder="Vorname"
+                                Text="{Binding User.FirstName}" />
 
-                            <controls:LabeledBorderlessEntry  Label="Name"
-                                                           FontSize="{OnPlatform WinUI=16,Android=12}"
-                                                           Placeholder="Name"
-                                                           IsEnabled="{Binding IsEditMode}"
-                                                           Margin="0"  
-                                                           Text="{Binding User.LastName}"/>
+                            <controls:LabeledBorderlessEntry
+                                Margin="0"
+                                FontSize="{OnPlatform WinUI=16,
+                                                      Android=12}"
+                                IsEnabled="{Binding IsEditMode}"
+                                Label="Name"
+                                Placeholder="Name"
+                                Text="{Binding User.LastName}" />
 
-                            <controls:LabeledBorderlessEntry  Label="Benutzername"
-                                                           FontSize="{OnPlatform WinUI=16,Android=12}"
-                                                           Placeholder="Benutzername"
-                                                           IsEnabled="False"
-                                                           Margin="0"  
-                                                           Text="{Binding User.UserName}"/>
+                            <controls:LabeledBorderlessEntry
+                                Margin="0"
+                                FontSize="{OnPlatform WinUI=16,
+                                                      Android=12}"
+                                IsEnabled="False"
+                                Label="Benutzername"
+                                Placeholder="Benutzername"
+                                Text="{Binding User.UserName}" />
 
-                            <controls:LabeledBorderlessEntry  Label="Geburtsdatum"
-                                                           FontSize="{OnPlatform WinUI=16,Android=12}"
-                                                           Placeholder="Benutzername"
-                                                           IsEnabled="False"
-                                                           Margin="0"  
-                                                           Text="{Binding User.DateOfBirth, Converter={StaticResource dateConverter}}"/>
+                            <controls:LabeledBorderlessEntry
+                                Margin="0"
+                                FontSize="{OnPlatform WinUI=16,
+                                                      Android=12}"
+                                IsEnabled="False"
+                                Label="Geburtsdatum"
+                                Placeholder="Benutzername"
+                                Text="{Binding User.DateOfBirth, Converter={StaticResource dateConverter}}" />
 
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="20" Padding="10,15,0,15">
-                                <Button Text="Passwort Ändern"
-                                        Command="{Binding NavigateToChangePasswordCommand}"
-                                        IsVisible="True"
-                                        IsEnabled="True"
-                                        BackgroundColor="{StaticResource ColorAccent}"
-                                        TextColor="{StaticResource ColorTextPrimary}"
-                                        FontSize="{OnPlatform WinUI=20, Android=14}"
-                                        Grid.Column="1" />
+                            <Grid
+                                Padding="10,15,0,15"
+                                ColumnDefinitions="*,*"
+                                ColumnSpacing="20">
+                                <Button
+                                    Grid.Column="1"
+                                    BackgroundColor="{StaticResource ColorAccent}"
+                                    Command="{Binding NavigateToChangePasswordCommand}"
+                                    FontSize="{OnPlatform WinUI=20,
+                                                          Android=14}"
+                                    IsEnabled="True"
+                                    IsVisible="True"
+                                    Text="Passwort Ändern"
+                                    TextColor="{StaticResource ColorTextPrimary}" />
                             </Grid>
-                            <Grid ColumnDefinitions="*,*,*"
-                                  ColumnSpacing="20">
-                                <Grid Grid.Column="0" ColumnDefinitions="30, 150" Padding="0" >
-                                    <CheckBox IsChecked="{Binding IsUser}"
-                                              IsEnabled="False"
-                                              Color="{StaticResource ColorAccentDark}"
-                                              HorizontalOptions="Center"
-                                              VerticalOptions="Center"
-                                              Grid.Column="0"/>
-                                    <Label Grid.Column="1"
-                                           Text="User"
-                                           VerticalOptions="Center"
-                                           Margin="8,0,0,0"/>
+                            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20">
+                                <Grid
+                                    Grid.Column="0"
+                                    Padding="0"
+                                    ColumnDefinitions="30, 150">
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        HorizontalOptions="Center"
+                                        IsChecked="{Binding IsUser}"
+                                        IsEnabled="False"
+                                        VerticalOptions="Center"
+                                        Color="{StaticResource ColorAccentDark}" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        Text="User"
+                                        VerticalOptions="Center" />
                                 </Grid>
-                                <Grid Grid.Column="1" ColumnDefinitions="30, 150" Padding="0" >
-                                    <CheckBox Grid.Column="0"
-                                              Color="{StaticResource ColorAccentDark}"
-                                              IsChecked="{Binding IsAdminUser}"
-                                              IsEnabled="False"
-                                              HorizontalOptions="Center"
-                                              VerticalOptions="Center"
-                                              />
-                                    <Label Grid.Column="1"
-                                           Text="Admin"
-                                           VerticalOptions="Center"
-                                           Margin="8,0,0,0"/>
+                                <Grid
+                                    Grid.Column="1"
+                                    Padding="0"
+                                    ColumnDefinitions="30, 150">
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        HorizontalOptions="Center"
+                                        IsChecked="{Binding IsAdminUser}"
+                                        IsEnabled="False"
+                                        VerticalOptions="Center"
+                                        Color="{StaticResource ColorAccentDark}" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        Text="Admin"
+                                        VerticalOptions="Center" />
                                 </Grid>
-                                <Grid Grid.Column="2" ColumnDefinitions="30, 150" Padding="0" >
-                                    <CheckBox Grid.Column="0"
-                                              Color="{StaticResource ColorAccentDark}"
-                                              IsChecked="{Binding IsSystemAdminUser}"
-                                              IsEnabled="False"
-                                              HorizontalOptions="Center"
-                                              VerticalOptions="Center"
-                                              />
-                                    <Label Grid.Column="1"
-                                           Text="System Admin"
-                                           VerticalOptions="Center"
-                                           Margin="8,0,0,0"/>
+                                <Grid
+                                    Grid.Column="2"
+                                    Padding="0"
+                                    ColumnDefinitions="30, 150">
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        HorizontalOptions="Center"
+                                        IsChecked="{Binding IsSystemAdminUser}"
+                                        IsEnabled="False"
+                                        VerticalOptions="Center"
+                                        Color="{StaticResource ColorAccentDark}" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        Text="System Admin"
+                                        VerticalOptions="Center" />
                                 </Grid>
                             </Grid>
 
-                            <Label 
-                                Text="{Binding LastUpdateText}"
-                                TextColor="{StaticResource ColorTextPrimary}"
+                            <Label
+                                Margin="5,15,0,0"
                                 FontAttributes="Italic"
-                                FontSize="{OnPlatform WinUI=16,Android=12}"
-                                Margin="5,15,0,0"/>
+                                FontSize="{OnPlatform WinUI=16,
+                                                      Android=12}"
+                                Text="{Binding LastUpdateText}"
+                                TextColor="{StaticResource ColorTextPrimary}" />
 
-                            <Grid ColumnDefinitions="*,*"
-                                  ColumnSpacing="20">
-                                <Button Text="Abbrechen"
-                                        Command="{Binding RevertChangesCommand}"
-                                        IsVisible="{Binding IsEditMode}"
-                                        IsEnabled="{Binding IsModified}"
-                                        BackgroundColor="{StaticResource ColorAccent}"
-                                        TextColor="{StaticResource ColorTextPrimary}"
-                                        FontSize="{OnPlatform WinUI=20, Android=14}"
-                                        Grid.Column="0" />
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                                <Button
+                                    Grid.Column="0"
+                                    BackgroundColor="{StaticResource ColorAccent}"
+                                    Command="{Binding RevertChangesCommand}"
+                                    FontSize="{OnPlatform WinUI=20,
+                                                          Android=14}"
+                                    IsEnabled="{Binding IsModified}"
+                                    IsVisible="{Binding IsEditMode}"
+                                    Text="Abbrechen"
+                                    TextColor="{StaticResource ColorTextPrimary}" />
 
-                                <Button Text="Speichern"
-                                        Command="{Binding SaveChangesCommand}"
-                                        IsVisible="{Binding IsEditMode}"
-                                        IsEnabled="{Binding IsModified}"
-                                        BackgroundColor="{StaticResource ColorAccent}"
-                                        TextColor="{StaticResource ColorTextPrimary}"
-                                        FontSize="{OnPlatform WinUI=20, Android=14}"
-                                        Grid.Column="1" />
+                                <Button
+                                    Grid.Column="1"
+                                    BackgroundColor="{StaticResource ColorAccent}"
+                                    Command="{Binding SaveChangesCommand}"
+                                    FontSize="{OnPlatform WinUI=20,
+                                                          Android=14}"
+                                    IsEnabled="{Binding IsModified}"
+                                    IsVisible="{Binding IsEditMode}"
+                                    Text="Speichern"
+                                    TextColor="{StaticResource ColorTextPrimary}" />
                             </Grid>
-                            
-                           
+
+
                         </VerticalStackLayout>
-                        <controls:LoadingOverlay IsLoading="{Binding IsLoading}"
-                                                 HorizontalOptions="Fill"
-                                                 VerticalOptions="Fill" />
+                        <controls:LoadingOverlay
+                            HorizontalOptions="Fill"
+                            IsLoading="{Binding IsLoading}"
+                            VerticalOptions="Fill" />
                     </Grid>
                 </Grid>
             </Border>

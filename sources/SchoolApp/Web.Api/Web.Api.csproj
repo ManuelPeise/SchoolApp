@@ -27,4 +27,12 @@
     <ProjectReference Include="..\Service.Api\Service.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Development\SchoolApp\sources\SchoolApp\Web.Api\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Development\SchoolApp\sources\SchoolApp\Web.Api\.editorconfig" />
+  </ItemGroup>
+
 </Project>

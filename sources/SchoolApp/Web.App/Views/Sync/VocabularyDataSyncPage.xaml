@@ -1,83 +1,97 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Web.App.Views.Sync.VocabularyDataSyncPage"
-             xmlns:controls="clr-namespace:Web.App.ViewComponents"
-             xmlns:converters="clr-namespace:Web.App.Converters"
-             BackgroundColor="{StaticResource ColorBackground}"
-             Title="ChangePasswordPage">
+<ContentPage
+    x:Class="Web.App.Views.Sync.VocabularyDataSyncPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    xmlns:converters="clr-namespace:Web.App.Converters"
+    Title="ChangePasswordPage"
+    BackgroundColor="{StaticResource ColorBackground}">
     <ContentPage.Resources>
         <converters:InvertBoolConverter x:Key="invertBoolConverter" />
     </ContentPage.Resources>
-    <Grid RowDefinitions="*,Auto,*"
-       ColumnDefinitions="*,Auto,*">
+    <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*,Auto,*">
         <Grid Grid.Row="1" Grid.Column="1">
-            <Border Grid.Row="1"
-             Grid.Column="1"
-             Padding="0"
-             StrokeThickness="0"
-             BackgroundColor="{StaticResource ColorSurface}"
-             StrokeShape="RoundRectangle 20">
-                <Grid BackgroundColor="{StaticResource ColorSurface}"
-                      Padding="30"
-                      HorizontalOptions="Center"
-                      VerticalOptions="Center"
-                      MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
+            <Border
+                Grid.Row="1"
+                Grid.Column="1"
+                Padding="0"
+                BackgroundColor="{StaticResource ColorSurface}"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="0">
+                <Grid
+                    Padding="30"
+                    BackgroundColor="{StaticResource ColorSurface}"
+                    HorizontalOptions="Center"
+                    MaximumWidthRequest="{OnPlatform WinUI=600,
+                                                     Android=350}"
+                    VerticalOptions="Center">
                     <Grid RowSpacing="0">
                         <VerticalStackLayout Spacing="10">
-                            <!-- Image -->
-                            <Image Source="dotnet_bot.png"
-                                   HeightRequest="140"
-                                   WidthRequest="400"
-                                   Aspect="AspectFit" />
+                            <!--  Image  -->
+                            <Image
+                                Aspect="AspectFit"
+                                HeightRequest="140"
+                                Source="dotnet_bot.png"
+                                WidthRequest="400" />
 
-                            <Grid ColumnDefinitions="Auto,*"
-                                  ColumnSpacing="0"
-                                  Padding="10,0"
-                                  MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
+                            <Grid
+                                Padding="10,0"
+                                ColumnDefinitions="Auto,*"
+                                ColumnSpacing="0"
+                                MaximumWidthRequest="{OnPlatform WinUI=600,
+                                                                 Android=350}">
 
-                                <Label Grid.Column="0" 
-                                       Text="Vokabel Daten Synconisierung"
-                                       FontSize="{OnPlatform WinUI=24,Android=14}"
-                                       TextColor="{StaticResource ColorTextPrimary}"
-                                       VerticalOptions="Center"/>
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="{OnPlatform WinUI=24,
+                                                          Android=14}"
+                                    Text="Vokabel Daten Synconisierung"
+                                    TextColor="{StaticResource ColorTextPrimary}"
+                                    VerticalOptions="Center" />
                             </Grid>
 
-                            <!-- Sync Info -->
-                            <Grid RowDefinitions="*,*,*" 
-                                  ColumnDefinitions="Auto,*"
-                                  ColumnSpacing="30"
-                                  RowSpacing="20"
-                                  Padding="10">
-                                <!-- Last Sync -->
-                                <Label Grid.Row="0" 
-                                       Grid.Column="0" 
-                                       Text="Letzte Synchronisation am:" 
-                                       FontSize="18" />
-                                <Label Grid.Row="0" 
-                                       Grid.Column="1"     
-                                       Text="20.04.2004" 
-                                       FontSize="16" 
-                                       TextColor="Gray" 
-                                       HorizontalTextAlignment="Start"/>
-                                <!-- By -->
-                                <Label Grid.Row="1" 
-                                       Grid.Column="0" 
-                                       Text="Durch:" 
-                                       FontSize="18" />
-                                <Label Grid.Row="1" 
-                                       Grid.Column="1" 
-                                       Text="Papa" 
-                                       FontSize="16" 
-                                       TextColor="Gray" 
-                                       HorizontalTextAlignment="Start"/>
-                                <!-- Sync Button -->
-                                <Button Grid.Row="2" 
-                                        Grid.Column="1" 
-                                        Text="Jetzt synchronisieren"
-                                        FontSize="18"
-                                        BackgroundColor="#6200EE"
-                                        TextColor="White" />
+                            <!--  Sync Info  -->
+                            <Grid
+                                Padding="10"
+                                ColumnDefinitions="Auto,*"
+                                ColumnSpacing="30"
+                                RowDefinitions="*,*,*"
+                                RowSpacing="20">
+                                <!--  Last Sync  -->
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    FontSize="18"
+                                    Text="Letzte Synchronisation am:" />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontSize="16"
+                                    HorizontalTextAlignment="Start"
+                                    Text="20.04.2004"
+                                    TextColor="Gray" />
+                                <!--  By  -->
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    FontSize="18"
+                                    Text="Durch:" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    FontSize="16"
+                                    HorizontalTextAlignment="Start"
+                                    Text="Papa"
+                                    TextColor="Gray" />
+                                <!--  Sync Button  -->
+                                <Button
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    BackgroundColor="#6200EE"
+                                    FontSize="18"
+                                    Text="Jetzt synchronisieren"
+                                    TextColor="White" />
                             </Grid>
                         </VerticalStackLayout>
                     </Grid>

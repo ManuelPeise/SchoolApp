@@ -1,0 +1,42 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cs]
+# Indentation
+indent_style = space
+indent_size = 4
+
+# Braces: prefer open brace on new line for types/methods/properties/control blocks
+csharp_new_line_before_open_brace_types = true
+csharp_new_line_before_open_brace_methods = true
+csharp_new_line_before_open_brace_properties = true
+csharp_new_line_before_open_brace_accessors = true
+csharp_new_line_before_open_brace_anonymous_methods = true
+csharp_new_line_before_open_brace_control_blocks = true
+
+# Naming: private fields start with underscore and camelCase
+dotnet_naming_rule.private_fields_underscore.rule_severity = suggestion
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_prefix
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_prefix.required_prefix = _
+dotnet_naming_style.underscore_prefix.capitalization = camel_case
+
+# Naming: properties use PascalCase
+dotnet_naming_rule.properties_pascal.rule_severity = suggestion
+dotnet_naming_rule.properties_pascal.symbols = properties
+dotnet_naming_rule.properties_pascal.style = pascal_style
+
+dotnet_naming_symbols.properties.applicable_kinds = property
+dotnet_naming_symbols.properties.applicable_accessibilities = *
+dotnet_naming_style.pascal_style.capitalization = pascal_case

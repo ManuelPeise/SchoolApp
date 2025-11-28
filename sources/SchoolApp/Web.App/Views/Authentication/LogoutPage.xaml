@@ -1,61 +1,64 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Web.App.Views.Authentication.LogoutPage"
-             BackgroundColor="{StaticResource ColorBackground}"
-             Title="LogoutPage">
-    <Grid
-        RowDefinitions="*,Auto,*"
-        ColumnDefinitions="*,Auto,*">
+<ContentPage
+    x:Class="Web.App.Views.Authentication.LogoutPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="LogoutPage"
+    BackgroundColor="{StaticResource ColorBackground}">
+    <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*,Auto,*">
 
-        <!-- Center container -->
+        <!--  Center container  -->
         <Grid Grid.Row="1" Grid.Column="1">
 
             <Border
-    Grid.Row="1"
-    Grid.Column="1"
-    Padding="0"
-    StrokeThickness="0"
-    BackgroundColor="{StaticResource ColorSurface}"
-    StrokeShape="RoundRectangle 20">
-                <!-- Card container (dark surface) -->
-                <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                Padding="0"
                 BackgroundColor="{StaticResource ColorSurface}"
-                Padding="30"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                MaximumWidthRequest="{OnIdiom Phone=350, Tablet=400, Desktop=600}">
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="0">
+                <!--  Card container (dark surface)  -->
+                <Grid
+                    Padding="30"
+                    BackgroundColor="{StaticResource ColorSurface}"
+                    HorizontalOptions="Center"
+                    MaximumWidthRequest="{OnIdiom Phone=350,
+                                                  Tablet=400,
+                                                  Desktop=600}"
+                    VerticalOptions="Center">
 
                     <Grid>
                         <VerticalStackLayout Spacing="30">
                             <Image
-                                Source="log_out.png"
+                                Aspect="AspectFit"
                                 HeightRequest="140"
-                                WidthRequest="400"
-                                Aspect="AspectFit" />
+                                Source="log_out.png"
+                                WidthRequest="400" />
                             <Label
-                                Text="{Binding LogoutText}"
                                 FontSize="28"
                                 HorizontalOptions="Center"
+                                Text="{Binding LogoutText}"
                                 TextColor="{StaticResource ColorTextPrimary}" />
-                            <!-- Buttons -->
+                            <!--  Buttons  -->
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
 
                                 <Button
-                                    Text="Nein"
-                                    Command="{Binding NavigateToHomeCommand}"
+                                    Grid.Column="0"
                                     BackgroundColor="{StaticResource ColorAccent}"
-                                    TextColor="{StaticResource ColorTextPrimary}"
-                                    FontSize="{OnPlatform WinUI=20, Android=14}"
-                                    Grid.Column="0" />
+                                    Command="{Binding NavigateToHomeCommand}"
+                                    FontSize="{OnPlatform WinUI=20,
+                                                          Android=14}"
+                                    Text="Nein"
+                                    TextColor="{StaticResource ColorTextPrimary}" />
 
                                 <Button
-                                    Text="Ja"
-                                    Command="{Binding LogoutCommand}"
+                                    Grid.Column="1"
                                     BackgroundColor="{StaticResource ColorAccent}"
-                                    TextColor="{StaticResource ColorTextPrimary}"
-                                    FontSize="{OnPlatform WinUI=20, Android=14}"
-                                    Grid.Column="1" />
+                                    Command="{Binding LogoutCommand}"
+                                    FontSize="{OnPlatform WinUI=20,
+                                                          Android=14}"
+                                    Text="Ja"
+                                    TextColor="{StaticResource ColorTextPrimary}" />
                             </Grid>
                         </VerticalStackLayout>
                     </Grid>

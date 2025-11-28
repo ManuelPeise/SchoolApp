@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:components="clr-namespace:Web.App.ViewComponents"
-             x:Class="Web.App.ViewComponents.LabeledBorderlessEntry"
-             x:Name="Root">
-    <VerticalStackLayout Spacing="3" BackgroundColor="Transparent" Margin="0" Padding="0">
+<ContentView
+    x:Class="Web.App.ViewComponents.LabeledBorderlessEntry"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:Web.App.ViewComponents"
+    x:Name="Root">
+    <VerticalStackLayout
+        Margin="0"
+        Padding="0"
+        BackgroundColor="Transparent"
+        Spacing="3">
 
-        <Label x:Name="TitleLabel"
-           FontSize="{Binding FontSize, Source={x:Reference Root}}"
-           Margin="0,0,0,0"
-           Padding="5,2"
-           Text="{Binding Label,Source={x:Reference Root}}"/>
-        
-        <components:BorderlessEntry 
-               x:Name="ValueEntry"
-               BackgroundColor="White"
-               Margin="0,0,0,0"
-               HorizontalTextAlignment="Start"
-               VerticalTextAlignment="Center"
-               Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
-               FontSize="{Binding FontSize, Source={x:Reference Root}}"
-               Text="{Binding Text, Source={x:Reference Root}}"
-               IsEnabled="{Binding IsEnabled,Source={x:Reference Root}}"
-               IsPassword="{Binding IsPassword, Source={x:Reference Root}}"
-               Unfocused="OnEntryFieldUnfocused"/>
+        <Label
+            x:Name="TitleLabel"
+            Margin="0,0,0,0"
+            Padding="5,2"
+            FontSize="{Binding FontSize, Source={x:Reference Root}}"
+            Text="{Binding Label, Source={x:Reference Root}}" />
+
+        <components:BorderlessEntry
+            x:Name="ValueEntry"
+            Margin="0,0,0,0"
+            BackgroundColor="White"
+            FontSize="{Binding FontSize, Source={x:Reference Root}}"
+            HorizontalTextAlignment="Start"
+            IsEnabled="{Binding IsEnabled, Source={x:Reference Root}}"
+            IsPassword="{Binding IsPassword, Source={x:Reference Root}}"
+            Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
+            Text="{Binding Text, Source={x:Reference Root}}"
+            Unfocused="OnEntryFieldUnfocused"
+            VerticalTextAlignment="Center" />
     </VerticalStackLayout>
 </ContentView>
