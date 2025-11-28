@@ -5,7 +5,7 @@ using Shared.Models.Sync;
 
 namespace Logic.Sync.DataSync.Extensions
 {
-    public  static class SyncExtensions
+    public  static class AppUserSyncExtensions
     {
         /// <summary>
         /// Converts an <see cref="AppUserEntity"/> to its corresponding <see cref="AppUserSyncModel"/> representation.
