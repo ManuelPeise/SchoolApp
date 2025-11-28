@@ -1,10 +1,11 @@
-﻿using Data.ContextMysql;
+using Data.ContextMysql;
 using Data.Entities.User;
 using Logic.Authentication;
 using Logic.Import;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Storage;
+using Logic.Sync.DataSync.Remote;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -60,6 +61,7 @@ namespace Web.Api.Bundles
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IAuthenticationService, RemoteAuthenticationService>();
             builder.Services.AddScoped<IJsonFileImporter, JsonFileImporter>();
+            builder.Services.AddScoped<IRemoteDataSyncService, RemoteDataSyncService>();
         }
 
         internal static void ConfigureDatabases(WebApplicationBuilder builder)

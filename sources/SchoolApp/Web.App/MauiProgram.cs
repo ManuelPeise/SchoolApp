@@ -4,8 +4,10 @@ using Logic.Authentication;
 using Logic.Profile;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
+using Logic.Shared.Interfaces.Logic.Shared.Interfaces;
 using Logic.Shared.Services;
 using Logic.Shared.Storage;
+using Logic.Sync.DataSync.Local;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -48,6 +50,7 @@ namespace Web.App
 
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
+            builder.Services.AddScoped<ILocalDataSyncService, LocalDataSyncService>();
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
