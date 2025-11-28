@@ -15,7 +15,7 @@ namespace Logic.Authentication
 {
     public class JwtTokenService : IJwtTokenService
     {
-        private bool disposedValue;
+        private bool _disposedValue;
         private readonly IOptions<JwtTokenModel> _jwtOptions;
         private readonly IRemoteDatabaseAccessor _databaseAccessor;
 
@@ -109,28 +109,30 @@ namespace Logic.Authentication
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_jwtOptions.Value.SecurityKey)
                 ),
-                ValidateLifetime = false 
+                ValidateLifetime = false
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
 
             if (securityToken is not JwtSecurityToken)
+            {
                 throw new SecurityTokenException("Invalid token");
+            }
 
             return principal;
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
                     _databaseAccessor.Dispose();
                 }
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
