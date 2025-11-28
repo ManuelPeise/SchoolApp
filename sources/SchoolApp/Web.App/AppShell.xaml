@@ -10,6 +10,7 @@
     xmlns:auth="clr-namespace:Web.App.Views.Authentication"
     xmlns:user="clr-namespace:Web.App.Views.User"
     xmlns:admin="clr-namespace:Web.App.Views.Administration"
+    xmlns:sync="clr-namespace:Web.App.Views.Sync"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Shell.FlyoutBackdrop="Transparent"
     Shell.FlyoutBehavior="Flyout"
@@ -40,6 +41,8 @@
             <!-- Subtitle -->
             <Label Grid.Row="1"
                Grid.Column="1"
+               Grid.ColumnSpan="2"
+               IsVisible="{Binding ShowLogout}"
                Text="{Binding UserName}"
                VerticalOptions="End"
                Padding="10,0,0,0"
@@ -50,25 +53,27 @@
             <!-- Logout Button -->
             <Button Grid.Column="2"
                 Grid.RowSpan="2"
-                IsVisible="True"
+                IsVisible="{Binding ShowLogout}"
                 Text="Abmelden"
                 WidthRequest="90"
                 HeightRequest="36"
+                Padding="0"
+                Margin="0"
                 BackgroundColor="Transparent"
                 BorderColor="Transparent"
                 TextColor="#FFFFFF"
-                VerticalOptions="End"
-                   Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, Path=NavigateCommand}" 
-                   CommandParameter="///logout"/>
+                VerticalOptions="Start"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, Path=NavigateCommand}" 
+                CommandParameter="///logout"/>
         </Grid>
     </Shell.FlyoutHeader>
     <Shell.FlyoutContent>
         <VerticalStackLayout Spacing="0" Padding="0">
             <!--HOME Page SIDE MENU ENTRY-->
-            <Grid x:Name="HomeGrid" ColumnDefinitions="Auto, *" Padding="0,5" ColumnSpacing="10" Margin="0, 0">
+            <Grid x:Name="HomeGrid" ColumnDefinitions="Auto, *" Padding="5" ColumnSpacing="10" Margin="0, 0">
                 <Image x:Name="HomeIcon" Grid.Column="0" 
                    HeightRequest="30" 
-                   WidthRequest="30" 
+                   WidthRequest="30"
                    Aspect="Fill"
                    Source="dotnet_bot.png"/>
                 <Label x:Name="HomeLabel" Grid.Column="1" 
@@ -90,7 +95,7 @@
             <toolkit:Expander>
                 <toolkit:Expander.Header>
                     <Grid x:Name="AccountHeaderGrid" ColumnDefinitions="Auto, *" 
-               Padding="0,5" 
+               Padding="5" 
                ColumnSpacing="10">
                         <Image x:Name="AccountIcon" 
                                Grid.Column="0" 
@@ -137,7 +142,7 @@
             <toolkit:Expander>
                 <toolkit:Expander.Header>
                     <Grid x:Name="AdminHeaderGrid" ColumnDefinitions="Auto, *" 
-              Padding="0,5" 
+              Padding="5" 
               ColumnSpacing="10">
                         <Image x:Name="AdminIcon" 
                                Grid.Column="0" 
@@ -172,6 +177,53 @@
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, 
                                                                   Path=NavigateCommand}" 
                                                                   CommandParameter="{Binding Route}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <!--DATA SIDE MENU ITEM-->
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Grid x:Name="DataSyncHeaderGrid" ColumnDefinitions="Auto, *" 
+                           Padding="5" 
+                           ColumnSpacing="10">
+                        <Image x:Name="DataIcon" 
+                               Grid.Column="0" 
+                               HeightRequest="30" 
+                               WidthRequest="30" 
+                               Aspect="Fill"
+                               Source="datasync.png"/>
+                        <Label x:Name="DataLabel" 
+                               Grid.Column="1" 
+                               Text="DATEN SYNCRONISATION" 
+                               TextColor="White"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               VerticalTextAlignment="Center"/>
+                    </Grid>
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <CollectionView ItemsSource="{Binding DataSectionItems}" Margin="0, 0" BackgroundColor="Transparent">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto, *" Padding="0,5" ColumnSpacing="10">
+                                    <Image Grid.Column="0" 
+                                           HeightRequest="30" 
+                                           WidthRequest="30" 
+                                           Aspect="Fill"/>
+                                    <Label Grid.Column="1" 
+                                           Text="{Binding Title}" 
+                                           TextColor="White"
+                                           FontSize="18"
+                                           VerticalTextAlignment="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, 
+                                                      Path=NavigateCommand}" 
+                                                      CommandParameter="{Binding Route}" />
                                         </Label.GestureRecognizers>
                                     </Label>
                                 </Grid>
@@ -245,16 +297,30 @@
         ContentTemplate="{DataTemplate user:ProfilePage}" />
 
     <ShellContent 
-        Title="ChangePasswordPage"
+        Title="Change-Password-Page"
         Route="changePassword"
         Shell.NavBarIsVisible="False"
         Shell.NavBarHasShadow="False"
         ContentTemplate="{DataTemplate user:ChangePasswordPage}" />
 
     <ShellContent 
-        Title="JSON-Datei Import"
+        Title="JSON-Datei-Import"
         Route="jsonImportAssistent"
         Shell.NavBarIsVisible="False"
         Shell.NavBarHasShadow="False"
         ContentTemplate="{DataTemplate admin:JsonImportAssistentPage}" />
+
+    <ShellContent 
+         Title="Profil-Daten-Sync"
+         Route="profileDataSync"
+         Shell.NavBarIsVisible="False"
+         Shell.NavBarHasShadow="False"
+         ContentTemplate="{DataTemplate sync:ProfileDataSyncPage}" />
+
+    <ShellContent 
+         Title="Vokabel-Daten-Sync"
+         Route="vocabularyDataSync"
+         Shell.NavBarIsVisible="False"
+         Shell.NavBarHasShadow="False"
+         ContentTemplate="{DataTemplate sync:VocabularyDataSyncPage}" />
 </Shell>

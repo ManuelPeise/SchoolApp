@@ -11,5 +11,6 @@ namespace Data.Entities
         public string CreatedBy { get; set; } = string.Empty;
         public DateTime? UpdatedAt { get; set; }
         public string? UpdatedBy { get; set; }
+        public DateTime? LastSyncAt { get; set; }
     }
 }

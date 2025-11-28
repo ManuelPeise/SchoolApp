@@ -12,7 +12,7 @@ namespace Web.App
 
             HoverHandlerFactory.Execute("Home", this);
             HoverHandlerFactory.Execute("Admin", this);
-            HoverHandlerFactory.Execute("SystemAdmin", this);
+            HoverHandlerFactory.Execute("DataSync", this);
         }
     }
 }

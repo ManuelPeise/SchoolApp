@@ -2,6 +2,7 @@
 using Web.App.Views.Administration;
 using Web.App.Views.Authentication;
 using Web.App.Views.Home;
+using Web.App.Views.Sync;
 using Web.App.Views.User;
 
 namespace Web.App.Bundels
@@ -19,6 +20,8 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<JsonImportAssistentPage>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<ChangePasswordPage>();
+            builder.Services.AddTransient<ProfileDataSyncPage>();
+            builder.Services.AddTransient<VocabularyDataSyncPage>();
         }
 
         internal static void InitializeCustomComponents(MauiAppBuilder builder)
@@ -35,6 +38,8 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
             builder.Services.AddTransient<ProfilePageViewModel>();
             builder.Services.AddTransient<ChangePasswordViewModel>();
+            builder.Services.AddTransient<ProfileDataSyncViewModel>();
+            builder.Services.AddTransient<VocabularyDataSyncViewModel>();
 
         }
     }

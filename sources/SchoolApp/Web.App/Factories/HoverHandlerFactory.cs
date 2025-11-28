@@ -27,9 +27,9 @@
                         registration.RegisterHoverEvents(grid);
                         break;
                     }
-                    case "SystemAdmin":
+                    case "DataSync":
                     {
-                        var grid = shell.FindByName<Grid>("SystemAdminHeaderGrid");
+                        var grid = shell.FindByName<Grid>("DataSyncHeaderGrid");
                         
                         registration.RegisterHoverEvents(grid);
                         break;

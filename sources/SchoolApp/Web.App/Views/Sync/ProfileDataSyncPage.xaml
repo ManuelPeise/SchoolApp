@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Web.App.Views.Sync.ProfileDataSyncPage"
+             xmlns:controls="clr-namespace:Web.App.ViewComponents"
+             xmlns:converters="clr-namespace:Web.App.Converters"
+             BackgroundColor="{StaticResource ColorBackground}"
+             Title="ChangePasswordPage">
+    <ContentPage.Resources>
+        <converters:InvertBoolConverter x:Key="invertBoolConverter" />
+    </ContentPage.Resources>
+    <Grid RowDefinitions="*,Auto,*"
+       ColumnDefinitions="*,Auto,*">
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Border Grid.Row="1"
+             Grid.Column="1"
+             Padding="0"
+             StrokeThickness="0"
+             BackgroundColor="{StaticResource ColorSurface}"
+             StrokeShape="RoundRectangle 20">
+                <Grid BackgroundColor="{StaticResource ColorSurface}"
+                   Padding="30"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
+                    <Grid RowSpacing="0">
+                        <VerticalStackLayout Spacing="10">
+                            <!-- Image -->
+                            <Image Source="dotnet_bot.png"
+                                   HeightRequest="140"
+                                   WidthRequest="400"
+                                   Aspect="AspectFit" />
+
+                            <Grid ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="0"
+                                  Padding="10,0"
+                                  MaximumWidthRequest="{OnPlatform WinUI=600,Android=350}">
+
+                                <Label Grid.Column="0" 
+                                       Text="Profil Daten Synconisierung"
+                                       FontSize="{OnPlatform WinUI=24,Android=14}"
+                                       TextColor="{StaticResource ColorTextPrimary}"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+
+                            <!-- Sync Info -->
+                            <Grid RowDefinitions="*,*,*" 
+                                  ColumnDefinitions="Auto,*"
+                                  ColumnSpacing="30"
+                                  RowSpacing="20"
+                                  Padding="10">
+                                <!-- Last Sync -->
+                                <Label Grid.Row="0" Grid.Column="0" Text="Letzte Synchronisation am:" 
+                                       FontSize="18" />
+                                <Label Grid.Row="0" Grid.Column="1" x:Name="LastSyncLabel" 
+                                           Text="20.04.2004" 
+                                           FontSize="16" 
+                                           TextColor="Gray" 
+                                           HorizontalTextAlignment="Start"
+                                           />
+                                <!-- By -->
+                                <Label Grid.Row="1" Grid.Column="0" Text="Durch:" 
+                                       FontSize="18" />
+                                <Label Grid.Row="1" Grid.Column="1" x:Name="SyncByLabel" 
+                                           Text="Papa" 
+                                           FontSize="16" 
+                                           TextColor="Gray" 
+                                           HorizontalTextAlignment="Start"/>
+                                <!-- Sync Button -->
+                                <Button Grid.Row="2" Grid.Column="1" Text="Jetzt synchronisieren"
+                                         FontSize="18"
+                                         BackgroundColor="#6200EE"
+                                         TextColor="White" />
+                            </Grid>
+                           
+
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
