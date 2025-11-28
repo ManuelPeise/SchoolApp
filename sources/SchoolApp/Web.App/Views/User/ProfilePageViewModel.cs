@@ -111,9 +111,9 @@ namespace Web.App.Views.User
                 var localUser = User?.ToEntity();
                 localUser!.IsInSync = false;
 
-                var result = await _profileService.ChangeProfile(localUser);
+                var (success, message) = await _profileService.UpdateProfile(localUser);
 
-                if (result.Success)
+                if (success)
                 {
                     await _currentUserService.SetCurrentUser();
 

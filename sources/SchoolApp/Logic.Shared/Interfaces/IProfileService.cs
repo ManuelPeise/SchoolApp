@@ -1,10 +1,11 @@
 ﻿using Data.Entities.User;
-using Shared.Models;
 
 namespace Logic.Shared.Interfaces
 {
     public interface IProfileService: IDisposable
     {
-        Task<ResponseBaseModel> ChangeProfile(AppUserEntity entityToUpdate);
+        Task<(bool success, string message)> UpdateProfile(AppUserEntity entityToUpdate);
+        Task<(bool confirmed, string error)> CheckPassword(string password, int currentUserId, string currentUser);
+        Task<bool> ChangePassword(string oldPassword, string newPassword, string currentUser);
     }
 }

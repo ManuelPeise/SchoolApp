@@ -1,15 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Data.Entities.User;
 using Logic.Shared.Interfaces;
-using Logic.Shared.Storage;
 using Shared.Models;
 
 namespace Web.App.Views.User
 {
     public partial class ChangePasswordViewModel : BaseViewModel
     {
-        private readonly ISqLiteService _sqLiteService;
+        private readonly IProfileService _profileService;
         private readonly ICurrentUserService _currentUserService;
         private readonly IDbStorageHandler<ChangePasswordRequest> _storageHandler;
         private readonly IApiHttpClient<ChangePasswordRequest, ResponseBaseModel> _changePasswordClient;
@@ -32,12 +30,12 @@ namespace Web.App.Views.User
         private string _errorMessage = string.Empty;
 
         public ChangePasswordViewModel(
-            ISqLiteService sqLiteService,
+            IProfileService profileService,
             ICurrentUserService currentUserService,
             IDbStorageHandler<ChangePasswordRequest> storageHandler,
             IApiHttpClient<ChangePasswordRequest, ResponseBaseModel> changePasswordClient)
         {
-            _sqLiteService = sqLiteService;
+            _profileService = profileService;
             _currentUserService = currentUserService;
             _storageHandler = storageHandler;
             _changePasswordClient = changePasswordClient;
@@ -60,7 +58,7 @@ namespace Web.App.Views.User
                 return;
             }
 
-            var (confirmed, error) = await _sqLiteService.CheckPassword(
+            var (confirmed, error) = await _profileService.CheckPassword(
                 CurrentPassword,
                 (int)currentUserId,
                 _currentUserService?.CurrentUser?.UserName ?? "System");
@@ -92,11 +90,8 @@ namespace Web.App.Views.User
 
             credentialsEntity.Password = NewPassword;
 
-            var result = await _storageHandler.StoreData(
-                request,
-                _currentUserService?.CurrentUser?.UserName ?? "System",
-                HandleStorePasswordEntityInMySql,
-                _sqLiteService.HandleUpdateInSqLite);
+            var result = await _profileService.ChangePassword(
+                CurrentPassword, NewPassword, _currentUserService?.CurrentUser?.UserName ?? "System");
 
             PasswordChanged = result;
 

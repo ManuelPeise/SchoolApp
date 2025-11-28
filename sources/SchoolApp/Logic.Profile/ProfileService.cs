@@ -1,9 +1,9 @@
 ﻿using Data.Entities.Administration;
 using Data.Entities.User;
+using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Storage;
 using Shared.Enums;
-using Shared.Models;
 
 namespace Logic.Profile
 {
@@ -19,7 +19,7 @@ namespace Logic.Profile
             _currentUserService = currentUserService;
         }
 
-        public async Task<ResponseBaseModel> ChangeProfile(AppUserEntity entityToUpdate)
+        public async Task<(bool success, string message)> UpdateProfile(AppUserEntity entityToUpdate)
         {
             try
             {
@@ -27,24 +27,17 @@ namespace Logic.Profile
 
                 if (existingEntity == null)
                 {
-                    return new ResponseBaseModel
-                    {
-                        Success = false,
-                        Message = "Profile not found."
-                    };
+                    return (false, "Dein Profil wurde nicht gefunden.");
                 }
 
                 existingEntity = entityToUpdate;
+                existingEntity.IsInSync = false;
 
                 _databaseAccessor.UserRepository.Update(existingEntity);
 
                 await _databaseAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName);
 
-                return new ResponseBaseModel
-                {
-                    Success = true,
-                    Message = "Profile updated."
-                };
+                return (true, "Profil aktualisiert.");
             }
             catch (Exception exception)
             {
@@ -58,13 +51,86 @@ namespace Logic.Profile
 
                 await _databaseAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName);
 
-                return new ResponseBaseModel
-                {
-                    Success = false,
-                    Message = "Update profile local failed."
-                };
+                return (false, "Dein Profil konnte nicht aktualisiert werden.");
             }
+        }
 
+        public async Task<(bool confirmed, string error)> CheckPassword(string password, int currentUserId, string currentUser)
+        {
+            try
+            {
+                var userEntity = await _databaseAccessor.UserRepository.GetByIdAsync((int)currentUserId, true, x => x.Credentials);
+
+                if (userEntity == null)
+                {
+                    return (false, "Ups. da ist etwas schief gelaufen!");
+                }
+
+                var passwordHash = PasswordHelper.HashPassword(password, userEntity.Credentials.Salt);
+
+                if (userEntity.Credentials.Password != passwordHash)
+                {
+                    return (false, "Überprüfe dein Passwort!");
+                }
+
+                return (true, string.Empty);
+            }
+            catch (Exception exception)
+            {
+                await _databaseAccessor.LogMessage(new LogEntryEntity
+                {
+                    Message = "Validate password failed.",
+                    ExceptionMessage = exception.Message,
+                    Stacktrace = exception.StackTrace ?? string.Empty,
+                    LogLevel = LogLevelEnum.Error
+                });
+
+                await _databaseAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName);
+
+                return await Task.FromResult((false, "Passwort konnte nicht überprüft werden!"));
+            }
+        }
+
+        public async Task<bool> ChangePassword(string oldPassword, string newPassword, string currentUser)
+        {
+            try
+            {
+                var userId = _currentUserService.GetCurrentUserId();
+
+                var userEntity = await _databaseAccessor.UserRepository.Find(x => x.Id == userId, true, x => x.Credentials);
+
+                if (userEntity == null
+                    || userEntity.Credentials == null
+                    || userEntity.Credentials.Password != PasswordHelper.HashPassword(oldPassword, userEntity.Credentials.Salt))
+                {
+                    throw new Exception("Could not change password!");
+                }
+
+                var credentials = userEntity.Credentials;
+
+                credentials.Password = PasswordHelper.HashPassword(newPassword, credentials.Salt);
+                credentials.IsInSync = false;
+
+                _databaseAccessor.UserCredentialsRepository.Update(credentials);
+
+                await _databaseAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName);
+
+                return true;
+            }
+            catch (Exception exception)
+            {
+                await _databaseAccessor.LogMessage(new LogEntryEntity
+                {
+                    Message = "Update password failed.",
+                    ExceptionMessage = exception.Message,
+                    Stacktrace = exception.StackTrace ?? string.Empty,
+                    LogLevel = LogLevelEnum.Error
+                });
+
+                await _databaseAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName);
+
+                return false;
+            }
         }
 
         protected virtual void Dispose(bool disposing)

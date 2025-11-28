@@ -41,12 +41,10 @@ namespace Web.App
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             builder.Services.AddScoped<ILocalDatabaseAccessor, LocalDatabaseAccessor>();
             
-            builder.Services.AddScoped<ISqLiteService, SqLiteService>();
             builder.Services.AddScoped<IAuthenticationService, LocalAuthenticationService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IApiHttpClient<, >), typeof(ApiHttpClient<, >));
-            builder.Services.AddScoped(typeof(IDbStorageHandler<>), typeof(DbStorageHandler<>));
 
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
