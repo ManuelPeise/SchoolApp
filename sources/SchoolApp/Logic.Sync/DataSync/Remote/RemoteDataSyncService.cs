@@ -49,7 +49,12 @@ namespace Logic.Sync.DataSync.Remote
 
                 var syncEntity = syncModel.ToEntity();
 
-                MapAppUserEntitys(userEntity, syncEntity);
+                var hasChanges = MapAppUserEntitys(userEntity, syncEntity);
+
+                if (!hasChanges)
+                {
+                    return null;
+                }
 
                 _databaseAccessor.UserRepository.Update(userEntity);
 
@@ -80,8 +85,17 @@ namespace Logic.Sync.DataSync.Remote
         /// </summary>
         /// <param name="originalEntity">The existing entity loaded from the database to be updated.</param>
         /// <param name="syncEntity">The sync entity containing new values to apply.</param>
-        private void MapAppUserEntitys(AppUserEntity originalEntity, AppUserEntity syncEntity)
+        private bool MapAppUserEntitys(AppUserEntity originalEntity, AppUserEntity syncEntity)
         {
+            var hasChanges = !syncEntity.IsInSync
+                || (syncEntity.Credentials != null && !syncEntity.Credentials.IsInSync)
+                || (syncEntity.Family != null && !syncEntity.Family.IsInSync);
+
+            if (!hasChanges)
+            {
+                return hasChanges;
+            }
+
             originalEntity.FirstName = syncEntity.FirstName;
             originalEntity.LastName = syncEntity.LastName;
             originalEntity.UserName = syncEntity.UserName;
@@ -125,6 +139,8 @@ namespace Logic.Sync.DataSync.Remote
                     originalEntity.Credentials.LastSyncAt = syncEntity.Credentials.LastSyncAt;
                 }
             }
+
+            return hasChanges;
         }
     }
 }

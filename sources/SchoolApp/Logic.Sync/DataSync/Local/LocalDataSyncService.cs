@@ -8,10 +8,19 @@ using Logic.Sync.Interfaces;
 
 namespace Logic.Sync.DataSync.Local
 {
+    /// <summary>
+    /// Provides local synchronization operations for application user profile data.
+    /// Loads and persists <see cref="AppUserSyncModel"/> instances against the local database.
+    /// </summary>
     public class LocalDataSyncService: ILocalDataSyncService
     {
         private readonly ILocalDatabaseAccessor _databaseAccessor;
         private readonly ICurrentUserService _currentUserService;
+        /// <summary>
+        /// Initializes a new instance of <see cref="LocalDataSyncService"/>.
+        /// </summary>
+        /// <param name="databaseAccessor">Local database accessor used for repository operations.</param>
+        /// <param name="currentUserService">Service used to determine the current user.</param>
         public LocalDataSyncService(ILocalDatabaseAccessor databaseAccessor, ICurrentUserService currentUserService)
         {
             _databaseAccessor = databaseAccessor;
@@ -39,7 +48,7 @@ namespace Logic.Sync.DataSync.Local
 
                 var userEntity = await _databaseAccessor.UserRepository.GetByIdAsync((int)userId, true, x => x.Credentials, x => x.Family);
 
-                if (userEntity == null)
+                if (userEntity == null || userEntity.IsInSync)
                 {
                     return null;
                 }
