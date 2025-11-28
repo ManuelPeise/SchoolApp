@@ -1,9 +1,9 @@
 ﻿using Data.Entities.Administration;
 using Data.Entities.User;
 using Logic.Shared;
-using Logic.Shared.Interfaces;
 using Logic.Shared.Storage;
 using Logic.Sync.DataSync.Extensions;
+using Logic.Sync.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Shared.Enums;
 using Shared.Models.Sync;

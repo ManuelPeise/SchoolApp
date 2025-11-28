@@ -4,7 +4,7 @@ using Logic.Shared.Storage;
 using Shared.Enums;
 using Shared.Models.Sync;
 using Logic.Sync.DataSync.Extensions;
-using Logic.Shared.Interfaces.Logic.Shared.Interfaces;
+using Logic.Sync.Interfaces;
 
 namespace Logic.Sync.DataSync.Local
 {

@@ -6,6 +6,7 @@ using Logic.Shared;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Storage;
 using Logic.Sync.DataSync.Remote;
+using Logic.Sync.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

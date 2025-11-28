@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Entities\Data.Entities.csproj" />
+    <ProjectReference Include="..\Logic.Shared\Logic.Shared.csproj" />
+    <ProjectReference Include="..\Shared.Models\Shared.Models.csproj" />
+  </ItemGroup>
+
 </Project>

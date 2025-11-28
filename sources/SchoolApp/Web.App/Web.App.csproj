@@ -84,6 +84,7 @@
 	  <ProjectReference Include="..\Logic.Authentication\Logic.Authentication.csproj" />
 	  <ProjectReference Include="..\Logic.Profile\Logic.Profile.csproj" />
 	  <ProjectReference Include="..\Logic.Shared\Logic.Shared.csproj" />
+	  <ProjectReference Include="..\Logic.Sync\Logic.Sync.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using Shared.Models.Sync;
+﻿using Shared.Models.Sync;
 
-namespace Logic.Shared.Interfaces
+namespace Logic.Sync.Interfaces
 {
     public interface IRemoteDataSyncService
     {

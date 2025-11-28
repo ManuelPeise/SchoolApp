@@ -1,9 +1,6 @@
-﻿namespace Logic.Shared.Interfaces
-using System.Threading.Tasks;
-using global::Shared.Models.Sync;
-using Shared.Models.Sync;
+﻿using Shared.Models.Sync;
 
-namespace Logic.Shared.Interfaces
+namespace Logic.Sync.Interfaces
 {
     public interface ILocalDataSyncService
     {

@@ -1,4 +1,4 @@
-﻿using Logic.Shared.Interfaces;
+﻿using Logic.Sync.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models.Sync;
 

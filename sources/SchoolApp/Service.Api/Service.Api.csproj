@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Data.Entities\Data.Entities.csproj" />
     <ProjectReference Include="..\Logic.Shared\Logic.Shared.csproj" />
+    <ProjectReference Include="..\Logic.Sync\Logic.Sync.csproj" />
   </ItemGroup>
 
 </Project>
