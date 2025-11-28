@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Administration;
 using Logic.Shared.Interfaces;
+using Logic.Shared.Storage;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Shared.Enums;
@@ -13,12 +14,13 @@ namespace Logic.Shared
     public class ApiHttpClient<TRequest, TResponse> : IApiHttpClient<TRequest, TResponse> where TRequest : class where TResponse : class
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogService _logService;
+        private readonly ILocalDatabaseAccessor _databaseAccessor;
 
-        public ApiHttpClient(IConfiguration configuration, ILogService logService)
+        public ApiHttpClient(IConfiguration configuration, ILocalDatabaseAccessor databaseAccessor)
         {
+            _databaseAccessor = databaseAccessor;
             var apiBaseAddress = configuration.GetValue<string>("ApiBaseUrl");
-            _logService = logService;
+            
 
             _httpClient = new HttpClient
             {
@@ -59,7 +61,7 @@ namespace Logic.Shared
             }
             catch (Exception exception)
             {
-                await _logService.LogMessageSqLite(new LogEntryEntity
+                await _databaseAccessor.LogMessage(new LogEntryEntity
                 {
 
                     Message = $"Get request for ${url} failed",
@@ -107,7 +109,7 @@ namespace Logic.Shared
             }
             catch (Exception exception)
             {
-                await _logService.LogMessageSqLite(new LogEntryEntity
+                await _databaseAccessor.LogMessage(new LogEntryEntity
                 {
 
                     Message = $"Post request for ${url} failed",

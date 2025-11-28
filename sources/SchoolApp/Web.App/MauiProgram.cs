@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Data.Context;
-using Data.ContextMysql;
-using Logic.Administration;
+using Logic.Authentication;
 using Logic.Profile;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
@@ -36,31 +35,19 @@ namespace Web.App
                 var dbPath = Path.Combine(folderPath, "applicationDb.db");
                 opt.UseSqlite($"Data Source={dbPath}");
             });
-            
-            builder.Services.AddDbContext<MySqlDbContext>(options =>
-            {
-                var connection = builder.Configuration.GetConnectionString("SchoolDb");
-                if (string.IsNullOrEmpty(connection))
-                {
-                    throw new Exception("Could not find connection string for mysql db.");
-                }
-
-                options.UseMySQL(connection);
-            });
+           
 
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped(typeof(IDbContextFactory), typeof(DbContextFactory));
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-
+            builder.Services.AddScoped<ILocalDatabaseAccessor, LocalDatabaseAccessor>();
+            
             builder.Services.AddScoped<ISqLiteService, SqLiteService>();
-            builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IAuthenticationService, LocalAuthenticationService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IApiHttpClient<, >), typeof(ApiHttpClient<, >));
             builder.Services.AddScoped(typeof(IDbStorageHandler<>), typeof(DbStorageHandler<>));
 
-            builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
 

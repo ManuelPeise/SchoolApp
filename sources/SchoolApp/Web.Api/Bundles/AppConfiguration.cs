@@ -1,12 +1,10 @@
-﻿using Data.Context;
-using Data.ContextMysql;
+﻿using Data.ContextMysql;
 using Data.Entities.User;
-using Logic.Administration;
+using Logic.Authentication;
 using Logic.Import;
-using Logic.Profile;
 using Logic.Shared;
 using Logic.Shared.Interfaces;
-using Logic.Shared.Services;
+using Logic.Shared.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -57,20 +55,15 @@ namespace Web.Api.Bundles
         internal static void ConfigureServices(WebApplicationBuilder builder)
         {
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped(typeof(IDbContextFactory), typeof(DbContextFactory));
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddScoped<IUserAdministrationService, UserAdministrationService>();
-            builder.Services.AddScoped<IDbSycronisationService, DbSycronisationService>();
+            builder.Services.AddScoped<IRemoteDatabaseAccessor,  RemoteDatabaseAccessor>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IAuthenticationService, RemoteAuthenticationService>();
             builder.Services.AddScoped<IJsonFileImporter, JsonFileImporter>();
-            builder.Services.AddScoped<IProfileService, ProfileService>();
         }
 
         internal static void ConfigureDatabases(WebApplicationBuilder builder)
         {
-            builder.Services.AddDbContext<SqLiteDbContext>();
             builder.Services.AddDbContext<MySqlDbContext>(options =>
             {
                 var connection = builder.Configuration.GetConnectionString("SchoolDb");
@@ -82,7 +75,6 @@ namespace Web.Api.Bundles
 
                 options.UseMySQL(connection);
             });
-
         }
 
         internal static void EnsureDatabaseMigrated(WebApplication app)

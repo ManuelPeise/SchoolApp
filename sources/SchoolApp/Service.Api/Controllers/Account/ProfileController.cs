@@ -17,7 +17,7 @@ namespace Service.Api.Controllers.Account
         [HttpPost(Name = "UpdateProfile")]
         public async Task<ResponseBaseModel> UpdateProfile([FromBody] AppUserEntity entityToUpdate)
         {
-            return await _profileService.ChangeProfileRemote(entityToUpdate);
+            return await _profileService.ChangeProfile(entityToUpdate);
         }
     }
 }

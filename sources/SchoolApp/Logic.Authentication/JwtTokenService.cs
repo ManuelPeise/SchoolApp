@@ -1,6 +1,6 @@
 ﻿using Data.Entities.User;
-using Logic.Shared;
 using Logic.Shared.Interfaces;
+using Logic.Shared.Storage;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Enums;
@@ -10,20 +10,19 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Logic.Administration
+
+namespace Logic.Authentication
 {
     public class JwtTokenService : IJwtTokenService
     {
         private bool disposedValue;
         private readonly IOptions<JwtTokenModel> _jwtOptions;
-        private readonly IDbContextFactory _dbContextFactory;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IRemoteDatabaseAccessor _databaseAccessor;
 
-        public JwtTokenService(IOptions<JwtTokenModel> jwtOptions, IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
+        public JwtTokenService(IOptions<JwtTokenModel> jwtOptions, IRemoteDatabaseAccessor databaseAccessor)
         {
             _jwtOptions = jwtOptions;
-            _dbContextFactory = dbContextFactory;
-            _currentUserService = currentUserService;
+            _databaseAccessor = databaseAccessor;
         }
 
         public (string Jwt, string RefreshToken) GenerateTokens(AppUserEntity user)
@@ -33,20 +32,19 @@ namespace Logic.Administration
 
         public async Task<RefreshTokenResponse> RefreshToken(RefreshTokenRequest request)
         {
-            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, _dbContextFactory, _currentUserService);
             var principal = GetPrincipalFromExpiredToken(request.AccessToken);
             var username = principal.Identity!.Name;
 
-            var user = await unitOfWork.UserRepository.Find(x => x.UserName == username);
+            var user = await _databaseAccessor.UserRepository.Find(x => x.UserName == username);
 
             if (user == null)
             {
                 throw new SecurityTokenException("Invalid refresh token");
             }
 
-            await unitOfWork.UserCredentialsRepository.GetByIdAsync(user.CredentialsId);
+            await _databaseAccessor.UserCredentialsRepository.GetByIdAsync(user.CredentialsId);
 
-            if(user.Credentials.RefreshToken != request.RefreshToken)
+            if (user.Credentials.RefreshToken != request.RefreshToken)
             {
                 throw new SecurityTokenException("Invalid refresh token");
             }
@@ -56,9 +54,9 @@ namespace Logic.Administration
 
             user.Credentials.RefreshToken = newRefreshToken;
 
-            unitOfWork.UserCredentialsRepository.Update(user.Credentials);
+            _databaseAccessor.UserCredentialsRepository.Update(user.Credentials);
 
-            await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+            await _databaseAccessor.SaveChangesAsync();
 
             return new RefreshTokenResponse
             {
@@ -111,8 +109,7 @@ namespace Logic.Administration
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_jwtOptions.Value.SecurityKey)
                 ),
-
-                ValidateLifetime = false // <= IMPORTANT: allow expired access token
+                ValidateLifetime = false 
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -130,10 +127,8 @@ namespace Logic.Administration
             {
                 if (disposing)
                 {
-                    _currentUserService.Dispose();
-                    _dbContextFactory.Dispose();
+                    _databaseAccessor.Dispose();
                 }
-
 
                 disposedValue = true;
             }

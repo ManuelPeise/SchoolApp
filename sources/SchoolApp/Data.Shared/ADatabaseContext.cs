@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Administration;
 using Data.Entities.LearnContent;
+using Data.Entities.Syncronisation;
 using Data.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,5 +37,6 @@ namespace Data.Shared
         public DbSet<LearnTopicEntity> LearnTopics { get; set; }
         public DbSet<UserLearnTopicEntity> UserLearnTopics { get; set; }
         public DbSet<VocabularyEntity> Vocabularys { get; set; }
+        public DbSet<SyncornisationEntity> SyncTable { get; set; }
     }
 }

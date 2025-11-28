@@ -1,4 +1,5 @@
 ﻿using Logic.Shared.Interfaces;
+using Logic.Shared.Storage;
 using Shared.Models;
 using Shared.Models.Import;
 
@@ -6,19 +7,19 @@ namespace Logic.Import
 {
     public class JsonFileImporter : IJsonFileImporter
     {
-        private readonly IDbContextFactory _dbContextFactory;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IRemoteDatabaseAccessor _databaseAccessor;
+
         private bool disposedValue;
 
-        public JsonFileImporter(IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
+        public JsonFileImporter(IRemoteDatabaseAccessor databaseAccessor)
         {
-            _dbContextFactory = dbContextFactory;
-            _currentUserService = currentUserService;
+            _databaseAccessor = databaseAccessor;
+
         }
 
         public async Task<ResponseBaseModel> ImportJson(FileImportModel model)
         {
-            var instance = FileImportFactory.Execute(model, _dbContextFactory, _currentUserService);
+            var instance = FileImportFactory.Execute(model, _databaseAccessor);
 
             return await instance.Execute();
         }
@@ -29,8 +30,7 @@ namespace Logic.Import
             {
                 if (disposing)
                 {
-                    _currentUserService.Dispose();
-                    _dbContextFactory.Dispose();
+                    _databaseAccessor.Dispose();
                 }
 
                 disposedValue = true;

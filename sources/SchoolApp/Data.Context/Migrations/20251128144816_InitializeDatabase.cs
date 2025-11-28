@@ -24,7 +24,8 @@ namespace Data.Context.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,7 +44,8 @@ namespace Data.Context.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -62,7 +64,8 @@ namespace Data.Context.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -83,11 +86,32 @@ namespace Data.Context.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LogTable", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SyncTable",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SyncronisationName = table.Column<string>(type: "TEXT", nullable: false),
+                    SyncronisationType = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsInSync = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SyncTable", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,7 +132,8 @@ namespace Data.Context.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -140,7 +165,8 @@ namespace Data.Context.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -167,7 +193,8 @@ namespace Data.Context.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -212,6 +239,9 @@ namespace Data.Context.Migrations
         {
             migrationBuilder.DropTable(
                 name: "LogTable");
+
+            migrationBuilder.DropTable(
+                name: "SyncTable");
 
             migrationBuilder.DropTable(
                 name: "UserLearnTopics");

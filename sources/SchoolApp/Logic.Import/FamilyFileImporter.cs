@@ -2,7 +2,7 @@
 using Data.Entities.User;
 using Logic.Import.Models;
 using Logic.Shared;
-using Logic.Shared.Interfaces;
+using Logic.Shared.Storage;
 using Newtonsoft.Json;
 using Shared.Enums;
 using Shared.Models;
@@ -14,29 +14,27 @@ namespace Logic.Import
     {
         private readonly FileImportModel _fileImportModel;
 
-        public FamilyFileImporter(FileImportModel fileImportModel, IDbContextFactory dbContextFactory, ICurrentUserService currentUserService)
-            : base(dbContextFactory, currentUserService)
+        public FamilyFileImporter(FileImportModel fileImportModel, IRemoteDatabaseAccessor databaseAccessor)
+            : base(databaseAccessor)
         {
             _fileImportModel = fileImportModel;
         }
 
         public override async Task<ResponseBaseModel> Execute()
         {
-            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.MySql, DbContextFactory, CurrentUserService);
-
             try
             {
                 if (string.IsNullOrEmpty(_fileImportModel.FileContent))
                 {
-                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                    await DatabaseAccessor.LogMessage(new LogEntryEntity
                     {
                         Message = $"Error: file: {_fileImportModel.FileName} is empty",
                         ExceptionMessage = string.Empty,
                         Stacktrace = string.Empty,
                         LogLevel = LogLevelEnum.Info
-                    }, null);
+                    });
 
-                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+                    await DatabaseAccessor.SaveChangesAsync();
 
                     return new ResponseBaseModel { Success = false, Message = $"Error: file: {_fileImportModel.FileName} is empty" };
                 }
@@ -45,55 +43,55 @@ namespace Logic.Import
 
                 if (model == null)
                 {
-                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                    await DatabaseAccessor.LogMessage(new LogEntryEntity
                     {
                         Message = $"File: {_fileImportModel.FileName} could not be parsed.",
                         ExceptionMessage = string.Empty,
                         Stacktrace = string.Empty,
                         LogLevel = LogLevelEnum.Info
-                    }, null);
+                    });
 
-                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+                    await DatabaseAccessor.SaveChangesAsync();
 
                     return new ResponseBaseModel { Success = false, Message = $"Error, file: {_fileImportModel.FileName} could not be parsed." };
                 }
 
                 if (!model.IsValidModel())
                 {
-                    await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                    await DatabaseAccessor.LogMessage(new LogEntryEntity
                     {
                         Message = $"File: {_fileImportModel.FileName} could not be parsed.",
                         ExceptionMessage = string.Empty,
                         Stacktrace = string.Empty,
                         LogLevel = LogLevelEnum.Info
-                    }, null);
+                    });
 
-                    await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+                    await DatabaseAccessor.SaveChangesAsync();
 
                     return new ResponseBaseModel { Success = false, Message = $"File: {_fileImportModel.FileName} could not be parsed." };
                 }
 
-                var familyId = await unitOfWork.FamilyRepository.GetEntityId(x => x.FamilyName.ToLower() == model.FamilyName.ToLower());
+                var familyId = await DatabaseAccessor.FamilyRepository.GetEntityId(x => x.FamilyName.ToLower() == model.FamilyName.ToLower());
 
                 var importTimeStamp = DateTime.UtcNow;
 
                 if (familyId == null)
                 {
-                    var familyMembers = await GetFamilyMemberEntities(unitOfWork, model.FamilyMembers, importTimeStamp);
+                    var familyMembers = await GetFamilyMemberEntities(DatabaseAccessor, model.FamilyMembers, importTimeStamp);
 
                     var adminUser = familyMembers.FirstOrDefault(x => x.UserRole == UserRoleEnum.Admin);
 
                     if (adminUser == null)
                     {
-                        await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                        await DatabaseAccessor.LogMessage(new LogEntryEntity
                         {
                             Message = $"Could not import family: {_fileImportModel.FileName} - admin user is not defined.",
                             ExceptionMessage = string.Empty,
                             Stacktrace = string.Empty,
                             LogLevel = LogLevelEnum.Info
-                        }, null);
+                        });
 
-                        await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+                        await DatabaseAccessor.SaveChangesAsync();
 
                         return new ResponseBaseModel { Success = false, Message = $"Could not import family: {_fileImportModel.FileName} - admin user is not defined." };
                     }
@@ -107,45 +105,45 @@ namespace Logic.Import
                         CreatedBy = "System"
                     };
 
-                    await unitOfWork.FamilyRepository.AddAsync(familyEntity, null);
+                    await DatabaseAccessor.FamilyRepository.AddAsync(familyEntity, null);
                 }
 
-                await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                await DatabaseAccessor.LogMessage(new LogEntryEntity
                 {
                     Message = $"File: {_fileImportModel.FileName} imported with success.",
                     ExceptionMessage = string.Empty,
                     Stacktrace = string.Empty,
                     LogLevel = LogLevelEnum.Info
-                }, null);
+                });
 
-                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+                await DatabaseAccessor.SaveChangesAsync();
 
                 return new ResponseBaseModel { Success = true, Message = $"Import {_fileImportModel.FileName} with success!" };
 
             }
             catch (Exception exception)
             {
-                await unitOfWork.LogRepository.AddAsync(new LogEntryEntity
+                await DatabaseAccessor.LogMessage(new LogEntryEntity
                 {
                     Message = $"Could not import file: {_fileImportModel.FileName} - family import failed.",
                     ExceptionMessage = exception.Message,
                     Stacktrace = exception.StackTrace ?? string.Empty,
                     LogLevel = LogLevelEnum.Error
-                }, null);
+                });
 
-                await unitOfWork.SaveChangesAsync(DatabaseProviderTypeEnum.MySql);
+                await DatabaseAccessor.SaveChangesAsync();
 
                 return new ResponseBaseModel { Success = false, Message = $"Could not import file: {_fileImportModel.FileName} - family import failed." };
             }
         }
 
-        private async Task<List<AppUserEntity>> GetFamilyMemberEntities(ApplicationUnitOfWork unitOfWork, List<FamilyMemberImportModel> familyMembers, DateTime timeStamp)
+        private async Task<List<AppUserEntity>> GetFamilyMemberEntities(IRemoteDatabaseAccessor databaseAccessor, List<FamilyMemberImportModel> familyMembers, DateTime timeStamp)
         {
             var members = new List<AppUserEntity>();
 
             foreach (var familyMember in familyMembers)
             {
-                var userId = await unitOfWork.UserRepository.GetEntityId(x =>
+                var userId = await databaseAccessor.UserRepository.GetEntityId(x =>
                     x.FirstName.ToLower() == familyMember.FirstName.ToLower() && x.LastName.ToLower() == familyMember.LastName.ToLower());
 
                 if (userId == null)

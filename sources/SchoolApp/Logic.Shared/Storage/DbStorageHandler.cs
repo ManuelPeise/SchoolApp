@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Administration;
 using Logic.Shared.Interfaces;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Shared.Enums;
 using Shared.Models;
 
@@ -8,11 +9,11 @@ namespace Logic.Shared.Storage
     public class DbStorageHandler<TRequest> : IDbStorageHandler<TRequest> where TRequest : class
     {
         private readonly IApiHttpClient<TRequest, ResponseBaseModel> _apiHealthClient;
-        private readonly ILogService _logService;
-        public DbStorageHandler(ILogService logService, IApiHttpClient<TRequest, ResponseBaseModel> apiHealthClient)
+        private readonly ILocalDatabaseAccessor _databaseAccessor;
+        public DbStorageHandler(ILocalDatabaseAccessor databaseAccessor, IApiHttpClient<TRequest, ResponseBaseModel> apiHealthClient)
         {
             _apiHealthClient = apiHealthClient;
-            _logService = logService;
+            _databaseAccessor = databaseAccessor;
         }
 
         public async Task<bool> StoreData(
@@ -39,7 +40,7 @@ namespace Logic.Shared.Storage
             }
             catch (Exception exception)
             {
-                await _logService.LogMessageSqLite(new LogEntryEntity
+                await _databaseAccessor.LogMessage(new LogEntryEntity
                 {
                     LogLevel = LogLevelEnum.Error,
                     Message = $"Error while store data [{typeof(TRequest).Name}].",
@@ -49,6 +50,8 @@ namespace Logic.Shared.Storage
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = "System"
                 });
+
+                await _databaseAccessor.SaveChangesAsync(currentUser);
 
                 return await Task.FromResult(false);
             }

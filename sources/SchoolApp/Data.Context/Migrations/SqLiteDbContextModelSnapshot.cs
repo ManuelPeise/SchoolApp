@@ -37,6 +37,9 @@ namespace Data.Context.Migrations
                     b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("LogLevel")
                         .HasColumnType("INTEGER");
 
@@ -74,6 +77,9 @@ namespace Data.Context.Migrations
 
                     b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TopicDescription")
                         .IsRequired()
@@ -124,6 +130,9 @@ namespace Data.Context.Migrations
                     b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
@@ -165,6 +174,9 @@ namespace Data.Context.Migrations
                     b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("TopicId")
                         .HasColumnType("INTEGER");
 
@@ -179,6 +191,43 @@ namespace Data.Context.Migrations
                     b.HasIndex("TopicId");
 
                     b.ToTable("Vocabularys");
+                });
+
+            modelBuilder.Entity("Data.Entities.Syncronisation.SyncornisationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SyncronisationName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SyncronisationType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SyncTable");
                 });
 
             modelBuilder.Entity("Data.Entities.User.AppUserCredentialsEntity", b =>
@@ -196,6 +245,9 @@ namespace Data.Context.Migrations
 
                     b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -256,6 +308,9 @@ namespace Data.Context.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
@@ -301,6 +356,9 @@ namespace Data.Context.Migrations
 
                     b.Property<bool>("IsInSync")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");

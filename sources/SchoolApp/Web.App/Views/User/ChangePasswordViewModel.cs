@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Data.Entities.User;
 using Logic.Shared.Interfaces;
+using Logic.Shared.Storage;
 using Shared.Models;
 
 namespace Web.App.Views.User
@@ -33,7 +34,6 @@ namespace Web.App.Views.User
         public ChangePasswordViewModel(
             ISqLiteService sqLiteService,
             ICurrentUserService currentUserService,
-            IDbContextFactory dbContextFactory,
             IDbStorageHandler<ChangePasswordRequest> storageHandler,
             IApiHttpClient<ChangePasswordRequest, ResponseBaseModel> changePasswordClient)
         {

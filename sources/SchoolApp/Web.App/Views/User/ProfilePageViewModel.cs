@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Data.Entities.User;
 using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
 using Shared.Enums;
-using Shared.Models;
 using System.ComponentModel;
 
 namespace Web.App.Views.User
@@ -15,7 +13,6 @@ namespace Web.App.Views.User
         private readonly IProfileService _profileService;
         private readonly INavigationService _navigationService;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IApiHttpClient<AppUserEntity, ResponseBaseModel> _apiClient;
         private const string LastUpdateTemplate = "Letzte Aktualisierung: am {TimeStamp} Uhr (UTC) von {User}";
 
         [ObservableProperty]
@@ -41,13 +38,11 @@ namespace Web.App.Views.User
         public ProfilePageViewModel(
             IProfileService profileService,
             INavigationService navigationService,
-            ICurrentUserService currentUserService,
-            IApiHttpClient<AppUserEntity, ResponseBaseModel> apiClient)
+            ICurrentUserService currentUserService)
         {
             _profileService = profileService;
             _navigationService = navigationService;
             _currentUserService = currentUserService;
-            _apiClient = apiClient;
 
             Initialíze();
         }
@@ -70,6 +65,7 @@ namespace Web.App.Views.User
                 IsSystemAdminUser = User.UserRole == UserRoleEnum.SystemAdmin;
                 ToggleButtonImage = "edit.png";
                 IsModified = false;
+
             }
         }
 
@@ -112,35 +108,19 @@ namespace Web.App.Views.User
                     return;
                 }
 
-                var apiHealthResponse = await _apiClient.ApiIsReachable();
-
-                if (apiHealthResponse == null || !apiHealthResponse.Success)
-                {
-                    return;
-                }
-
-                var result = await _apiClient.PostAsync("api/profile/updateprofile", user);
-
-                if (result == null || !result.Success)
-                {
-                    return;
-                }
-
                 var localUser = User?.ToEntity();
-                localUser!.IsInSync = result.Success ? true : false;
+                localUser!.IsInSync = false;
 
-                result = await _profileService.ChangeProfileLocal(localUser);
+                var result = await _profileService.ChangeProfile(localUser);
 
                 if (result.Success)
                 {
-
                     await _currentUserService.SetCurrentUser();
 
                     User = _currentUserService.CurrentUser?.ToObservable();
                     LastUpdateText = LastUpdateTemplate
                                    .Replace("{TimeStamp}", User?.UpdatedAt?.ToString("dd.MM.yyyy HH:mm"))
                                    .Replace("{User}", User?.UpdatedBy);
-
                 }
             }
             finally

@@ -1,5 +1,6 @@
 ﻿using Data.Entities.User;
 using Logic.Shared.Interfaces;
+using Logic.Shared.Storage;
 using Shared.Enums;
 
 namespace Logic.Shared.Services
@@ -8,7 +9,7 @@ namespace Logic.Shared.Services
     {
         private const string CurrentUserIdKey = "CurrentUserId";
         private const string JwtTokenKey = "JwtToken";
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ILocalDatabaseAccessor _localDatabaseAccessor;
 
         private AppUserEntity? _currentUser = null;
         private string? _jwtToken = null;
@@ -20,9 +21,9 @@ namespace Logic.Shared.Services
         public event Action<AppUserEntity?>? CurrentUserChanged;
         public event Action<string?>? JwtTokenChanged;
 
-        public CurrentUserService(IDbContextFactory dbContextFactory)
+        public CurrentUserService(ILocalDatabaseAccessor localDatabaseAccessor)
         {
-            _dbContextFactory = dbContextFactory;
+            _localDatabaseAccessor = localDatabaseAccessor;
         }
 
         public bool IsAuthenticated()
@@ -82,11 +83,9 @@ namespace Logic.Shared.Services
                 return null;
             }
 
-            var unitOfWork = new ApplicationUnitOfWork(DatabaseProviderTypeEnum.SqLite, _dbContextFactory, this);
+            var userIdentity = await _localDatabaseAccessor.UserRepository.GetByIdAsync(int.Parse(userIdString));
 
-            var userIdentity = await unitOfWork.UserRepository.GetByIdAsync(int.Parse(userIdString));
             return userIdentity;
-
         }
 
         protected virtual void Dispose(bool disposing)
@@ -95,7 +94,7 @@ namespace Logic.Shared.Services
             {
                 if (disposing)
                 {
-                    _dbContextFactory.Dispose();
+                    _localDatabaseAccessor.Dispose();
                 }
 
                 disposedValue = true;
