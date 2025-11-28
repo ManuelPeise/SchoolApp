@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="Web.App.Views.Sync.ProfileDataSyncPage"
+    x:Class="Web.App.Views.Sync.DataSyncPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
@@ -46,57 +46,11 @@
                                     Grid.Column="0"
                                     FontSize="{OnPlatform WinUI=24,
                                                           Android=14}"
-                                    Text="Profil Daten Synconisierung"
+                                    Text="Daten Synconisierung"
                                     TextColor="{StaticResource ColorTextPrimary}"
                                     VerticalOptions="Center" />
                             </Grid>
-
-                            <!--  Sync Info  -->
-                            <Grid
-                                Padding="10"
-                                ColumnDefinitions="Auto,*"
-                                ColumnSpacing="30"
-                                RowDefinitions="*,*,*"
-                                RowSpacing="20">
-                                <!--  Last Sync  -->
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    FontSize="18"
-                                    Text="Letzte Synchronisation am:" />
-                                <Label
-                                    x:Name="LastSyncLabel"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    FontSize="16"
-                                    HorizontalTextAlignment="Start"
-                                    Text="20.04.2004"
-                                    TextColor="Gray" />
-                                <!--  By  -->
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    FontSize="18"
-                                    Text="Durch:" />
-                                <Label
-                                    x:Name="SyncByLabel"
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontSize="16"
-                                    HorizontalTextAlignment="Start"
-                                    Text="Papa"
-                                    TextColor="Gray" />
-                                <!--  Sync Button  -->
-                                <Button
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    BackgroundColor="#6200EE"
-                                    FontSize="18"
-                                    Text="Jetzt synchronisieren"
-                                    TextColor="White" />
-                            </Grid>
-
-
+                            <!--  TODO ADD SYNC ITEMS  -->
                         </VerticalStackLayout>
                     </Grid>
                 </Grid>

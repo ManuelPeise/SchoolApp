@@ -38,7 +38,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<JsonImportAssistentPageViewModel>();
             builder.Services.AddTransient<ProfilePageViewModel>();
             builder.Services.AddTransient<ChangePasswordViewModel>();
-            builder.Services.AddTransient<ProfileDataSyncViewModel>();
+            builder.Services.AddTransient<DataSyncViewModel>();
             builder.Services.AddTransient<VocabularyDataSyncViewModel>();
 
         }

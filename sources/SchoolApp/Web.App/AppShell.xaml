@@ -351,16 +351,9 @@
         Shell.NavBarIsVisible="False" />
 
     <ShellContent
-        Title="Profil-Daten-Sync"
-        ContentTemplate="{DataTemplate sync:ProfileDataSyncPage}"
-        Route="profileDataSync"
-        Shell.NavBarHasShadow="False"
-        Shell.NavBarIsVisible="False" />
-
-    <ShellContent
-        Title="Vokabel-Daten-Sync"
-        ContentTemplate="{DataTemplate sync:VocabularyDataSyncPage}"
-        Route="vocabularyDataSync"
+        Title="Daten-Sync"
+        ContentTemplate="{DataTemplate sync:DataSyncPage}"
+        Route="dataSync"
         Shell.NavBarHasShadow="False"
         Shell.NavBarIsVisible="False" />
 </Shell>

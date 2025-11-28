@@ -4,7 +4,6 @@ using Data.Entities.User;
 using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
-using Shared.Models;
 using Shared.Models.UiModels;
 using System.Collections.ObjectModel;
 
@@ -48,13 +47,8 @@ namespace Web.App.Views
         {
             new ShellItemModel
             {
-                Title = "Profildaten ",
-                Route = "///profileDataSync"
-            },
-            new ShellItemModel
-            {
-                Title = "Vokabeldaten",
-                Route = "///vocabularyDataSync"
+                Title = "Data Sync ",
+                Route = "///dataSync"
             }
         };
 
@@ -63,7 +57,7 @@ namespace Web.App.Views
             _currentUserService = currentUserService;
 
             _currentUserService.SetCurrentUser();
-            
+
             AppUser = _currentUserService.CurrentUser?.ToObservable();
             UserName = AppUser?.UserName ?? string.Empty;
             ShowLogout = !string.IsNullOrEmpty(UserName);
