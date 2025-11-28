@@ -78,11 +78,6 @@ namespace Logic.Authentication
             throw new NotImplementedException();
         }
 
-        public Task<ResponseBaseModel> ChangePassword(ChangePasswordRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -90,20 +85,12 @@ namespace Logic.Authentication
                 if (disposing)
                 {
                    _databaseAccessor.Dispose();
+                    _jwtTokenService.Dispose();
                 }
 
-                // TODO: Nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer überschreiben
-                // TODO: Große Felder auf NULL setzen
                 disposedValue = true;
             }
         }
-
-        // // TODO: Finalizer nur überschreiben, wenn "Dispose(bool disposing)" Code für die Freigabe nicht verwalteter Ressourcen enthält
-        // ~RemoteAuthenticationService()
-        // {
-        //     // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(bool disposing)" ein.
-        //     Dispose(disposing: false);
-        // }
 
         public void Dispose()
         {

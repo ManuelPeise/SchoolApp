@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Logic.Shared.Interfaces;
-using Shared.Models;
 
 namespace Web.App.Views.User
 {
@@ -9,8 +8,6 @@ namespace Web.App.Views.User
     {
         private readonly IProfileService _profileService;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IDbStorageHandler<ChangePasswordRequest> _storageHandler;
-        private readonly IApiHttpClient<ChangePasswordRequest, ResponseBaseModel> _changePasswordClient;
 
         [ObservableProperty]
         private bool _passwordChanged = false;
@@ -31,14 +28,10 @@ namespace Web.App.Views.User
 
         public ChangePasswordViewModel(
             IProfileService profileService,
-            ICurrentUserService currentUserService,
-            IDbStorageHandler<ChangePasswordRequest> storageHandler,
-            IApiHttpClient<ChangePasswordRequest, ResponseBaseModel> changePasswordClient)
+            ICurrentUserService currentUserService)
         {
             _profileService = profileService;
             _currentUserService = currentUserService;
-            _storageHandler = storageHandler;
-            _changePasswordClient = changePasswordClient;
 
             _currentUserService.SetCurrentUser();
         }
@@ -81,12 +74,6 @@ namespace Web.App.Views.User
                 SetIsLoading(false);
                 return;
             }
-
-            var request = new ChangePasswordRequest
-            {
-                Password = credentialsEntity.Password,
-                NewPassword = NewPassword
-            };
 
             credentialsEntity.Password = NewPassword;
 
@@ -145,13 +132,6 @@ namespace Web.App.Views.User
             CanSave = CurrentPasswordConfirmed &&
                 NewPassword.Length > 0 &&
                 NewPassword == NewPasswordReplication;
-        }
-
-        private async Task<ResponseBaseModel> HandleStorePasswordEntityInMySql(ChangePasswordRequest model)
-        {
-            var response = await _changePasswordClient.PostAsync("api/authentication/changepassword", model, _currentUserService.JwtToken);
-
-            return response ?? new ResponseBaseModel { Success = false };
         }
     }
 }
