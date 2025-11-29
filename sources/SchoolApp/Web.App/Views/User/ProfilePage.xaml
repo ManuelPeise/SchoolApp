@@ -9,6 +9,7 @@
     BackgroundColor="{StaticResource ColorBackground}">
     <ContentPage.Resources>
         <converters:DateTimeToStringConverter x:Key="dateConverter" />
+        <converters:InvertBoolConverter x:Key="invertBoolConverter" />
     </ContentPage.Resources>
     <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*,Auto,*">
 
@@ -107,8 +108,8 @@
                                     Grid.Column="1"
                                     BackgroundColor="{StaticResource ColorAccent}"
                                     Command="{Binding NavigateToChangePasswordCommand}"
-                                    FontSize="{OnPlatform WinUI=20,
-                                                          Android=14}"
+                                    FontSize="{OnPlatform WinUI=16,
+                                                          Android=12}"
                                     IsEnabled="True"
                                     IsVisible="True"
                                     Text="Passwort Ändern"
@@ -175,16 +176,53 @@
                                                       Android=12}"
                                 Text="{Binding LastUpdateText}"
                                 TextColor="{StaticResource ColorTextPrimary}" />
+                            <Grid
+                                Margin="0,15,0,0"
+                                ColumnDefinitions="Auto,*,Auto"
+                                ColumnSpacing="0">
+                                <Grid
+                                    Grid.Column="0"
+                                    Padding="0"
+                                    ColumnDefinitions="30,250">
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        HorizontalOptions="Start"
+                                        IsChecked="{Binding IsSyncOnSave}"
+                                        IsEnabled="{Binding IsEditMode}"
+                                        Color="{StaticResource ColorAccentDark}" />
+                                    <Label
+                                        Grid.Column="2"
+                                        Margin="8,0,0,0"
+                                        FontSize="{OnPlatform WinUI=16,
+                                                              Android=12}"
+                                        Text="Bei Speichern synchronisieren"
+                                        VerticalOptions="Center" />
+                                </Grid>
 
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+                                <!--  optional manual sync button in the middle  -->
+                                <Button
+                                    Grid.Column="1"
+                                    BackgroundColor="{StaticResource ColorAccent}"
+                                    Command="{Binding SyncNowCommand}"
+                                    FontSize="{OnPlatform WinUI=16,
+                                                          Android=12}"
+                                    IsEnabled="{Binding IsSyncOnSave, Converter={StaticResource invertBoolConverter}}"
+                                    Text="Jetzt synchronisieren" />
+
+                                <!--  Save / Cancel buttons remain, or keep them in column 2 as currently  -->
+                            </Grid>
+                            <Grid
+                                Margin="0,25,0,0"
+                                ColumnDefinitions="*,*"
+                                ColumnSpacing="20">
                                 <Button
                                     Grid.Column="0"
                                     BackgroundColor="{StaticResource ColorAccent}"
                                     Command="{Binding RevertChangesCommand}"
-                                    FontSize="{OnPlatform WinUI=20,
-                                                          Android=14}"
+                                    FontSize="{OnPlatform WinUI=16,
+                                                          Android=12}"
                                     IsEnabled="{Binding IsModified}"
-                                    IsVisible="{Binding IsEditMode}"
+                                    IsVisible="True"
                                     Text="Abbrechen"
                                     TextColor="{StaticResource ColorTextPrimary}" />
 
@@ -192,10 +230,10 @@
                                     Grid.Column="1"
                                     BackgroundColor="{StaticResource ColorAccent}"
                                     Command="{Binding SaveChangesCommand}"
-                                    FontSize="{OnPlatform WinUI=20,
-                                                          Android=14}"
+                                    FontSize="{OnPlatform WinUI=16,
+                                                          Android=12}"
                                     IsEnabled="{Binding IsModified}"
-                                    IsVisible="{Binding IsEditMode}"
+                                    IsVisible="True"
                                     Text="Speichern"
                                     TextColor="{StaticResource ColorTextPrimary}" />
                             </Grid>

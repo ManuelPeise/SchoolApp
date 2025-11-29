@@ -31,6 +31,8 @@ namespace Web.App.Views.User
         private string _toggleButtonImage = string.Empty;
         [ObservableProperty]
         private bool _isModified = false;
+        [ObservableProperty]
+        private bool _isSyncOnSave = false;
 
         // keeps reference to previously subscribed user so we can unsubscribe
         private ObservableUser? _subscribedUser = null;
