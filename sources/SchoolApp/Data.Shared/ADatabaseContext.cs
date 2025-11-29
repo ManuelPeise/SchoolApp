@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Administration;
 using Data.Entities.LearnContent;
+using Data.Entities.Settings;
 using Data.Entities.Syncronisation;
 using Data.Entities.User;
 using Microsoft.EntityFrameworkCore;
@@ -32,11 +33,13 @@ namespace Data.Shared
         }
 
         public DbSet<LogEntryEntity> LogTable { get; set; }
-        public DbSet<FamilyEntity> Families { get; set; }
-        public DbSet<AppUserEntity> AppUsers { get; set; }
-        public DbSet<LearnTopicEntity> LearnTopics { get; set; }
-        public DbSet<UserLearnTopicEntity> UserLearnTopics { get; set; }
-        public DbSet<VocabularyEntity> Vocabularys { get; set; }
+        public DbSet<FamilyEntity> FamilyTable { get; set; }
+        public DbSet<AppUserEntity> AppUserTable { get; set; }
+        public DbSet<LearnTopicEntity> LearnTopicTable { get; set; }
+        public DbSet<UserLearnTopicEntity> UserLearnTopicTable { get; set; }
+        public DbSet<VocabularyEntity> VocabularyTable { get; set; }
         public DbSet<SyncornisationEntity> SyncTable { get; set; }
+        public DbSet<SettingsEntity> SettingsTable { get; set; }
+        public DbSet<ScheduleSettingsEntity> ScheduleSettingsTable { get; set; }
     }
 }
