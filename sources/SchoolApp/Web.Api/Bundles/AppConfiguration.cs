@@ -1,4 +1,5 @@
 using Data.ContextMysql;
+using Data.Entities.Settings;
 using Data.Entities.User;
 using Logic.Authentication;
 using Logic.Import;
@@ -91,7 +92,7 @@ namespace Web.Api.Bundles
                 db.Database.Migrate();
             }
 
-            if (!db.AppUsers.Where(x => x.UserRole == UserRoleEnum.SystemAdmin).Any())
+            if (!db.AppUserTable.Where(x => x.UserRole == UserRoleEnum.SystemAdmin).Any())
             {
                 var salt = Guid.NewGuid().ToString();
 
@@ -115,11 +116,28 @@ namespace Web.Api.Bundles
                         CreatedAt = DateTime.UtcNow,
                         CreatedBy = "System"
                     },
+                    Settings = new SettingsEntity
+                    {
+                        Id = 1,
+                        Theme = "Light",
+                        AutoSync = false,
+                        ScheduleSettings = new ScheduleSettingsEntity
+                        {
+                            Id = 1,
+                            Hour = 0,
+                            Minute= 0,
+                            Interval = ScheduleIntervalEnum.Daily,
+                            CreatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        },
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = "System"
+                    },
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = "System"
                 };
 
-                db.AppUsers.Add(entity);
+                db.AppUserTable.Add(entity);
 
                 db.SaveChanges();
             }

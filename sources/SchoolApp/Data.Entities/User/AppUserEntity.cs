@@ -1,4 +1,5 @@
 ﻿using Data.Entities.LearnContent;
+using Data.Entities.Settings;
 using Shared.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,5 +20,8 @@ namespace Data.Entities.User
         public int CredentialsId { get; set; }
         [ForeignKey(nameof(CredentialsId))]
         public AppUserCredentialsEntity Credentials { get; set; } = new();
+        public int SettingsId { get; set; }
+        [ForeignKey(nameof(SettingsId))]
+        public SettingsEntity Settings { get; set; } = new();
     }
 }

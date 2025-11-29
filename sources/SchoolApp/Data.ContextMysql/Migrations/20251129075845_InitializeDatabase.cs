@@ -38,7 +38,7 @@ namespace Data.ContextMysql.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Families",
+                name: "FamilyTable",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -54,12 +54,12 @@ namespace Data.ContextMysql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Families", x => x.Id);
+                    table.PrimaryKey("PK_FamilyTable", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "LearnTopics",
+                name: "LearnTopicTable",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -75,7 +75,7 @@ namespace Data.ContextMysql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LearnTopics", x => x.Id);
+                    table.PrimaryKey("PK_LearnTopicTable", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -103,6 +103,29 @@ namespace Data.ContextMysql.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ScheduleSettingsTable",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Day = table.Column<int>(type: "int", nullable: false),
+                    Hour = table.Column<int>(type: "int", nullable: false),
+                    Minute = table.Column<int>(type: "int", nullable: false),
+                    Interval = table.Column<int>(type: "int", nullable: false),
+                    IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScheduleSettingsTable", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "SyncTable",
                 columns: table => new
                 {
@@ -124,45 +147,7 @@ namespace Data.ContextMysql.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "AppUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    LastName = table.Column<string>(type: "longtext", nullable: false),
-                    FirstName = table.Column<string>(type: "longtext", nullable: false),
-                    UserName = table.Column<string>(type: "longtext", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UserRole = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    FamilyId = table.Column<int>(type: "int", nullable: true),
-                    CredentialsId = table.Column<int>(type: "int", nullable: false),
-                    IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "longtext", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true),
-                    LastSyncAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AppUsers_AppUserCredentialsEntity_CredentialsId",
-                        column: x => x.CredentialsId,
-                        principalTable: "AppUserCredentialsEntity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AppUsers_Families_FamilyId",
-                        column: x => x.FamilyId,
-                        principalTable: "Families",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Vocabularys",
+                name: "VocabularyTable",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -180,18 +165,91 @@ namespace Data.ContextMysql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vocabularys", x => x.Id);
+                    table.PrimaryKey("PK_VocabularyTable", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vocabularys_LearnTopics_TopicId",
+                        name: "FK_VocabularyTable_LearnTopicTable_TopicId",
                         column: x => x.TopicId,
-                        principalTable: "LearnTopics",
+                        principalTable: "LearnTopicTable",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "UserLearnTopics",
+                name: "SettingsTable",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Theme = table.Column<string>(type: "longtext", nullable: false),
+                    AutoSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ScheduleSettingsId = table.Column<int>(type: "int", nullable: false),
+                    IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SettingsTable", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SettingsTable_ScheduleSettingsTable_ScheduleSettingsId",
+                        column: x => x.ScheduleSettingsId,
+                        principalTable: "ScheduleSettingsTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AppUserTable",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    LastName = table.Column<string>(type: "longtext", nullable: false),
+                    FirstName = table.Column<string>(type: "longtext", nullable: false),
+                    UserName = table.Column<string>(type: "longtext", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UserRole = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    FamilyId = table.Column<int>(type: "int", nullable: true),
+                    CredentialsId = table.Column<int>(type: "int", nullable: false),
+                    SettingsId = table.Column<int>(type: "int", nullable: false),
+                    IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "longtext", nullable: true),
+                    LastSyncAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserTable", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUserTable_AppUserCredentialsEntity_CredentialsId",
+                        column: x => x.CredentialsId,
+                        principalTable: "AppUserCredentialsEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserTable_FamilyTable_FamilyId",
+                        column: x => x.FamilyId,
+                        principalTable: "FamilyTable",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AppUserTable_SettingsTable_SettingsId",
+                        column: x => x.SettingsId,
+                        principalTable: "SettingsTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "UserLearnTopicTable",
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -209,40 +267,50 @@ namespace Data.ContextMysql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserLearnTopics", x => new { x.TopicId, x.UserId });
+                    table.PrimaryKey("PK_UserLearnTopicTable", x => new { x.TopicId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserLearnTopics_AppUsers_UserId",
+                        name: "FK_UserLearnTopicTable_AppUserTable_UserId",
                         column: x => x.UserId,
-                        principalTable: "AppUsers",
+                        principalTable: "AppUserTable",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserLearnTopics_LearnTopics_TopicId",
+                        name: "FK_UserLearnTopicTable_LearnTopicTable_TopicId",
                         column: x => x.TopicId,
-                        principalTable: "LearnTopics",
+                        principalTable: "LearnTopicTable",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AppUsers_CredentialsId",
-                table: "AppUsers",
+                name: "IX_AppUserTable_CredentialsId",
+                table: "AppUserTable",
                 column: "CredentialsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AppUsers_FamilyId",
-                table: "AppUsers",
+                name: "IX_AppUserTable_FamilyId",
+                table: "AppUserTable",
                 column: "FamilyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLearnTopics_UserId",
-                table: "UserLearnTopics",
+                name: "IX_AppUserTable_SettingsId",
+                table: "AppUserTable",
+                column: "SettingsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SettingsTable_ScheduleSettingsId",
+                table: "SettingsTable",
+                column: "ScheduleSettingsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserLearnTopicTable_UserId",
+                table: "UserLearnTopicTable",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vocabularys_TopicId",
-                table: "Vocabularys",
+                name: "IX_VocabularyTable_TopicId",
+                table: "VocabularyTable",
                 column: "TopicId");
         }
 
@@ -256,22 +324,28 @@ namespace Data.ContextMysql.Migrations
                 name: "SyncTable");
 
             migrationBuilder.DropTable(
-                name: "UserLearnTopics");
+                name: "UserLearnTopicTable");
 
             migrationBuilder.DropTable(
-                name: "Vocabularys");
+                name: "VocabularyTable");
 
             migrationBuilder.DropTable(
-                name: "AppUsers");
+                name: "AppUserTable");
 
             migrationBuilder.DropTable(
-                name: "LearnTopics");
+                name: "LearnTopicTable");
 
             migrationBuilder.DropTable(
                 name: "AppUserCredentialsEntity");
 
             migrationBuilder.DropTable(
-                name: "Families");
+                name: "FamilyTable");
+
+            migrationBuilder.DropTable(
+                name: "SettingsTable");
+
+            migrationBuilder.DropTable(
+                name: "ScheduleSettingsTable");
         }
     }
 }

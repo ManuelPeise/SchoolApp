@@ -97,7 +97,7 @@ namespace Data.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LearnTopics");
+                    b.ToTable("LearnTopicTable");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>
@@ -143,7 +143,7 @@ namespace Data.Context.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLearnTopics");
+                    b.ToTable("UserLearnTopicTable");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.VocabularyEntity", b =>
@@ -190,7 +190,91 @@ namespace Data.Context.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Vocabularys");
+                    b.ToTable("VocabularyTable");
+                });
+
+            modelBuilder.Entity("Data.Entities.Settings.ScheduleSettingsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Hour")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Interval")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Minute")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScheduleSettingsTable");
+                });
+
+            modelBuilder.Entity("Data.Entities.Settings.SettingsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutoSync")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsInSync")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastSyncAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ScheduleSettingsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduleSettingsId");
+
+                    b.ToTable("SettingsTable");
                 });
 
             modelBuilder.Entity("Data.Entities.Syncronisation.SyncornisationEntity", b =>
@@ -311,6 +395,9 @@ namespace Data.Context.Migrations
                     b.Property<DateTime?>("LastSyncAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("SettingsId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
@@ -330,7 +417,9 @@ namespace Data.Context.Migrations
 
                     b.HasIndex("FamilyId");
 
-                    b.ToTable("AppUsers");
+                    b.HasIndex("SettingsId");
+
+                    b.ToTable("AppUserTable");
                 });
 
             modelBuilder.Entity("Data.Entities.User.FamilyEntity", b =>
@@ -368,7 +457,7 @@ namespace Data.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Families");
+                    b.ToTable("FamilyTable");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.UserLearnTopicEntity", b =>
@@ -401,6 +490,17 @@ namespace Data.Context.Migrations
                     b.Navigation("Topic");
                 });
 
+            modelBuilder.Entity("Data.Entities.Settings.SettingsEntity", b =>
+                {
+                    b.HasOne("Data.Entities.Settings.ScheduleSettingsEntity", "ScheduleSettings")
+                        .WithMany()
+                        .HasForeignKey("ScheduleSettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ScheduleSettings");
+                });
+
             modelBuilder.Entity("Data.Entities.User.AppUserEntity", b =>
                 {
                     b.HasOne("Data.Entities.User.AppUserCredentialsEntity", "Credentials")
@@ -413,9 +513,17 @@ namespace Data.Context.Migrations
                         .WithMany("FamilyMembers")
                         .HasForeignKey("FamilyId");
 
+                    b.HasOne("Data.Entities.Settings.SettingsEntity", "Settings")
+                        .WithMany()
+                        .HasForeignKey("SettingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Credentials");
 
                     b.Navigation("Family");
+
+                    b.Navigation("Settings");
                 });
 
             modelBuilder.Entity("Data.Entities.LearnContent.LearnTopicEntity", b =>

@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Administration;
 using Data.Entities.LearnContent;
+using Data.Entities.Settings;
 using Data.Entities.Syncronisation;
 using Data.Entities.User;
 using Logic.Shared.Interfaces;
@@ -16,6 +17,7 @@ namespace Logic.Shared.Storage
         IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository { get; }
         IRepositoryBase<VocabularyEntity> VocabularyRepository { get; }
         IRepositoryBase<SyncornisationEntity> SyncRepository { get; }
+        IRepositoryBase<SettingsEntity> SettingsRepository { get; }
         Task<List<LogEntryEntity>> GetLogMessages();
         Task LogMessage(LogEntryEntity entity);
         Task SaveChangesAsync(string? userName);

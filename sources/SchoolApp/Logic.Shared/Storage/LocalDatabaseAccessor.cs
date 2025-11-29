@@ -2,6 +2,7 @@
 using Data.Entities;
 using Data.Entities.Administration;
 using Data.Entities.LearnContent;
+using Data.Entities.Settings;
 using Data.Entities.Syncronisation;
 using Data.Entities.User;
 using Logic.Shared.Interfaces;
@@ -20,6 +21,7 @@ namespace Logic.Shared.Storage
         private readonly IRepositoryBase<UserLearnTopicEntity> _userLearnTopicRepository;
         private readonly IRepositoryBase<VocabularyEntity> _vocabularyRepository;
         private readonly IRepositoryBase<SyncornisationEntity> _syncRepository;
+        private readonly IRepositoryBase<SettingsEntity> _settingsRepository;
 
         private bool disposedValue;
 
@@ -31,6 +33,7 @@ namespace Logic.Shared.Storage
         public IRepositoryBase<UserLearnTopicEntity> UserLearnTopicRepository => _userLearnTopicRepository ?? new RepositoryBase<UserLearnTopicEntity>(_dbContext);
         public IRepositoryBase<VocabularyEntity> VocabularyRepository => _vocabularyRepository ?? new RepositoryBase<VocabularyEntity>(_dbContext);
         public IRepositoryBase<SyncornisationEntity> SyncRepository => _syncRepository ?? new RepositoryBase<SyncornisationEntity>(_dbContext);
+        public IRepositoryBase<SettingsEntity> SettingsRepository => _settingsRepository ?? new RepositoryBase<SettingsEntity>(_dbContext);
 
         public LocalDatabaseAccessor(SqLiteDbContext dbContext)
         {
@@ -44,6 +47,7 @@ namespace Logic.Shared.Storage
             _vocabularyRepository = new RepositoryBase<VocabularyEntity>(_dbContext);
             _userCredentialsRepository = new RepositoryBase<AppUserCredentialsEntity>(_dbContext);
             _syncRepository = new RepositoryBase<SyncornisationEntity>(_dbContext);
+            _settingsRepository = new RepositoryBase<SettingsEntity>(_dbContext);
         }
 
         public async Task<List<LogEntryEntity>> GetLogMessages()
