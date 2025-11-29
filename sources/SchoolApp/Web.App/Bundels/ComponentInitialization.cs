@@ -11,7 +11,6 @@ namespace Web.App.Bundels
     {
         internal static void InitializeViews(MauiAppBuilder builder)
         {
-           
             builder.Services.AddTransient<AppShell>();
             builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<AuthenticationPage>();
@@ -38,7 +37,6 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<ProfilePageViewModel>();
             builder.Services.AddTransient<ChangePasswordViewModel>();
             builder.Services.AddTransient<DataSyncViewModel>();
-
         }
     }
 }
