@@ -17,6 +17,8 @@ namespace Logic.Profile
         {
             _databaseAccessor = databaseAccessor;
             _currentUserService = currentUserService;
+
+            _currentUserService.SetCurrentUser();
         }
 
         public async Task<(bool success, string message)> UpdateProfile(AppUserEntity entityToUpdate)

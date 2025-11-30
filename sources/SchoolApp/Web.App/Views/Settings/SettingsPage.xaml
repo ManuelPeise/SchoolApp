@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Web.App.Views.Settings.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    xmlns:converters="clr-namespace:Web.App.Converters"
+    Title="GeneralSettingsPage"
+    BackgroundColor="{DynamicResource BackgroundPrimary}">
+    <ContentPage.Resources>
+        <converters:InvertBoolConverter x:Key="invertBoolConverter" />
+    </ContentPage.Resources>
+    <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*,Auto,*">
+
+        <!--  Center container  -->
+        <Grid Grid.Row="1" Grid.Column="1">
+
+            <Border
+                Grid.Row="1"
+                Grid.Column="1"
+                Padding="0"
+                BackgroundColor="{DynamicResource BorderPrimary}"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="0">
+                <!--  Card container (dark surface)  -->
+                <Grid
+                    Padding="30"
+                    BackgroundColor="{DynamicResource BackgroundSecondary}"
+                    HorizontalOptions="Center"
+                    MaximumWidthRequest="{OnIdiom Phone=350,
+                                                  Desktop=600}"
+                    VerticalOptions="Center">
+                    <Grid
+                        ColumnSpacing="15"
+                        RowDefinitions="Auto,*"
+                        RowSpacing="50">
+                        <VerticalStackLayout
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Spacing="30">
+                            <Image
+                                HorizontalOptions="Center"
+                                Source="settings.png"
+                                Style="{DynamicResource HeaderIcon}"
+                                VerticalOptions="Center" />
+
+                            <Label
+                                FontSize="28"
+                                HorizontalOptions="Center"
+                                Style="{DynamicResource Caption}"
+                                Text="Einstellungen" />
+                        </VerticalStackLayout>
+                        <ScrollView Grid.Row="1">
+                            <Grid RowDefinitions="Auto,*" RowSpacing="20">
+                                <Grid
+                                    Grid.Row="0"
+                                    RowDefinitions="Auto,*,*,Auto"
+                                    RowSpacing="5">
+                                    <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Style="{StaticResource Title}"
+                                        Text="Generell" />
+                                    <Label
+                                        Grid.Row="1"
+                                        FontSize="14"
+                                        Style="{StaticResource SubTitle}"
+                                        Text="Hier findest Du die generellen Einstellungen." />
+                                    <BoxView Grid.Row="2" Style="{StaticResource Delimitter}" />
+                                    <Grid Grid.Row="3" Padding="10">
+                                        <VerticalStackLayout>
+                                            <controls:LabeledSwitch
+                                                Checked="{Binding IsDarkTheme}"
+                                                Command="{Binding ToggleThemeCommand}"
+                                                Label="Dark Theme" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="1"
+                                    RowDefinitions="Auto,*,*,Auto"
+                                    RowSpacing="5">
+                                    <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Style="{StaticResource Title}"
+                                        Text="Syncronisation" />
+                                    <Label
+                                        Grid.Row="1"
+                                        FontSize="14"
+                                        Style="{StaticResource SubTitle}"
+                                        Text="Hier findest Du die Einstellungen für die Datensyncronisation." />
+                                    <BoxView Grid.Row="2" Style="{StaticResource Delimitter}" />
+                                    <Grid Grid.Row="3" Padding="10" />
+                                </Grid>
+                            </Grid>
+                        </ScrollView>
+                        <!--  Loading overlay  -->
+                        <controls:LoadingOverlay
+                            HorizontalOptions="Fill"
+                            IsLoading="{Binding IsLoading}"
+                            VerticalOptions="Fill" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

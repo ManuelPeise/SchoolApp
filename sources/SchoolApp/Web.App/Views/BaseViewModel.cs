@@ -25,15 +25,5 @@ namespace Web.App.Views
 
         protected AppTheme GetUserTheme() => ThemeService?.GetTheme() ?? AppTheme.Light;
 
-        protected async Task<AppTheme> SetUserTheme(AppTheme theme)
-        {
-            if (ThemeService is null)
-                return AppTheme.Light;
-
-            await ThemeService.UpdateTheme(theme);
-
-            return ThemeService.GetTheme();
-        }
-
     }
 }

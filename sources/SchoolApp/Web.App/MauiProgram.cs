@@ -51,6 +51,7 @@ namespace Web.App
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
             builder.Services.AddScoped<ILocalDataSyncService, LocalDataSyncService>();
+            builder.Services.AddScoped<ISettingsService, SettingsService>();
 
             builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 

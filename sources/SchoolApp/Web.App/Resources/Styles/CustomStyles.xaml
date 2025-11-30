@@ -1,6 +1,168 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <!--  Consolidated component styles (merged from ContentPageStyles, EntryStyles, LabelStyles, ButtonStyles, IconStyles and existing custom styles)  -->
+
+    <!--  ContentPage  -->
+    <Style x:Key="DefaultContentPageStyle" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundPrimary}" />
+        <Setter Property="Padding" Value="{OnPlatform WinUI=10, Android=3}" />
+    </Style>
+
+    <!--  Labels  -->
+    <Style x:Key="DefaultLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+    </Style>
+
+    <Style x:Key="Caption" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="{OnPlatform WinUI=24, Android=14}" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+    </Style>
+
+    <!--  Title and Subtitle styles used by Section component  -->
+    <Style x:Key="Title" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="{OnPlatform WinUI=18, Android=12}" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <Style x:Key="SubTitle" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource FontSecondary}" />
+        <Setter Property="FontAttributes" Value="Italic" />
+        <Setter Property="FontSize" Value="{OnPlatform WinUI=16, Android=10}" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <!--  Delimitter  -->
+    <Style x:Key="Delimitter" TargetType="BoxView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource FontSecondary}" />
+        <Setter Property="HeightRequest" Value="1" />
+        <Setter Property="Margin" Value="5,2" />
+    </Style>
+    <!--  Icons  -->
+    <Style x:Key="Icon" TargetType="Image">
+        <Setter Property="WidthRequest" Value="10" />
+        <Setter Property="HeightRequest" Value="10" />
+    </Style>
+
+    <Style x:Key="HeaderIcon" TargetType="Image">
+        <Setter Property="WidthRequest" Value="50" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!--  Buttons (named default + app ButtonStyle for legacy pages)  -->
+    <Style x:Key="DefaultButton" TargetType="Button">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Padding" Value="8,0" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource ColorAccent}" />
+        <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup>
+                    <VisualState Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ColorAccent}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="Opacity" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundDisabled}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ColorTextDisabled}" />
+                            <Setter Property="Opacity" Value="0.6" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource ButtonBlue}" />
+        <Setter Property="TextColor" Value="{DynamicResource ButtonFont}" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="8,6" />
+        <Setter Property="FontAttributes" Value="None" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup>
+                    <VisualState Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ColorAccent}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="Opacity" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundDisabled}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ColorTextDisabled}" />
+                            <Setter Property="Opacity" Value="0.6" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--  Entry / TextBox  -->
+    <Style x:Key="BorderLessEntry" TargetType="Entry">
+        <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource ColorTextSecondary}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource ColorBackground}" />
+        <Setter Property="Margin" Value="0,0,0,0" />
+        <Setter Property="FontSize" Value="{OnPlatform WinUI=16, Android=14}" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ColorBackground}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource ColorTextSecondary}" />
+                            <Setter Property="Opacity" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ColorSurfaceAlt}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource ColorTextSecondary}" />
+                            <Setter Property="Opacity" Value="1" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ColorSurface}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="Opacity" Value="0.6" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
     <!--  Import item / selectable border  -->
     <Style x:Key="ImportItemContainerStyle" TargetType="Border">
         <Setter Property="BackgroundColor" Value="{DynamicResource ColorSurface}" />
@@ -28,17 +190,9 @@
         </Setter>
     </Style>
 
-
     <!--  CollectionView background  -->
     <Style TargetType="CollectionView">
         <Setter Property="BackgroundColor" Value="{DynamicResource ColorBackground}" />
-    </Style>
-
-    <Style x:Key="ButtonStyle" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{DynamicResource ButtonBlue}" />
-        <Setter Property="TextColor" Value="{DynamicResource ButtonFont}" />
-        <Setter Property="CornerRadius" Value="20" />
-        <Setter Property="FontAttributes" Value="None" />
     </Style>
 
 </ResourceDictionary>

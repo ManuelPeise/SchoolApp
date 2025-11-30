@@ -57,7 +57,7 @@
                                     Grid.Column="1"
                                     Command="{Binding LoginCommand}"
                                     IsEnabled="{Binding CanLogin}"
-                                    Style="{DynamicResource ButtonStyle}"
+                                    Style="{StaticResource ButtonStyle}"
                                     Text="Anmelden" />
                             </Grid>
 

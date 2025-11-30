@@ -2,6 +2,7 @@
 using Web.App.Views.Administration;
 using Web.App.Views.Authentication;
 using Web.App.Views.Home;
+using Web.App.Views.Settings;
 using Web.App.Views.Sync;
 using Web.App.Views.User;
 
@@ -21,6 +22,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<ChangePasswordPage>();
             builder.Services.AddTransient<DataSyncPage>();
+            builder.Services.AddTransient<SettingsPage>();
         }
 
         internal static void InitializeCustomComponents(MauiAppBuilder builder)
@@ -39,6 +41,7 @@ namespace Web.App.Bundels
             builder.Services.AddTransient<ProfilePageViewModel>();
             builder.Services.AddTransient<ChangePasswordViewModel>();
             builder.Services.AddTransient<DataSyncViewModel>();
+            builder.Services.AddTransient<SettingsPageViewModel>();
         }
     }
 }

@@ -10,13 +10,10 @@
         <ResourceDictionary>
             <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Themes/DarkTheme.xaml" />
+                <!--  Load default theme first so component styles can reference tokens  -->
                 <ResourceDictionary Source="/Resources/Themes/LightTheme.xaml" />
-                <ResourceDictionary Source="/Resources/Styles/ContentPageStyles.xaml" />
-                <ResourceDictionary Source="/Resources/Styles/EntryStyles.xaml" />
-                <ResourceDictionary Source="/Resources/Styles/LabelStyles.xaml" />
-                <ResourceDictionary Source="/Resources/Styles/ButtonStyles.xaml" />
-                <ResourceDictionary Source="/Resources/Styles/IconStyles.xaml" />
+
+                <!--  Consolidated component styles -->
                 <ResourceDictionary Source="/Resources/Styles/CustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

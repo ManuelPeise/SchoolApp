@@ -1,42 +1,32 @@
-﻿using Data.Entities.Administration;
+﻿
 using Logic.Shared.Interfaces;
 using Logic.Shared.Storage;
-using Shared.Enums;
+
 using Web.App.Resources.Themes;
 using System.Diagnostics;
-using System.Linq;
+
 
 namespace Web.App.Services
 {
     public partial class ThemeService : IThemeService
     {
-        private readonly ILocalDatabaseAccessor _databaseAccessor;
         private readonly ICurrentUserService _currentUserService;
 
         private AppTheme _theme;
         private const string UserTheme = "UserTheme";
 
-        public ThemeService(ILocalDatabaseAccessor databaseAccessor, ICurrentUserService currentUserService)
+        public ThemeService(ICurrentUserService currentUserService)
         {
-            _databaseAccessor = databaseAccessor;
             _currentUserService = currentUserService;
 
-            Preferences.Remove("UserTheme");
-
-#if DEBUG
-            _theme = AppTheme.Light;
-#else
             _theme = Preferences.ContainsKey(UserTheme) ?
                 (AppTheme)Enum.Parse(typeof(AppTheme), Preferences.Get(UserTheme, "Light")) :
                 AppTheme.Dark;
-#endif
+
             _ = _currentUserService.SetCurrentUser();
 
-            // Ensure theme resources are applied on startup
             ApplyTheme(_theme);
         }
-
-
 
         public AppTheme GetTheme()
         {
@@ -79,8 +69,8 @@ namespace Web.App.Services
 
                 // Ensure shared styles (CustomStyles.xaml) are present
                 var hasCustom = app.Resources.MergedDictionaries.Any(d => (d as ResourceDictionary)?.Source?.OriginalString?.Contains("CustomStyles.xaml") == true
-                    || d.GetType().Name.Contains("CustomStyles") );
-                
+                    || d.GetType().Name.Contains("CustomStyles"));
+
                 if (!hasCustom)
                 {
                     var custom = new ResourceDictionary();
@@ -94,55 +84,5 @@ namespace Web.App.Services
             }
 
         }
-        public async Task UpdateTheme(AppTheme theme)
-        {
-            try
-            {
-                var userId = _currentUserService.GetCurrentUserId();
-
-                if (userId == null)
-                {
-                    return;
-                }
-
-                var userEntity = await _databaseAccessor.UserRepository.GetByIdAsync((int)userId);
-
-                if (userEntity == null)
-                {
-                    return;
-                }
-
-                var settingsEntity = await _databaseAccessor.SettingsRepository.GetByIdAsync(userEntity.SettingsId);
-
-                if (settingsEntity == null)
-                {
-                    return;
-                }
-
-                settingsEntity.Theme = (ThemeTypeEnum)theme;
-
-                await _databaseAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName ?? "System");
-
-                _theme = theme;
-                Preferences.Set(UserTheme, Enum.GetName(typeof(ThemeTypeEnum), _theme));
-
-                ApplyTheme(_theme);
-
-            }
-            catch (Exception exception)
-            {
-                await _databaseAccessor.LogMessage(new LogEntryEntity
-                {
-                    Message = "Could not update Theme",
-                    ExceptionMessage = exception.Message,
-                    Stacktrace = exception.StackTrace ?? string.Empty,
-                    LogLevel = LogLevelEnum.Error
-                });
-
-                await _databaseAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName ?? "System");
-            }
-        }
-
-
     }
 }

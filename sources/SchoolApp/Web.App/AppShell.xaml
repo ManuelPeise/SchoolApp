@@ -7,6 +7,7 @@
     xmlns:auth="clr-namespace:Web.App.Views.Authentication"
     xmlns:ct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:home="clr-namespace:Web.App.Views.Home"
+    xmlns:settings="clr-namespace:Web.App.Views.Settings"
     xmlns:shellVm="clr-namespace:Web.App.Views"
     xmlns:sync="clr-namespace:Web.App.Views.Sync"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -97,7 +98,6 @@
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
-
             <!--  ACCOUNT SIDE MENU ITEM  -->
             <toolkit:Expander>
                 <toolkit:Expander.Header>
@@ -269,6 +269,33 @@
                     </CollectionView>
                 </toolkit:Expander.Content>
             </toolkit:Expander>
+            <!--  Settings Page SIDE MENU ENTRY  -->
+            <Grid
+                x:Name="SettingsGrid"
+                Margin="0,0"
+                Padding="5"
+                ColumnDefinitions="Auto, *"
+                ColumnSpacing="10">
+                <Image
+                    x:Name="SettingsIcon"
+                    Grid.Column="0"
+                    Aspect="Fill"
+                    HeightRequest="30"
+                    Source="settings.png"
+                    WidthRequest="30" />
+                <Label
+                    x:Name="SettingsLabel"
+                    Grid.Column="1"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    Text="EINSTELLUNGEN"
+                    TextColor="White"
+                    VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type shellVm:AppShellViewModel}}, Path=NavigateCommand}" CommandParameter="///settings" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
         </VerticalStackLayout>
     </Shell.FlyoutContent>
 
@@ -354,6 +381,13 @@
         Title="Daten-Sync"
         ContentTemplate="{DataTemplate sync:DataSyncPage}"
         Route="dataSync"
+        Shell.NavBarHasShadow="False"
+        Shell.NavBarIsVisible="False" />
+
+    <ShellContent
+        Title="Settings"
+        ContentTemplate="{DataTemplate settings:SettingsPage}"
+        Route="settings"
         Shell.NavBarHasShadow="False"
         Shell.NavBarIsVisible="False" />
 </Shell>
