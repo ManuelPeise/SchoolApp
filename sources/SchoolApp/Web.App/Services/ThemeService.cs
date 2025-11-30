@@ -18,10 +18,9 @@ namespace Web.App.Services
         {
             _currentUserService = currentUserService;
 
-            _theme = AppTheme.Light;
-            //_theme = Preferences.ContainsKey(PreferencesConstants.ThemeKey) ?
-            //    (AppTheme)Enum.Parse(typeof(AppTheme), Preferences.Get(PreferencesConstants.ThemeKey, "Light")) :
-            //    AppTheme.Dark;
+            _theme = Preferences.ContainsKey(PreferencesConstants.ThemeKey) ?
+                (AppTheme)Enum.Parse(typeof(AppTheme), Preferences.Get(PreferencesConstants.ThemeKey, "Light")) :
+                AppTheme.Dark;
 
             _ = _currentUserService.SetCurrentUser();
 

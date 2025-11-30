@@ -7,11 +7,15 @@
     <!--  Modern Light Theme - Semantic Tokens  -->
 
     <!--  Backgrounds / Surfaces  -->
-    <Color x:Key="BackgroundPrimary">#F6F8FA</Color> <!-- page background -->
+    <Color x:Key="BackgroundPrimary">#F6F8FA</Color> 
+    <!--  page background  -->
     <Color x:Key="BackgroundSecondary">#F0F3F6</Color>
-    <Color x:Key="ColorBackground">#F6F8FA</Color>
-    <Color x:Key="ColorSurface">#FFFFFF</Color> <!-- cards, panels -->
-    <Color x:Key="ColorSurfaceAlt">#F7FAFC</Color>
+    <Color x:Key="BackgroundDisabled">#0F1724</Color>
+    <!--<Color x:Key="ColorBackground">#F6F8FA</Color>-->
+    <!--<Color x:Key="ColorSurface">#FFFFFF</Color> -->
+    <!--  cards, panels  -->
+    <!--
+    <Color x:Key="ColorSurfaceAlt">#F7FAFC</Color>-->
 
     <!--  Elevation / Borders  -->
     <Color x:Key="ColorBorder">#E6EDF3</Color>
@@ -19,7 +23,8 @@
     <Color x:Key="BorderSecondary">#EAF2FA</Color>
 
     <!--  Primary / Accent  -->
-    <Color x:Key="ColorAccent">#2563EB</Color> <!-- blue-600 -->
+    <Color x:Key="ColorAccent">#2563EB</Color> 
+    <!--  blue-600  -->
 
     <!--  Buttons  -->
     <Color x:Key="ButtonBlue">#2563EB</Color>

@@ -64,10 +64,10 @@
 
     <!--  Borders  -->
     <Style x:Key="StyledBorder" TargetType="Border">
-        <Setter Property="StrokeThickness" Value="1" />
-        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundSecondary}" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundDisabled}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 15" />
-        <Setter Property="Padding" Value="30" />
+        <Setter Property="Padding" Value="0" />
     </Style>
 
     <!--  Buttons (named default + app ButtonStyle for legacy pages)  -->
