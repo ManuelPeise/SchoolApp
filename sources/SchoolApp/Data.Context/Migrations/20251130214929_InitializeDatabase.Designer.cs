@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Context.Migrations
 {
     [DbContext(typeof(SqLiteDbContext))]
-    [Migration("20251129112943_InitializeDatabase")]
+    [Migration("20251130214929_InitializeDatabase")]
     partial class InitializeDatabase
     {
         /// <inheritdoc />
@@ -244,6 +244,10 @@ namespace Data.Context.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ApiBaseUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("AutoSync")
                         .HasColumnType("INTEGER");
 
@@ -259,6 +263,9 @@ namespace Data.Context.Migrations
 
                     b.Property<DateTime?>("LastSyncAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("Port")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ScheduleSettingsId")
                         .HasColumnType("INTEGER");

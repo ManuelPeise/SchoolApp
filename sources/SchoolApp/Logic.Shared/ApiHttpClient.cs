@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Administration;
 using Logic.Shared.Interfaces;
+using Logic.Shared.Models.Settings;
 using Logic.Shared.Storage;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -15,17 +16,19 @@ namespace Logic.Shared
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalDatabaseAccessor _databaseAccessor;
+        private readonly ISettingsService _settingsService;
 
-        public ApiHttpClient(IConfiguration configuration, ILocalDatabaseAccessor databaseAccessor)
+        public ApiHttpClient(IConfiguration configuration, ILocalDatabaseAccessor databaseAccessor, ISettingsService settingsService)
         {
             _databaseAccessor = databaseAccessor;
-            var apiBaseAddress = configuration.GetValue<string>("ApiBaseUrl");
-            
+            _settingsService = settingsService;
+
+            var baseAddress = GetBaseAddress();
 
             _httpClient = new HttpClient
             {
-                BaseAddress = !string.IsNullOrEmpty(apiBaseAddress) ?
-                new Uri(apiBaseAddress, UriKind.Absolute) : throw new ArgumentNullException(nameof(apiBaseAddress)),
+                BaseAddress = !string.IsNullOrEmpty(baseAddress) ?
+                new Uri(baseAddress, UriKind.Absolute) : throw new ArgumentNullException(nameof(baseAddress)),
             };
         }
 
@@ -78,7 +81,7 @@ namespace Logic.Shared
         {
             try
             {
-                if(model == null || string.IsNullOrEmpty(url))
+                if (model == null || string.IsNullOrEmpty(url))
                 {
                     return null;
                 }
@@ -140,7 +143,7 @@ namespace Logic.Shared
 
                 var response = await _httpClient.SendAsync(requestMessage);
 
-                if (response.IsSuccessStatusCode) 
+                if (response.IsSuccessStatusCode)
                 {
                     reponseBase.Success = true;
                 }
@@ -151,6 +154,26 @@ namespace Logic.Shared
             {
                 return await Task.FromResult(reponseBase);
             }
+        }
+
+        public void SetBaseAddress(string baseAddress)
+        {
+            _httpClient.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
+        }
+
+        private string GetBaseAddress()
+        {
+            var result = _settingsService.LoadApiSettings().Result;
+
+            if (result == null)
+            {
+                throw new Exception("Api settings could not be loaded");
+            }
+
+            var baseAddress = !string.IsNullOrEmpty(result.ApiBaseUrl) && result.Port != null ?
+                $"{result.ApiBaseUrl}:{result.Port}" : "https://localhost:7239";
+
+            return baseAddress;
         }
     }
 }

@@ -171,6 +171,8 @@ namespace Data.Context.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Theme = table.Column<int>(type: "INTEGER", nullable: false),
+                    ApiBaseUrl = table.Column<string>(type: "TEXT", nullable: false),
+                    Port = table.Column<int>(type: "INTEGER", nullable: true),
                     AutoSync = table.Column<bool>(type: "INTEGER", nullable: false),
                     ScheduleSettingsId = table.Column<int>(type: "INTEGER", nullable: false),
                     IsInSync = table.Column<bool>(type: "INTEGER", nullable: false),

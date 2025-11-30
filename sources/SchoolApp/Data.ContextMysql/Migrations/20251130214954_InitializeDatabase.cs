@@ -182,6 +182,8 @@ namespace Data.ContextMysql.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Theme = table.Column<int>(type: "int", nullable: false),
+                    ApiBaseUrl = table.Column<string>(type: "longtext", nullable: false),
+                    Port = table.Column<int>(type: "int", nullable: true),
                     AutoSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     ScheduleSettingsId = table.Column<int>(type: "int", nullable: false),
                     IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),

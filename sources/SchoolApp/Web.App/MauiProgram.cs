@@ -53,7 +53,7 @@ namespace Web.App
             builder.Services.AddScoped<ILocalDataSyncService, LocalDataSyncService>();
             builder.Services.AddScoped<ISettingsService, SettingsService>();
 
-            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+          //   builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             // Views and view models
             ComponentInitialization.InitializeViewModels(builder);

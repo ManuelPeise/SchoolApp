@@ -325,23 +325,24 @@
                 VerticalOptions="Center" />
         </Grid>
     </Shell.FlyoutFooter>
-
+    build content page component and wrap all pages into
     <ShellContent
         Title="LoadingPage"
         ContentTemplate="{DataTemplate auth:LoadingPage}"
         Route="loading"
-        Shell.FlyoutBehavior="Disabled"
-        Shell.FlyoutItemIsVisible="False"
-        Shell.NavBarHasShadow="False"
-        Shell.NavBarIsVisible="False" />
+        Shell.FlyoutBehavior="Flyout"
+        Shell.FlyoutItemIsVisible="True"
+        Shell.NavBarHasShadow="True"
+        Shell.NavBarIsVisible="True" />
 
     <ShellContent
         Title="AuthenticationPage"
         ContentTemplate="{DataTemplate auth:AuthenticationPage}"
         Route="login"
-        Shell.FlyoutItemIsVisible="False"
-        Shell.NavBarHasShadow="False"
-        Shell.NavBarIsVisible="False" />
+        Shell.FlyoutBehavior="Flyout"
+        Shell.FlyoutItemIsVisible="True"
+        Shell.NavBarHasShadow="True"
+        Shell.NavBarIsVisible="True" />
 
     <ShellContent
         Title="LogoutPage"

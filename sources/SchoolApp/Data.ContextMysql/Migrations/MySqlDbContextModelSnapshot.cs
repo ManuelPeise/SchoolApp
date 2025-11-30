@@ -243,6 +243,10 @@ namespace Data.ContextMysql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("ApiBaseUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("AutoSync")
                         .HasColumnType("tinyint(1)");
 
@@ -258,6 +262,9 @@ namespace Data.ContextMysql.Migrations
 
                     b.Property<DateTime?>("LastSyncAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("Port")
+                        .HasColumnType("int");
 
                     b.Property<int>("ScheduleSettingsId")
                         .HasColumnType("int");

@@ -7,5 +7,6 @@ namespace Logic.Shared.Interfaces
         Task<TResponse?> GetAsync(Uri url, List<KeyValuePair<string, object>> parameters, string? token = null);
         Task<TResponse?> PostAsync(string url, TRequest? model, string? token = null);
         Task<ResponseBaseModel> ApiIsReachable(string url = "api/availability/isavailable");
+        void SetBaseAddress(string baseAddress);
     }
 }
