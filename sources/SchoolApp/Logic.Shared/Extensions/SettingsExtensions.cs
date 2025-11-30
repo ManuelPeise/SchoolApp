@@ -15,6 +15,8 @@ namespace Logic.Shared.Extensions
                 {
                     Id = 0,
                     Theme = ThemeTypeEnum.Light,
+                    ApiBaseUrl = string.Empty,
+                    Port = null,
                     AutoSync = false,
                     ScheduleSettings = new ObservableScheduleSettings
                     {
@@ -31,6 +33,8 @@ namespace Logic.Shared.Extensions
             {
                 Id = entity.Settings.Id,
                 Theme = entity.Settings.Theme,
+                ApiBaseUrl = entity.Settings.ApiBaseUrl,
+                Port = entity.Settings.Port,
                 AutoSync = entity.Settings.AutoSync,
                 ScheduleSettings = new ObservableScheduleSettings
                 {
@@ -55,6 +59,8 @@ namespace Logic.Shared.Extensions
                 Id = settings.Id,
                 Theme = settings.Theme,
                 AutoSync = settings.AutoSync,
+                ApiBaseUrl=settings.ApiBaseUrl,
+                Port = settings.Port,
                 ScheduleSettings = new ScheduleSettingsEntity
                 {
                     Id = settings.ScheduleSettings.Id,

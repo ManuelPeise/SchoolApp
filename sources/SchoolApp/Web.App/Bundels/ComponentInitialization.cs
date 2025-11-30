@@ -34,6 +34,7 @@ namespace Web.App.Bundels
         {
             builder.Services.AddTransient<AppViewModel>();
             builder.Services.AddTransient<AppShellViewModel>();
+            builder.Services.AddTransient<LoadingPageViewModel>();
             builder.Services.AddTransient<AuthenticationViewModel>();
             builder.Services.AddTransient<LogoutPageViewModel>();
             builder.Services.AddTransient<HomePageViewModel>();

@@ -10,6 +10,10 @@ namespace Logic.Shared.Models.Settings
         [ObservableProperty]
         private ThemeTypeEnum _theme;
         [ObservableProperty]
+        private string _apiBaseUrl;
+        [ObservableProperty]
+        private int? _port;
+        [ObservableProperty]
         private bool _autoSync;
         [ObservableProperty]
         private ObservableScheduleSettings _scheduleSettings = new();

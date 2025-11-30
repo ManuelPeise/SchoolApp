@@ -6,7 +6,7 @@
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
     xmlns:converters="clr-namespace:Web.App.Converters"
     Title="GeneralSettingsPage"
-    BackgroundColor="{DynamicResource BackgroundPrimary}">
+    Style="{StaticResource DefaultContentPageStyle}">
     <ContentPage.Resources>
         <converters:InvertBoolConverter x:Key="invertBoolConverter" />
     </ContentPage.Resources>
@@ -18,10 +18,12 @@
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
-                Padding="0"
-                BackgroundColor="{DynamicResource BorderPrimary}"
-                StrokeShape="RoundRectangle 20"
-                StrokeThickness="0">
+                HorizontalOptions="Center"
+                MinimumWidthRequest="{OnPlatform WinUI=400,
+                                                 Android=300}"
+                Style="{StaticResource StyledBorder}"
+                VerticalOptions="Center">
+
                 <!--  Card container (dark surface)  -->
                 <Grid
                     Padding="30"
@@ -51,7 +53,7 @@
                                 Text="Einstellungen" />
                         </VerticalStackLayout>
                         <ScrollView Grid.Row="1">
-                            <Grid RowDefinitions="Auto,*" RowSpacing="20">
+                            <Grid RowDefinitions="Auto,*,*" RowSpacing="20">
                                 <Grid
                                     Grid.Row="0"
                                     RowDefinitions="Auto,*,*,Auto"
@@ -66,7 +68,7 @@
                                         Grid.Row="1"
                                         FontSize="14"
                                         Style="{StaticResource SubTitle}"
-                                        Text="Hier findest Du die generellen Einstellungen." />
+                                        Text="Hier kannst Du die generellen Einstellungen ändern." />
                                     <BoxView Grid.Row="2" Style="{StaticResource Delimitter}" />
                                     <Grid Grid.Row="3" Padding="10">
                                         <VerticalStackLayout>
@@ -86,12 +88,41 @@
                                         FontAttributes="Bold"
                                         FontSize="20"
                                         Style="{StaticResource Title}"
+                                        Text="Api" />
+                                    <Label
+                                        Grid.Row="1"
+                                        FontSize="14"
+                                        Style="{StaticResource SubTitle}"
+                                        Text="Hier kannst Du die API-Einstellungen ändern." />
+                                    <BoxView Grid.Row="2" Style="{StaticResource Delimitter}" />
+                                    <Grid Grid.Row="3" Padding="10">
+                                        <VerticalStackLayout Spacing="10">
+                                            <controls:LabeledBorderlessEntry
+                                                Label="API-Url"
+                                                Placeholder="https://api.example.com"
+                                                Text="{Binding ApiSettings.ApiBaseUrl}" />
+                                            <controls:LabeledBorderlessEntry
+                                                Label="API-Port"
+                                                Placeholder="7739"
+                                                Text="{Binding ApiSettings.Port}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Grid>
+                                <Grid
+                                    Grid.Row="2"
+                                    RowDefinitions="Auto,*,*,Auto"
+                                    RowSpacing="5">
+                                    <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Style="{StaticResource Title}"
                                         Text="Syncronisation" />
                                     <Label
                                         Grid.Row="1"
                                         FontSize="14"
                                         Style="{StaticResource SubTitle}"
-                                        Text="Hier findest Du die Einstellungen für die Datensyncronisation." />
+                                        Text="Hie kannst Du die Einstellungen für die Datensyncronisation ändern." />
                                     <BoxView Grid.Row="2" Style="{StaticResource Delimitter}" />
                                     <Grid Grid.Row="3" Padding="10" />
                                 </Grid>

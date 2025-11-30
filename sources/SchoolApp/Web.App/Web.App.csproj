@@ -118,6 +118,9 @@
 	  <MauiXaml Update="Resources\Themes\LightTheme.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="ViewComponents\ApiSettingsOverlay.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="ViewComponents\LabeledBorderlessEntry.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

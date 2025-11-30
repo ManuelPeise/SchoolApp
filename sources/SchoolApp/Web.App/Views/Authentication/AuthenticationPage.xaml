@@ -11,64 +11,66 @@
 
         <!--  Center container  -->
         <Grid Grid.Row="1" Grid.Column="1">
-
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
-                Padding="0"
-                BackgroundColor="{DynamicResource BorderPrimary}"
-                StrokeShape="RoundRectangle 20"
-                StrokeThickness="0">
+                MinimumWidthRequest="{OnIdiom Phone=350,
+                                              Tablet=400,
+                                              Desktop=600}"
+                Style="{StaticResource StyledBorder}">
                 <!--  Card container (dark surface)  -->
                 <Grid
                     Padding="30"
                     BackgroundColor="{DynamicResource BackgroundSecondary}"
-                    HorizontalOptions="Center"
-                    MaximumWidthRequest="{OnIdiom Phone=350,
-                                                  Tablet=400,
-                                                  Desktop=600}"
+                    HorizontalOptions="Fill"
+                    RowDefinitions="Auto,*,*,*"
+                    RowSpacing="20"
                     VerticalOptions="Center">
-                    <Grid>
-                        <VerticalStackLayout Spacing="30">
+                    <VerticalStackLayout Grid.Row="0" Spacing="30">
+                        <Image
+                            Aspect="AspectFit"
+                            HeightRequest="140"
+                            Source="account.png"
+                            Style="{StaticResource HeaderIcon}"
+                            WidthRequest="140" />
 
-                            <Image
-                                Aspect="AspectFit"
-                                HeightRequest="140"
-                                Source="dotnet_bot.png"
-                                WidthRequest="400" />
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource Caption}"
+                            Text="Anmeldung" />
+                    </VerticalStackLayout>
+                    <controls:LabeledBorderlessEntry
+                        Grid.Row="1"
+                        Label="Benutzername"
+                        Text="{Binding UserName}" />
 
-                            <Label
-                                FontSize="28"
-                                HorizontalOptions="Center"
-                                Text="Anmeldung"
-                                TextColor="{DynamicResource FontPrimary}" />
+                    <controls:LabeledBorderlessEntry
+                        Grid.Row="2"
+                        IsPassword="True"
+                        Label="Passwort"
+                        Text="{Binding Password}" />
 
-                            <controls:LabeledBorderlessEntry Label="Benutzername" Text="{Binding UserName}" />
-
-                            <controls:LabeledBorderlessEntry
-                                IsPassword="True"
-                                Label="Passwort"
-                                Text="{Binding Password}" />
-
-                            <!--  Buttons  -->
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
-                                <!--  LOGIN  -->
-                                <Button
-                                    Grid.Column="1"
-                                    Command="{Binding LoginCommand}"
-                                    IsEnabled="{Binding CanLogin}"
-                                    Style="{StaticResource ButtonStyle}"
-                                    Text="Anmelden" />
-                            </Grid>
-
-                        </VerticalStackLayout>
-
-                        <!--  Loading overlay  -->
-                        <controls:LoadingOverlay
-                            HorizontalOptions="Fill"
-                            IsLoading="{Binding IsLoading}"
-                            VerticalOptions="Fill" />
+                    <!--  Buttons  -->
+                    <Grid
+                        Grid.Row="3"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="20">
+                        <!--  LOGIN  -->
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding LoginCommand}"
+                            IsEnabled="{Binding CanLogin}"
+                            Style="{StaticResource ButtonStyle}"
+                            Text="Anmelden" />
                     </Grid>
+
+
+
+                    <!--  Loading overlay  -->
+                    <controls:LoadingOverlay
+                        HorizontalOptions="Fill"
+                        IsLoading="{Binding IsLoading}"
+                        VerticalOptions="Fill" />
                 </Grid>
             </Border>
         </Grid>

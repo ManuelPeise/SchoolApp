@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Logic.Profile;
 using Logic.Shared.Interfaces;
+using Logic.Shared.Models.Settings;
 using Shared.Enums;
 
 namespace Web.App.Views.Settings
@@ -14,8 +16,10 @@ namespace Web.App.Views.Settings
 
         [ObservableProperty]
         private bool _isDarkTheme;
+        [ObservableProperty]
+        private ObservableSettings _apiSettings = new();
 
-        public SettingsPageViewModel(IThemeService themeService, ISettingsService settingsService): base(themeService)
+        public SettingsPageViewModel(IThemeService themeService, ISettingsService settingsService) : base(themeService)
         {
             _settingsService = settingsService;
 
@@ -41,21 +45,44 @@ namespace Web.App.Views.Settings
         {
             var settings = await _settingsService.LoadSettings();
 
+            ApiSettings = GetConsolidatedSettings(settings);
+
             var themeFormPreferences = ThemeService?.GetTheme();
 
             if (themeFormPreferences == null)
             {
-                themeFormPreferences = GetAppTheme(settings.Theme);
+                themeFormPreferences = GetAppTheme(ApiSettings.Theme);
             }
 
             _originalTheme = themeFormPreferences.Value;
             IsDarkTheme = themeFormPreferences == AppTheme.Dark;
+
         }
 
         private AppTheme GetAppTheme(ThemeTypeEnum? themeFromSettings)
         {
             return (AppTheme)Enum.Parse(typeof(AppTheme), themeFromSettings?.ToString() ?? ThemeTypeEnum.Light.ToString());
 
+        }
+
+        private ObservableSettings GetConsolidatedSettings(ObservableSettings currentSettings)
+        {
+            var apiFallbackSettings = new ObservableApiSettings
+            {
+                ApiBaseUrl = Preferences.Get(PreferencesConstants.ApiBaseUrlKey, ""),
+                Port = Preferences.Get(PreferencesConstants.ApiPort, 0)
+            };
+
+            currentSettings.ApiBaseUrl = string.IsNullOrWhiteSpace(currentSettings.ApiBaseUrl)
+                ? apiFallbackSettings.ApiBaseUrl
+                : currentSettings.ApiBaseUrl;
+
+            currentSettings.Port = currentSettings.Port == null ?
+                apiFallbackSettings.Port != null
+                ? apiFallbackSettings.Port : null
+                : currentSettings.Port;
+
+            return currentSettings;
         }
     }
 }

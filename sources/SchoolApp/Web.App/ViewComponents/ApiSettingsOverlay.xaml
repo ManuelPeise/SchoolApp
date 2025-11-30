@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Web.App.ViewComponents.ApiSettingsOverlay"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    x:Name="root"
+    BackgroundColor="{DynamicResource BackgroundPrimary}">
+    <Border
+        HorizontalOptions="Center"
+        MinimumWidthRequest="{OnPlatform WinUI=400,
+                                         Android=300}"
+        Style="{StaticResource StyledBorder}"
+        VerticalOptions="Center">
+        <Grid RowDefinitions="Auto, *, *, Auto" RowSpacing="20">
+            <VerticalStackLayout Grid.Row="0" Spacing="30">
+                <Image
+                    Aspect="AspectFit"
+                    HeightRequest="120"
+                    Source="api_icon.png"
+                    Style="{StaticResource HeaderIcon}"
+                    WidthRequest="120" />
+
+                <Label
+                    HorizontalOptions="Center"
+                    Style="{StaticResource Caption}"
+                    Text="API Einstellungen" />
+            </VerticalStackLayout>
+            <controls:LabeledBorderlessEntry
+                Grid.Row="1"
+                Margin="0,0,0,10"
+                Label="API Endpoint"
+                Placeholder="API url eingeben"
+                Text="{Binding ApiSettings.ApiBaseUrl, Source={x:Reference root}}" />
+            <controls:LabeledBorderlessEntry
+                Grid.Row="2"
+                Margin="0,0,0,10"
+                Label="API Port"
+                Placeholder="Api Port eingeben"
+                Text="{Binding ApiSettings.Port, Source={x:Reference root}}" />
+            <Grid Grid.Row="3" ColumnDefinitions="Auto, *, *">
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding SaveCommand, Source={x:Reference root}}"
+                    Style="{DynamicResource ButtonStyle}"
+                    Text="Speichern" />
+            </Grid>
+        </Grid>
+    </Border>
+</ContentView>

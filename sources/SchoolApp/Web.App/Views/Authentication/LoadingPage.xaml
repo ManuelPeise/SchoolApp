@@ -5,20 +5,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
     Title="LoadingPage"
-    BackgroundColor="{DynamicResource BackgroundPrimary}">
-    <VerticalStackLayout Padding="30" Spacing="20">
-        <Image
-            Aspect="AspectFit"
-            HeightRequest="140"
-            SemanticProperties.Description="dot net bot in a hovercraft number nine"
-            Source="dotnet_bot.png"
-            WidthRequest="400" />
+    BackgroundColor="{DynamicResource BackgroundPrimary}"
+    Loaded="LoadingPageLoaded">
+    <VerticalStackLayout
+        Padding="30"
+        Spacing="20"
+        VerticalOptions="Center">
+
+        <controls:LoadingOverlay IsLoading="{Binding IsLoading}" />
         <BoxView HeightRequest="10" HorizontalOptions="Center" />
-        <controls:LoadingOverlay IsLoading="True" />
-        <BoxView HeightRequest="10" HorizontalOptions="Center" />
-        <Label
-            Margin="0,20,0,0"
-            FontSize="18"
-            Text="Loading..." />
+        <controls:ApiSettingsOverlay
+            ApiSettings="{Binding ApiSettings, Mode=TwoWay}"
+            IsVisible="{Binding ApiSettingsOpen}"
+            SaveCommand="{Binding StoreApiSettingsCommand}" />
     </VerticalStackLayout>
 </ContentPage>

@@ -4,29 +4,16 @@ namespace Web.App.Views.Authentication;
 
 public partial class LoadingPage : ContentPage
 {
-    private readonly INavigationService _navigationService;
-    private readonly ICurrentUserService _currentUserService;
-    
-    public LoadingPage(INavigationService navigationService, ICurrentUserService currentUserService)
+    private readonly LoadingPageViewModel _vm;
+    public LoadingPage(LoadingPageViewModel vm)
     {
+        _vm = vm;
         InitializeComponent();
-        Loaded += LoadingPage_Loaded;
-        _currentUserService = currentUserService;
-        _navigationService = navigationService;
+        BindingContext = _vm;
     }
 
-
-    private async void LoadingPage_Loaded(object? sender, EventArgs? e)
+    private void LoadingPageLoaded(object sender, EventArgs e)
     {
-        bool isAuthenticated = _currentUserService.IsAuthenticated();
-
-        if (isAuthenticated)
-        {
-            await _navigationService.NavigateToAsync("///home");
-        }
-        else
-        {
-            await _navigationService.NavigateToAsync("///login");
-        }
+        _vm.LoadingPageLoaded();
     }
 }

@@ -1,9 +1,8 @@
 ﻿
 using Logic.Shared.Interfaces;
-using Logic.Shared.Storage;
-
 using Web.App.Resources.Themes;
 using System.Diagnostics;
+using Logic.Profile;
 
 
 namespace Web.App.Services
@@ -13,15 +12,16 @@ namespace Web.App.Services
         private readonly ICurrentUserService _currentUserService;
 
         private AppTheme _theme;
-        private const string UserTheme = "UserTheme";
+
 
         public ThemeService(ICurrentUserService currentUserService)
         {
             _currentUserService = currentUserService;
 
-            _theme = Preferences.ContainsKey(UserTheme) ?
-                (AppTheme)Enum.Parse(typeof(AppTheme), Preferences.Get(UserTheme, "Light")) :
-                AppTheme.Dark;
+            _theme = AppTheme.Light;
+            //_theme = Preferences.ContainsKey(PreferencesConstants.ThemeKey) ?
+            //    (AppTheme)Enum.Parse(typeof(AppTheme), Preferences.Get(PreferencesConstants.ThemeKey, "Light")) :
+            //    AppTheme.Dark;
 
             _ = _currentUserService.SetCurrentUser();
 
@@ -38,7 +38,7 @@ namespace Web.App.Services
             try
             {
                 // persist preference
-                Preferences.Set(UserTheme, theme.ToString());
+                Preferences.Set(PreferencesConstants.ThemeKey, theme.ToString());
 
                 var app = Application.Current;
 

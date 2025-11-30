@@ -6,7 +6,7 @@
     <!--  ContentPage  -->
     <Style x:Key="DefaultContentPageStyle" TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundPrimary}" />
-        <Setter Property="Padding" Value="{OnPlatform WinUI=10, Android=3}" />
+        <Setter Property="Padding" Value="{OnPlatform WinUI=10, Android=5}" />
     </Style>
 
     <!--  Labels  -->
@@ -48,6 +48,7 @@
         <Setter Property="HeightRequest" Value="1" />
         <Setter Property="Margin" Value="5,2" />
     </Style>
+
     <!--  Icons  -->
     <Style x:Key="Icon" TargetType="Image">
         <Setter Property="WidthRequest" Value="10" />
@@ -61,12 +62,20 @@
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
+    <!--  Borders  -->
+    <Style x:Key="StyledBorder" TargetType="Border">
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundSecondary}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+        <Setter Property="Padding" Value="30" />
+    </Style>
+
     <!--  Buttons (named default + app ButtonStyle for legacy pages)  -->
     <Style x:Key="DefaultButton" TargetType="Button">
-        <Setter Property="CornerRadius" Value="5" />
-        <Setter Property="Padding" Value="8,0" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="8,6" />
         <Setter Property="BackgroundColor" Value="{DynamicResource ColorAccent}" />
-        <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+        <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
         <Setter Property="FontAttributes" Value="Bold" />
 
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -74,8 +83,8 @@
                 <VisualStateGroup>
                     <VisualState Name="Normal">
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource ColorAccent}" />
-                            <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonBlue}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonFont}" />
                             <Setter Property="Opacity" Value="1" />
                         </VisualState.Setters>
                     </VisualState>
@@ -83,7 +92,7 @@
                     <VisualState Name="Disabled">
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundDisabled}" />
-                            <Setter Property="TextColor" Value="{DynamicResource ColorTextDisabled}" />
+                            <Setter Property="TextColor" Value="{DynamicResource FontPrimary}" />
                             <Setter Property="Opacity" Value="0.6" />
                         </VisualState.Setters>
                     </VisualState>
@@ -97,14 +106,13 @@
         <Setter Property="TextColor" Value="{DynamicResource ButtonFont}" />
         <Setter Property="CornerRadius" Value="20" />
         <Setter Property="Padding" Value="8,6" />
-        <Setter Property="FontAttributes" Value="None" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup>
                     <VisualState Name="Normal">
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{DynamicResource ColorAccent}" />
-                            <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonFont}" />
                             <Setter Property="Opacity" Value="1" />
                         </VisualState.Setters>
                     </VisualState>
@@ -112,7 +120,7 @@
                     <VisualState Name="Disabled">
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundDisabled}" />
-                            <Setter Property="TextColor" Value="{DynamicResource ColorTextDisabled}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonFont}" />
                             <Setter Property="Opacity" Value="0.6" />
                         </VisualState.Setters>
                     </VisualState>
@@ -125,7 +133,7 @@
     <Style x:Key="BorderLessEntry" TargetType="Entry">
         <Setter Property="TextColor" Value="{DynamicResource ColorTextPrimary}" />
         <Setter Property="PlaceholderColor" Value="{DynamicResource ColorTextSecondary}" />
-        <Setter Property="BackgroundColor" Value="{DynamicResource ColorBackground}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource BorderSecondary}" />
         <Setter Property="Margin" Value="0,0,0,0" />
         <Setter Property="FontSize" Value="{OnPlatform WinUI=16, Android=14}" />
         <Setter Property="HorizontalOptions" Value="Fill" />
