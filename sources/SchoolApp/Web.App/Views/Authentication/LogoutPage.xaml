@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="LogoutPage"
-    BackgroundColor="{StaticResource ColorBackground}">
+    BackgroundColor="{StaticResource BackgroundPrimary}">
     <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*,Auto,*">
 
         <!--  Center container  -->
@@ -14,13 +14,13 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Padding="0"
-                BackgroundColor="{StaticResource ColorSurface}"
+                BackgroundColor="{DynamicResource BorderPrimary}"
                 StrokeShape="RoundRectangle 20"
                 StrokeThickness="0">
                 <!--  Card container (dark surface)  -->
                 <Grid
                     Padding="30"
-                    BackgroundColor="{StaticResource ColorSurface}"
+                    BackgroundColor="{DynamicResource BackgroundSecondary}"
                     HorizontalOptions="Center"
                     MaximumWidthRequest="{OnIdiom Phone=350,
                                                   Tablet=400,
@@ -38,27 +38,21 @@
                                 FontSize="28"
                                 HorizontalOptions="Center"
                                 Text="{Binding LogoutText}"
-                                TextColor="{StaticResource ColorTextPrimary}" />
+                                TextColor="{DynamicResource FontPrimary}" />
                             <!--  Buttons  -->
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
 
                                 <Button
                                     Grid.Column="0"
-                                    BackgroundColor="{StaticResource ColorAccent}"
                                     Command="{Binding NavigateToHomeCommand}"
-                                    FontSize="{OnPlatform WinUI=20,
-                                                          Android=14}"
-                                    Text="Nein"
-                                    TextColor="{StaticResource ColorTextPrimary}" />
+                                    Style="{DynamicResource ButtonStyle}"
+                                    Text="Nein" />
 
                                 <Button
                                     Grid.Column="1"
-                                    BackgroundColor="{StaticResource ColorAccent}"
                                     Command="{Binding LogoutCommand}"
-                                    FontSize="{OnPlatform WinUI=20,
-                                                          Android=14}"
-                                    Text="Ja"
-                                    TextColor="{StaticResource ColorTextPrimary}" />
+                                    Style="{DynamicResource ButtonStyle}"
+                                    Text="Ja" />
                             </Grid>
                         </VerticalStackLayout>
                     </Grid>

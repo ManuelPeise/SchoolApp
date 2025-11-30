@@ -20,13 +20,11 @@
 
         <components:BorderlessEntry
             x:Name="ValueEntry"
-            Margin="0,0,0,0"
-            BackgroundColor="White"
-            FontSize="{Binding FontSize, Source={x:Reference Root}}"
             HorizontalTextAlignment="Start"
             IsEnabled="{Binding IsEnabled, Source={x:Reference Root}}"
             IsPassword="{Binding IsPassword, Source={x:Reference Root}}"
             Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
+            Style="{DynamicResource BorderLessEntry}"
             Text="{Binding Text, Source={x:Reference Root}}"
             Unfocused="OnEntryFieldUnfocused"
             VerticalTextAlignment="Center" />

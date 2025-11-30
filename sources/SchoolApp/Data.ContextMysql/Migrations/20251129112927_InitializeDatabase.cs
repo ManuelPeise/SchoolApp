@@ -181,7 +181,7 @@ namespace Data.ContextMysql.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Theme = table.Column<string>(type: "longtext", nullable: false),
+                    Theme = table.Column<int>(type: "int", nullable: false),
                     AutoSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     ScheduleSettingsId = table.Column<int>(type: "int", nullable: false),
                     IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),

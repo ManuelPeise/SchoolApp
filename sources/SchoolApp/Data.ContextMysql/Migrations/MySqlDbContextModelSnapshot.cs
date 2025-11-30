@@ -262,9 +262,8 @@ namespace Data.ContextMysql.Migrations
                     b.Property<int>("ScheduleSettingsId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Theme")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Theme")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");

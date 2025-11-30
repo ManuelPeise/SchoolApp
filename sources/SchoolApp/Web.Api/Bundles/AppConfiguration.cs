@@ -119,7 +119,7 @@ namespace Web.Api.Bundles
                     Settings = new SettingsEntity
                     {
                         Id = 1,
-                        Theme = "Light",
+                        Theme = ThemeTypeEnum.Light,
                         AutoSync = false,
                         ScheduleSettings = new ScheduleSettingsEntity
                         {

@@ -4,10 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Name="Root"
-    IsVisible="{Binding IsLoading}">
+    BackgroundColor="{DynamicResource BackgroundSecondary}"
+    IsVisible="{Binding IsLoading}"
+    Opacity="3">
 
     <Grid
-        BackgroundColor="{StaticResource OverLayBackground}"
+        BackgroundColor="{StaticResource BackgroundSecondary}"
         HorizontalOptions="Fill"
         VerticalOptions="Fill">
 
@@ -19,7 +21,7 @@
             VerticalOptions="Center"
             WidthRequest="{OnPlatform WinUI=200,
                                       Android=100}"
-            Color="{StaticResource ColorOrange}" />
+            Color="{StaticResource BorderPrimary}" />
     </Grid>
 </ContentView>
 

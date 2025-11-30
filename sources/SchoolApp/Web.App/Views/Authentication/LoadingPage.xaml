@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
     Title="LoadingPage"
-    BackgroundColor="Azure">
+    BackgroundColor="{DynamicResource BackgroundPrimary}">
     <VerticalStackLayout Padding="30" Spacing="20">
         <Image
             Aspect="AspectFit"

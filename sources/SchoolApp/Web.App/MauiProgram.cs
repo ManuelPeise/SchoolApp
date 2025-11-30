@@ -39,7 +39,7 @@ namespace Web.App
             });
            
 
-            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSingleton<IThemeService, ThemeService>();
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             builder.Services.AddScoped<ILocalDatabaseAccessor, LocalDatabaseAccessor>();
             

@@ -6,7 +6,7 @@
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
     xmlns:converters="clr-namespace:Web.App.Converters"
     Title="ChangePasswordPage"
-    BackgroundColor="{StaticResource ColorBackground}">
+    BackgroundColor="{DynamicResource BackgroundPrimary}">
     <ContentPage.Resources>
         <converters:InvertBoolConverter x:Key="invertBoolConverter" />
     </ContentPage.Resources>
@@ -16,12 +16,12 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Padding="0"
-                BackgroundColor="{StaticResource ColorSurface}"
+                BackgroundColor="{DynamicResource BackgroundPrimary}"
                 StrokeShape="RoundRectangle 20"
                 StrokeThickness="0">
                 <Grid
                     Padding="30"
-                    BackgroundColor="{StaticResource ColorSurface}"
+                    BackgroundColor="Transparent"
                     HorizontalOptions="Center"
                     MaximumWidthRequest="{OnPlatform WinUI=600,
                                                      Android=350}"
@@ -44,10 +44,8 @@
 
                                 <Label
                                     Grid.Column="0"
-                                    FontSize="{OnPlatform WinUI=24,
-                                                          Android=14}"
+                                    Style="{StaticResource Caption}"
                                     Text="Daten Synconisierung"
-                                    TextColor="{StaticResource ColorTextPrimary}"
                                     VerticalOptions="Center" />
                             </Grid>
                             <!--  TODO ADD SYNC ITEMS  -->

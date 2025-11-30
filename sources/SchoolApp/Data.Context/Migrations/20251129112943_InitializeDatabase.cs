@@ -170,7 +170,7 @@ namespace Data.Context.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Theme = table.Column<string>(type: "TEXT", nullable: false),
+                    Theme = table.Column<int>(type: "INTEGER", nullable: false),
                     AutoSync = table.Column<bool>(type: "INTEGER", nullable: false),
                     ScheduleSettingsId = table.Column<int>(type: "INTEGER", nullable: false),
                     IsInSync = table.Column<bool>(type: "INTEGER", nullable: false),

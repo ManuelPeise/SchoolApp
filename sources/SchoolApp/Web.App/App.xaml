@@ -5,11 +5,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:Web.App.Converters"
     xmlns:local="clr-namespace:Web.App">
+
     <Application.Resources>
         <ResourceDictionary>
             <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="/Resources/Themes/DarkTheme.xaml" />
+                <ResourceDictionary Source="/Resources/Themes/LightTheme.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/ContentPageStyles.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/EntryStyles.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/LabelStyles.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/IconStyles.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/CustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

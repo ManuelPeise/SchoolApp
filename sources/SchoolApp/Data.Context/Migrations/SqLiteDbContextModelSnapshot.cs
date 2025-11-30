@@ -260,9 +260,8 @@ namespace Data.Context.Migrations
                     b.Property<int>("ScheduleSettingsId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Theme")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Theme")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");

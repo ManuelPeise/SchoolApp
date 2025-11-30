@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    x:Class="Web.App.Resources.Styles.ContentPageStyles"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <!--  Default page style  -->
+    <Style x:Key="DefaultContentPageStyle" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundPrimary}" />
+        <Setter Property="Padding" Value="{OnPlatform WinUI=10, Android=3}" />
+    </Style>
+</ResourceDictionary>

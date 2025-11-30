@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Context.Migrations
 {
     [DbContext(typeof(SqLiteDbContext))]
-    [Migration("20251129075819_InitializeDatabase")]
+    [Migration("20251129112943_InitializeDatabase")]
     partial class InitializeDatabase
     {
         /// <inheritdoc />
@@ -263,9 +263,8 @@ namespace Data.Context.Migrations
                     b.Property<int>("ScheduleSettingsId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Theme")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Theme")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");

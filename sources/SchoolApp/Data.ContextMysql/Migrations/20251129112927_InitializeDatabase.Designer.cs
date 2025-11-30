@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.ContextMysql.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20251129075845_InitializeDatabase")]
+    [Migration("20251129112927_InitializeDatabase")]
     partial class InitializeDatabase
     {
         /// <inheritdoc />
@@ -265,9 +265,8 @@ namespace Data.ContextMysql.Migrations
                     b.Property<int>("ScheduleSettingsId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Theme")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Theme")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
