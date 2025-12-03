@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Data.Entities.User;
-using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models;
 using Shared.Models.UiModels;
@@ -11,12 +9,9 @@ namespace Web.App.Views
 {
     public partial class AppShellViewModel : BaseViewModel
     {
-        private readonly ICurrentUserService _currentUserService;
-
+        private readonly IUserService? _userService;
         [ObservableProperty]
-        private ObservableUser? _appUser = null;
-        [ObservableProperty]
-        private string _userName = string.Empty;
+        private ObservableUser? _user;
         [ObservableProperty]
         private bool _showLogout = false;
 
@@ -52,16 +47,19 @@ namespace Web.App.Views
             }
         };
 
-        public AppShellViewModel(ICurrentUserService currentUserService)
+        public AppShellViewModel(IUserService userService)
         {
-            _currentUserService = currentUserService;
+            _userService = userService;
 
-            _currentUserService.SetCurrentUser();
+            Task.Run(async () => await _userService.Initialize());
 
-            AppUser = _currentUserService.CurrentUser?.ToObservable();
-            UserName = AppUser?.UserName ?? string.Empty;
-            ShowLogout = !string.IsNullOrEmpty(UserName);
+            User = _userService?.CurrentUser ?? null;
+            ShowLogout = _userService?.IsAuthenticated ?? false;
 
+            if (_userService != null)
+            {
+                _userService.UserChanged += OnUserChanged;
+            }
         }
 
         [RelayCommand]
@@ -70,17 +68,18 @@ namespace Web.App.Views
             await Shell.Current.GoToAsync(route);
         }
 
-        partial void OnAppUserChanged(ObservableUser? value)
+        partial void OnUserChanged(ObservableUser? value)
         {
             if (value == null)
             {
-                UserName = string.Empty;
-                ShowLogout = true;
+                User = null;
+                ShowLogout = false;
+
                 return;
             }
-
-            UserName = value.UserName;
-            ShowLogout = true;
+            var isAuthenticated = _userService?.IsAuthenticated ?? false;
+            User = isAuthenticated ? value : null;
+            ShowLogout = isAuthenticated;
         }
     }
 }

@@ -347,6 +347,9 @@ namespace Data.Context.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("RefreshTokenExpireTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("TEXT");

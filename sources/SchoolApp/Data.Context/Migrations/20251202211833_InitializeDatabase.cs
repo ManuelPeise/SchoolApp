@@ -20,6 +20,7 @@ namespace Data.Context.Migrations
                     Salt = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     RefreshToken = table.Column<string>(type: "TEXT", nullable: false),
+                    RefreshTokenExpireTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsInSync = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),

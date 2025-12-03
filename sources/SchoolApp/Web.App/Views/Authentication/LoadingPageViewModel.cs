@@ -9,34 +9,29 @@ namespace Web.App.Views.Authentication
     public partial class LoadingPageViewModel : BaseViewModel
     {
         private readonly INavigationService _navigationService;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserService _userService;
 
         [ObservableProperty]
         private ObservableApiSettings? _apiSettings;
         [ObservableProperty]
         private bool _apiSettingsOpen;
 
-        public LoadingPageViewModel(
-
-            INavigationService navigationService,
-            ICurrentUserService currentUserService)
+        public LoadingPageViewModel(INavigationService navigationService, IUserService userService)
         {
             _navigationService = navigationService;
-            _currentUserService = currentUserService;
-
-            _currentUserService.SetCurrentUser();
-
+            _userService = userService;
             _apiSettings = GetApiSettings();
-
         }
 
         [RelayCommand]
         private async Task StoreApiSettings()
         {
+            // ApiSettings.Port is an int? so just check presence
             if (!string.IsNullOrEmpty(ApiSettings?.ApiBaseUrl) && ApiSettings?.Port != null)
             {
+
                 Preferences.Set(PreferencesConstants.ApiBaseUrlKey, ApiSettings.ApiBaseUrl);
-                Preferences.Set(PreferencesConstants.ApiPort, ApiSettings.Port ?? 0);
+                Preferences.Set(PreferencesConstants.ApiPort, ApiSettings.Port.Value);
 
                 ApiSettingsOpen = false;
 
@@ -46,13 +41,14 @@ namespace Web.App.Views.Authentication
 
         public async void LoadingPageLoaded()
         {
-            if(string.IsNullOrEmpty(ApiSettings?.ApiBaseUrl) || ApiSettings?.Port == null)
+            if (string.IsNullOrEmpty(ApiSettings?.ApiBaseUrl) || ApiSettings?.Port == null)
             {
                 ApiSettingsOpen = true;
                 return;
             }
 
             await CheckAuthentication();
+
         }
 
         private ObservableApiSettings GetApiSettings()
@@ -68,9 +64,7 @@ namespace Web.App.Views.Authentication
 
         private async Task CheckAuthentication()
         {
-            bool isAuthenticated = _currentUserService.IsAuthenticated();
-
-            if (isAuthenticated)
+            if (_userService.IsAuthenticated)
             {
                 await _navigationService.NavigateToAsync("///home");
             }

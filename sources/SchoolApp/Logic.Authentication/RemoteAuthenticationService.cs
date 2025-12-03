@@ -2,7 +2,6 @@
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
 using Logic.Shared.Storage;
-using Shared.Models;
 
 namespace Logic.Authentication
 {
@@ -24,7 +23,7 @@ namespace Logic.Authentication
             {
                 var user = await _databaseAccessor.UserRepository.Find(
                     x => x.UserName.ToLower() == model.UserName.ToLower(),
-                    true, e => e.Credentials);
+                    true, e => e.Family, e => e.Credentials, e => e.Settings);
 
                 if (user == null)
                 {
@@ -49,8 +48,9 @@ namespace Logic.Authentication
                 var tokenData = _jwtTokenService.GenerateTokens(user);
 
                 user.Credentials.RefreshToken = tokenData.RefreshToken;
+                user.Credentials.RefreshTokenExpireTime = DateTime.UtcNow.AddDays(1);
                 user.Credentials.IsInSync = true;
-
+                
                 _databaseAccessor.UserCredentialsRepository.Update(user.Credentials);
 
                 await _databaseAccessor.SaveChangesAsync();

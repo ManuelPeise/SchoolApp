@@ -62,34 +62,42 @@ namespace Logic.Shared.Storage
 
         public async Task SaveChangesAsync(string? userName)
         {
-            var user = userName ?? "SystemAdmin";
-
-            var modifiedEntries = _dbContext.ChangeTracker
-                .Entries()
-                .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
-
-            foreach (var entry in modifiedEntries)
+            try
             {
-                if (entry.Entity is AEntityBase entity)
-                {
-                    var now = DateTime.UtcNow;
+                var user = userName ?? "SystemAdmin";
 
-                    if (entry.State == EntityState.Added)
+                var modifiedEntries = _dbContext.ChangeTracker
+                    .Entries()
+                    .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
+
+                foreach (var entry in modifiedEntries)
+                {
+                    if (entry.Entity is AEntityBase entity)
                     {
-                        entity.CreatedAt = now;
-                        entity.CreatedBy = user;
-                        entity.UpdatedAt = now;
-                        entity.UpdatedBy = user;
-                    }
-                    else if (entry.State == EntityState.Modified)
-                    {
-                        entity.UpdatedAt = now;
-                        entity.UpdatedBy = user;
+                        var now = DateTime.UtcNow;
+
+                        if (entry.State == EntityState.Added)
+                        {
+                            entity.CreatedAt = now;
+                            entity.CreatedBy = user;
+                            entity.UpdatedAt = now;
+                            entity.UpdatedBy = user;
+                        }
+                        else if (entry.State == EntityState.Modified)
+                        {
+                            entity.UpdatedAt = now;
+                            entity.UpdatedBy = user;
+                        }
                     }
                 }
-            }
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                var error = ex.Message;
+            }
         }
 
         #region dispose

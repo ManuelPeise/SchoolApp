@@ -7,8 +7,7 @@ public partial class LoadingOverlay : ContentView
             nameof(IsLoading),
             typeof(bool),
             typeof(LoadingOverlay),
-            false,
-            propertyChanged: OnIsLoadingChanged);
+            false, propertyChanged: OnIsLoadingChanged);
 
     public bool IsLoading
     {
@@ -19,7 +18,7 @@ public partial class LoadingOverlay : ContentView
     private static void OnIsLoadingChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (LoadingOverlay)bindable;
-        view.IsVisible = (bool)newValue;
+        view.IsLoading = (bool)newValue;
     }
 
     public LoadingOverlay()

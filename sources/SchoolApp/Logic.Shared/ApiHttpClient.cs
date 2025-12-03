@@ -16,20 +16,12 @@ namespace Logic.Shared
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalDatabaseAccessor _databaseAccessor;
-        private readonly ISettingsService _settingsService;
-
-        public ApiHttpClient(IConfiguration configuration, ILocalDatabaseAccessor databaseAccessor, ISettingsService settingsService)
+       
+        public ApiHttpClient(IConfiguration configuration, ILocalDatabaseAccessor databaseAccessor)
         {
             _databaseAccessor = databaseAccessor;
-            _settingsService = settingsService;
 
-            var baseAddress = GetBaseAddress();
-
-            _httpClient = new HttpClient
-            {
-                BaseAddress = !string.IsNullOrEmpty(baseAddress) ?
-                new Uri(baseAddress, UriKind.Absolute) : throw new ArgumentNullException(nameof(baseAddress)),
-            };
+            _httpClient = new HttpClient();
         }
 
         public async Task<TResponse?> GetAsync(Uri url, List<KeyValuePair<string, object>> parameters, string? token = null)
@@ -89,7 +81,7 @@ namespace Logic.Shared
                 var requestMessage = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(url, UriKind.Relative),
+                    RequestUri = new Uri(url, UriKind.Absolute),
                     Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json")
                 };
 
@@ -159,21 +151,6 @@ namespace Logic.Shared
         public void SetBaseAddress(string baseAddress)
         {
             _httpClient.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
-        }
-
-        private string GetBaseAddress()
-        {
-            var result = _settingsService.LoadApiSettings().Result;
-
-            if (result == null)
-            {
-                throw new Exception("Api settings could not be loaded");
-            }
-
-            var baseAddress = !string.IsNullOrEmpty(result.ApiBaseUrl) && result.Port != null ?
-                $"{result.ApiBaseUrl}:{result.Port}" : "https://localhost:7239";
-
-            return baseAddress;
         }
     }
 }

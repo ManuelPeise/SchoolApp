@@ -1,49 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<?xaml-comp compile="true" ?>
-<ResourceDictionary 
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <!-- ===================== -->
-    <!--      DARK COLORS      -->
-    <!-- ===================== -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Hintergrund & Oberflächen -->
-    <Color x:Key="ColorBackground">#121212</Color>
-    <Color x:Key="ColorSurface">#232323</Color>
-    <Color x:Key="ColorSurfaceAlt">#1E1E1E</Color>
-    <Color x:Key="ColorBorder">#333333</Color>
+    <!--  These colors are REPLACED by each theme  -->
+    <Color x:Key="PrimaryColor">#000000</Color>
+    <Color x:Key="PrimaryColorVariant">#000000</Color>
+    <Color x:Key="SecondaryColor">#000000</Color>
 
-    <!-- Textfarben -->
-    <Color x:Key="ColorTextPrimary">#FFFFFF</Color>
-    <Color x:Key="ColorTextSecondary">#B5B5B5</Color>
-    <Color x:Key="ColorTextDisabled">#777777</Color>
+    <Color x:Key="BackgroundColor">#FFFFFF</Color>
+    <Color x:Key="SurfaceColor">#FFFFFF</Color>
 
-    <!-- Akzentfarben (Blau) -->
-    <Color x:Key="ColorAccent">#3D82F6</Color>
-    <Color x:Key="ColorAccentDark">#2C6CDD</Color>
-    <Color x:Key="ColorSelectedItem">#1A3B70</Color>
+    <Color x:Key="TextPrimaryColor">#000000</Color>
+    <Color x:Key="TextSecondaryColor">#666666</Color>
 
-    <Color x:Key="OverLayBackground">#AA000000</Color>
-    <Color x:Key="ColorOrange">#ffcc00</Color>
-    <Color x:Key="ColorError">#ff0000</Color>
-    
-    <!-- =============================== -->
-    <!--       SHELL DARK THEME         -->
-    <!-- =============================== -->
+    <Color x:Key="DividerColor">#CCCCCC</Color>
 
-    <!-- Flyout background -->
-    <Color x:Key="ShellFlyoutBackgroundColor">#121212</Color>
+    <Color x:Key="SuccessColor">#3CB371</Color>
+    <Color x:Key="ErrorColor">#E53935</Color>
 
-    <!-- Text colors -->
-    <Color x:Key="ShellFlyoutTextColor">#FFFFFF</Color>
-    <Color x:Key="ShellFlyoutTextSecondary">#B5B5B5</Color>
+    <Color x:Key="InputDisabledColor">#cccccc</Color>
+    <Color x:Key="InputDisabledTextColor">#666666</Color>
+    <Color x:Key="ButtonBlue">#4d4dff</Color>
+    <Color x:Key="LoadingColor">#ff6600</Color>
 
-    <!-- Selected item highlight -->
-    <Color x:Key="ShellFlyoutSelectedColor">#1A3B70</Color>
+    <!--  Brushes bound dynamically to theme colors  -->
+    <SolidColorBrush x:Key="AppPrimaryColor" Color="{DynamicResource PrimaryColor}" />
+    <SolidColorBrush x:Key="AppPrimaryVariantColor" Color="{DynamicResource PrimaryColorVariant}" />
+    <SolidColorBrush x:Key="AppSecondaryColor" Color="{DynamicResource SecondaryColor}" />
 
-    <!-- Icon color -->
-    <Color x:Key="ShellFlyoutIconColor">#CCCCCC</Color>
+    <SolidColorBrush x:Key="AppBackgroundColor" Color="{DynamicResource BackgroundColor}" />
+    <SolidColorBrush x:Key="AppSurfaceColor" Color="{DynamicResource SurfaceColor}" />
 
-    <!-- Divider color -->
-    <Color x:Key="ShellFlyoutSeparatorColor">#333333</Color>
+    <SolidColorBrush x:Key="AppTextPrimaryColor" Color="{DynamicResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="AppTextSecondaryColor" Color="{DynamicResource TextSecondaryColor}" />
+
+    <SolidColorBrush x:Key="AppDividerColor" Color="{DynamicResource DividerColor}" />
+
+    <SolidColorBrush x:Key="AppSuccessColor" Color="{DynamicResource SuccessColor}" />
+    <SolidColorBrush x:Key="AppErrorColor" Color="{DynamicResource ErrorColor}" />
+
 </ResourceDictionary>

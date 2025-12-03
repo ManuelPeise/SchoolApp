@@ -24,6 +24,7 @@ namespace Data.ContextMysql.Migrations
                     Salt = table.Column<string>(type: "longtext", nullable: false),
                     Password = table.Column<string>(type: "longtext", nullable: false),
                     RefreshToken = table.Column<string>(type: "longtext", nullable: false),
+                    RefreshTokenExpireTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     IsInSync = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: false),

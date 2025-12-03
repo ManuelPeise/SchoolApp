@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Logic.Profile;
+using Logic.Shared.Extensions;
 using Logic.Shared.Interfaces;
 using Logic.Shared.Models.Authentication;
 using Logic.Shared.Storage;
@@ -12,7 +14,7 @@ namespace Web.App.Views.Authentication
         private readonly INavigationService _navigationService;
         private readonly IApiHttpClient<LoginRequestModel, LoginResult> _apiHttpClient;
         private readonly ILocalDatabaseAccessor _dbAccessor;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserService _userService;
 
         [ObservableProperty]
         private string _userName = "Manuel.Peise";
@@ -26,13 +28,13 @@ namespace Web.App.Views.Authentication
         public AuthenticationViewModel(
             IAuthenticationService authenticationService,
             INavigationService navigationService,
-            ICurrentUserService currentUserService,
+            IUserService userService,
             ILocalDatabaseAccessor dbAccessor,
             IApiHttpClient<LoginRequestModel, LoginResult> apiHttpClient)
         {
             _authenticationService = authenticationService;
             _navigationService = navigationService;
-            _currentUserService = currentUserService;
+            _userService = userService;
             _dbAccessor = dbAccessor;
             _apiHttpClient = apiHttpClient;
         }
@@ -47,8 +49,12 @@ namespace Web.App.Views.Authentication
                 if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(Password))
                     return;
 
-                var userFromSqLite = await _dbAccessor.UserRepository
-                    .Find(x => x.UserName.ToLower() == UserName.ToLower());
+                var userId = await _dbAccessor.UserRepository
+                    .GetEntityId(x => x.UserName.ToLower() == UserName.ToLower());
+
+                var userFromSqLite = userId != null ?
+                    await _dbAccessor.UserRepository.GetByIdAsync((int)userId, true, x => x.Credentials) :
+                    null;
 
                 LoginResult? authResult;
 
@@ -62,7 +68,12 @@ namespace Web.App.Views.Authentication
 
                     if (authResult.Success)
                     {
-                        await _currentUserService.StoreUserData(userFromSqLite.Id, authResult.JwtToken);
+                        _userService.UpdateTokenStore(
+                            userFromSqLite.ToObservable(),
+                            authResult.JwtToken,
+                            authResult.AppUser?.Credentials.RefreshToken,
+                            authResult.AppUser?.Credentials?.RefreshTokenExpireTime ?? DateTime.MinValue);
+
                         await _navigationService.NavigateToAsync("///home");
                     }
                 }
@@ -71,7 +82,19 @@ namespace Web.App.Views.Authentication
                     if (_apiHttpClient == null)
                         return;
 
-                    authResult = await _apiHttpClient.PostAsync("api/userlogin/login", new LoginRequestModel
+                    var apiBaseUrl = Preferences.Get(PreferencesConstants.ApiBaseUrlKey, string.Empty);
+                    var port = Preferences.Get(PreferencesConstants.ApiPort, 0);
+
+                    if (string.IsNullOrWhiteSpace(apiBaseUrl) || port == 0)
+                    {
+                        return;
+                    }
+#if DEBUG
+                    var authenticationUrl = $"http://10.0.2.2:{port}/api/userlogin/login";
+#else
+                    var authenticationUrl = $"{apiBaseUrl}:{port}/api/userlogin/login";
+#endif               
+                    authResult = await _apiHttpClient.PostAsync(authenticationUrl, new LoginRequestModel
                     {
                         UserName = UserName,
                         Password = Password
@@ -87,24 +110,32 @@ namespace Web.App.Views.Authentication
                 if (userFromSqLite == null)
                 {
                     userFromSqLite = authResult.AppUser;
-                    
-                    await _dbAccessor.UserRepository.AddAsync(userFromSqLite, null);
-                    
-                    await _dbAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName);
 
-                    await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
+                    await _dbAccessor.UserRepository.AddAsync(userFromSqLite, null);
+
+                    await _dbAccessor.SaveChangesAsync(_userService.CurrentUser?.UserName);
+
+                    _userService.UpdateTokenStore(
+                        userFromSqLite.ToObservable(),
+                        authResult.JwtToken,
+                        authResult.AppUser?.Credentials.RefreshToken,
+                        authResult.AppUser?.Credentials?.RefreshTokenExpireTime ?? DateTime.MinValue);
                 }
                 else
                 {
                     await _dbAccessor.UserCredentialsRepository.GetByIdAsync(userFromSqLite.Id);
-                    
+
                     userFromSqLite.Credentials.RefreshToken = authResult.AppUser.Credentials.RefreshToken;
-                    
+
                     _dbAccessor.UserRepository.Update(userFromSqLite);
 
-                    await _dbAccessor.SaveChangesAsync(_currentUserService.CurrentUser?.UserName);
+                    await _dbAccessor.SaveChangesAsync(_userService.CurrentUser?.UserName);
 
-                    await _currentUserService.StoreUserData(userFromSqLite.Id, authResult?.JwtToken);
+                    _userService.UpdateTokenStore(
+                        userFromSqLite.ToObservable(),
+                        authResult.JwtToken,
+                        authResult.AppUser?.Credentials.RefreshToken,
+                        authResult.AppUser?.Credentials?.RefreshTokenExpireTime ?? DateTime.MinValue);
                 }
 
                 await _navigationService.NavigateToAsync("///home");

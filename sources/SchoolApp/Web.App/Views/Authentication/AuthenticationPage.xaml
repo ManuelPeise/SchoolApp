@@ -4,69 +4,55 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
-    Title="AuthenticationPage"
     Style="{StaticResource DefaultContentPageStyle}">
-    <Border
-        Grid.Row="1"
-        Grid.Column="1"
-        HorizontalOptions="Center"
-        MinimumWidthRequest="{OnPlatform WinUI=400,
-                                         Android=300}"
-        Style="{DynamicResource StyledBorder}"
-        VerticalOptions="Center">
-        <!--  Card container (dark surface)  -->
-        <Grid
+
+    <Grid RowDefinitions="*,Auto,*">
+
+        <Border
+            Grid.Row="1"
             Padding="30"
-            BackgroundColor="{DynamicResource BackgroundSecondary}"
-            HorizontalOptions="Fill"
-            RowDefinitions="Auto,*,*,*"
-            RowSpacing="20"
+            BackgroundColor="{DynamicResource AppSurfaceColor}"
+            HorizontalOptions="Center"
+            MinimumWidthRequest="{OnPlatform WinUI=420,
+                                             Android=350}"
+            StrokeThickness="0"
             VerticalOptions="Center">
-            <VerticalStackLayout Grid.Row="0" Spacing="30">
-                <Image
-                    Aspect="AspectFit"
-                    HeightRequest="140"
-                    Source="account.png"
-                    Style="{StaticResource HeaderIcon}"
-                    WidthRequest="140" />
 
-                <Label
-                    HorizontalOptions="Center"
-                    Style="{StaticResource Caption}"
-                    Text="Anmeldung" />
-            </VerticalStackLayout>
-            <controls:LabeledBorderlessEntry
-                Grid.Row="1"
-                Label="Benutzername"
-                Text="{Binding UserName}" />
+            <VerticalStackLayout Spacing="26">
 
-            <controls:LabeledBorderlessEntry
-                Grid.Row="2"
-                IsPassword="True"
-                Label="Passwort"
-                Text="{Binding Password}" />
+                <VerticalStackLayout Spacing="26">
+                    <Image
+                        Aspect="AspectFit"
+                        Source="user_account.png"
+                        Style="{StaticResource HeaderIcon}" />
 
-            <!--  Buttons  -->
-            <Grid
-                Grid.Row="3"
-                ColumnDefinitions="*,*"
-                ColumnSpacing="20">
-                <!--  LOGIN  -->
+                    <Label
+                        HorizontalOptions="Center"
+                        Style="{StaticResource H1}"
+                        Text="Anmeldung"
+                        TextColor="{DynamicResource AppTextPrimaryColor}" />
+                </VerticalStackLayout>
+
+                <controls:LabeledBorderlessEntry Label="Benutzername" Text="{Binding UserName}" />
+
+                <controls:LabeledBorderlessEntry
+                    IsPassword="True"
+                    Label="Passwort"
+                    Text="{Binding Password}" />
+
                 <Button
-                    Grid.Column="1"
                     Command="{Binding LoginCommand}"
                     IsEnabled="{Binding CanLogin}"
-                    Style="{StaticResource ButtonStyle}"
+                    Style="{StaticResource DefaultButton}"
                     Text="Anmelden" />
-            </Grid>
 
+            </VerticalStackLayout>
+        </Border>
 
+        <controls:LoadingOverlay BackgroundColor="Transparent" IsLoading="{Binding IsLoading}" />
+    </Grid>
 
-            <!--  Loading overlay  -->
-            <controls:LoadingOverlay
-                HorizontalOptions="Fill"
-                IsLoading="{Binding IsLoading}"
-                VerticalOptions="Fill" />
-        </Grid>
-    </Border>
 </ContentPage>
+
+
+

@@ -6,29 +6,33 @@ namespace Web.App.Views.Authentication
 {
     public partial class LogoutPageViewModel : BaseViewModel
     {
-        private const string LogoutUserLabel = "{User} möchtest Du dich wirklich abmelden?";
+        private const string LogoutUserLabel = "{Name} möchtest Du dich wirklich abmelden?";
         private const string LogoutLabel = "Möchtest Du dich wirklich abmelden?";
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IUserService? _userService;
         private readonly INavigationService _navigationService;
 
         [ObservableProperty]
         private string _logoutText = string.Empty;
-        
-        public LogoutPageViewModel(ICurrentUserService currentUserService, INavigationService navigationService)
+
+        public LogoutPageViewModel(IUserService userService, INavigationService navigationService)
         {
-            _currentUserService = currentUserService;
+            _userService = userService;
             _navigationService = navigationService;
 
-            LogoutText = _currentUserService.CurrentUser != null ?
-                LogoutUserLabel.Replace("{User}", _currentUserService.CurrentUser.UserName) :
+            Task.Run(async () => await _userService.Initialize());
+
+            LogoutText = _userService.CurrentUser != null ?
+                LogoutUserLabel.Replace("{Name}", _userService.CurrentUser.FirstName) :
                 LogoutLabel;
+
+            if(_userService != null) { }
 
         }
 
         [RelayCommand]
         private async Task Logout()
         {
-            _currentUserService.Logout();
+            _userService.Logout();
 
             await _navigationService.NavigateToAsync("///loading");
         }

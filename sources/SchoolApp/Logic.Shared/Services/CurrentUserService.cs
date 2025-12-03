@@ -11,8 +11,8 @@ namespace Logic.Shared.Services
         private const string JwtTokenKey = "JwtToken";
         private readonly ILocalDatabaseAccessor _localDatabaseAccessor;
 
-        private AppUserEntity? _currentUser = null;
-        private string? _jwtToken = null;
+        private AppUserEntity? _currentUser;
+        private string? _jwtToken;
         private bool disposedValue;
 
         public AppUserEntity? CurrentUser { get => _currentUser; }

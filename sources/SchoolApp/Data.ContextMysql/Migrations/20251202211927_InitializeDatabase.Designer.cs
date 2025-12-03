@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.ContextMysql.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20251130214954_InitializeDatabase")]
+    [Migration("20251202211927_InitializeDatabase")]
     partial class InitializeDatabase
     {
         /// <inheritdoc />
@@ -351,6 +351,9 @@ namespace Data.ContextMysql.Migrations
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RefreshTokenExpireTime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Salt")
                         .IsRequired()

@@ -1,27 +1,25 @@
-﻿using Logic.Shared.Interfaces;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Logic.Shared.Interfaces;
 
 namespace Web.App.Views.Home
 {
-    public partial class HomePageViewModel
+    public partial class HomePageViewModel:BaseViewModel
     {
         private readonly INavigationService _navigationService;
-        private readonly ICurrentUserService _currentUserService;
-        public HomePageViewModel(INavigationService navigationService, ICurrentUserService currentUserService)
+        private readonly IUserService _userService;
+
+        [ObservableProperty]
+        private string _userName;
+
+        public HomePageViewModel(INavigationService navigationService, IUserService userService)
         {
             _navigationService = navigationService;
-            _currentUserService = currentUserService;
-            InitializeAsync();
-        }
+            _userService = userService;
 
-        private async void InitializeAsync()
-        {
-            await _currentUserService.SetCurrentUser();
-            _navigationService.RedirectToLogin();
+            Task.Run(async () => await _userService.Initialize());
 
-            if(_currentUserService.CurrentUser != null)
-            {
-                
-            } 
+            UserName = _userService.CurrentUser?.UserName ?? "Guest";
+            var error = 100;
         }
     }
 }

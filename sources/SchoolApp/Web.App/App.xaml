@@ -8,13 +8,13 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <!--  Load default theme first so component styles can reference tokens  -->
-                <ResourceDictionary Source="/Resources/Themes/LightTheme.xaml" />
-
-                <!--  Consolidated component styles -->
-                <ResourceDictionary Source="/Resources/Styles/CustomStyles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Themes/LightTheme.xaml" />
+                <ResourceDictionary Source="Resources/Themes/DarkTheme.xaml" />
+                <!--  Consolidated component styles  -->
+                <ResourceDictionary Source="Resources/Styles/CustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

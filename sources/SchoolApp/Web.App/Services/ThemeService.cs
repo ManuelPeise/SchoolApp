@@ -1,8 +1,8 @@
 ﻿
 using Logic.Shared.Interfaces;
-using Web.App.Resources.Themes;
 using System.Diagnostics;
 using Logic.Profile;
+using Web.App.Resources.Themes;
 
 
 namespace Web.App.Services
@@ -17,10 +17,10 @@ namespace Web.App.Services
         public ThemeService(ICurrentUserService currentUserService)
         {
             _currentUserService = currentUserService;
-
-            _theme = Preferences.ContainsKey(PreferencesConstants.ThemeKey) ?
-                (AppTheme)Enum.Parse(typeof(AppTheme), Preferences.Get(PreferencesConstants.ThemeKey, "Light")) :
-                AppTheme.Dark;
+            _theme = AppTheme.Dark;
+            //_theme = Preferences.ContainsKey(PreferencesConstants.ThemeKey) ?
+            //    (AppTheme)Enum.Parse(typeof(AppTheme), Preferences.Get(PreferencesConstants.ThemeKey, "Light")) :
+            //    AppTheme.Dark;
 
             _ = _currentUserService.SetCurrentUser();
 

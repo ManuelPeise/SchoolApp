@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Context.Migrations
 {
     [DbContext(typeof(SqLiteDbContext))]
-    [Migration("20251130214929_InitializeDatabase")]
+    [Migration("20251202211833_InitializeDatabase")]
     partial class InitializeDatabase
     {
         /// <inheritdoc />
@@ -348,6 +348,9 @@ namespace Data.Context.Migrations
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RefreshTokenExpireTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Salt")

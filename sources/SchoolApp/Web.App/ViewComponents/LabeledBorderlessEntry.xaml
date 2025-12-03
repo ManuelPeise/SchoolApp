@@ -3,12 +3,14 @@
     x:Class="Web.App.ViewComponents.LabeledBorderlessEntry"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:components="clr-namespace:Web.App.ViewComponents"
+    xmlns:converters="clr-namespace:Web.App.Converters"
     x:Name="Root">
+    <ContentView.Resources>
+        <converters:BooleanToKeyboardConverter x:Key="BooleanToKeyboardConverter" />
+    </ContentView.Resources>
     <VerticalStackLayout
         Margin="0"
         Padding="0"
-        BackgroundColor="Transparent"
         Spacing="3">
 
         <Label
@@ -16,17 +18,18 @@
             Margin="0,0,0,0"
             Padding="5,2"
             FontSize="{Binding FontSize, Source={x:Reference Root}}"
+            Style="{DynamicResource H3}"
             Text="{Binding Label, Source={x:Reference Root}}" />
-
-        <components:BorderlessEntry
-            x:Name="ValueEntry"
-            HorizontalTextAlignment="Start"
-            IsEnabled="{Binding IsEnabled, Source={x:Reference Root}}"
-            IsPassword="{Binding IsPassword, Source={x:Reference Root}}"
-            Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
-            Style="{DynamicResource BorderLessEntry}"
-            Text="{Binding Text, Source={x:Reference Root}}"
-            Unfocused="OnEntryFieldUnfocused"
-            VerticalTextAlignment="Center" />
+        <Border Style="{StaticResource EntryBorderStyle}">
+            <Entry
+                x:Name="ValueEntry"
+                IsEnabled="{Binding IsEnabled, Source={x:Reference Root}}"
+                IsPassword="{Binding IsPassword, Source={x:Reference Root}}"
+                Keyboard="{Binding IsNumber, Converter={StaticResource BooleanToKeyboardConverter}}"
+                Placeholder="{Binding Placeholder, Source={x:Reference Root}}"
+                Style="{StaticResource Entry}"
+                Text="{Binding Text, Source={x:Reference Root}}"
+                Unfocused="OnEntryFieldUnfocused" />
+        </Border>
     </VerticalStackLayout>
 </ContentView>

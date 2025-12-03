@@ -9,7 +9,6 @@ using Logic.Shared.Storage;
 using Logic.Sync.DataSync.Local;
 using Logic.Sync.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using Web.App.Bundels;
@@ -40,10 +39,14 @@ namespace Web.App
            
 
             builder.Services.AddSingleton<IThemeService, ThemeService>();
+            // Register UserService as singleton. UserService will create scopes when it needs scoped services.
+            builder.Services.AddSingleton<IUserService, UserService>();
+
             builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             builder.Services.AddScoped<ILocalDatabaseAccessor, LocalDatabaseAccessor>();
             
             builder.Services.AddScoped<IAuthenticationService, LocalAuthenticationService>();
+            // TODO remove after replacing
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<INavigationService, NavigationService>();
             builder.Services.AddScoped(typeof(IApiHttpClient<, >), typeof(ApiHttpClient<, >));

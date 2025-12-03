@@ -349,6 +349,9 @@ namespace Data.ContextMysql.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("RefreshTokenExpireTime")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("longtext");

@@ -4,19 +4,54 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Web.App.ViewComponents"
-    Title="LoadingPage"
-    BackgroundColor="{DynamicResource BackgroundPrimary}"
-    Loaded="LoadingPageLoaded">
-    <VerticalStackLayout
-        Padding="30"
-        Spacing="20"
-        VerticalOptions="Center">
+    xmlns:converters="clr-namespace:Web.App.Converters"
+    x:Name="root"
+    Loaded="LoadingPageLoaded"
+    Style="{StaticResource DefaultContentPageStyle}">
 
-        <controls:LoadingOverlay IsLoading="{Binding IsLoading}" />
-        <BoxView HeightRequest="10" HorizontalOptions="Center" />
-        <controls:ApiSettingsOverlay
-            ApiSettings="{Binding ApiSettings, Mode=TwoWay}"
-            IsVisible="{Binding ApiSettingsOpen}"
-            SaveCommand="{Binding StoreApiSettingsCommand}" />
-    </VerticalStackLayout>
+    <ContentPage.Resources>
+        <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
+    </ContentPage.Resources>
+
+    <!--  Centered Card Layout  -->
+    <Grid RowDefinitions="*,Auto,*">
+
+        <!--  CARD  -->
+        <Border
+            Grid.Row="1"
+            Padding="30"
+            BackgroundColor="{DynamicResource AppSurfaceColor}"
+            HorizontalOptions="Center"
+            MinimumWidthRequest="{OnPlatform WinUI=420,
+                                             Android=350}"
+            StrokeThickness="0"
+            VerticalOptions="Center">
+
+            <VerticalStackLayout Spacing="26">
+
+                <!--  LOADING  -->
+                <controls:LoadingOverlay
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Center"
+                    IsLoading="{Binding IsLoading, Converter={StaticResource InvertBoolConverter}}"
+                    VerticalOptions="Center" />
+
+                <!--  SPACER  -->
+                <BoxView
+                    HeightRequest="10"
+                    HorizontalOptions="Center"
+                    Color="Transparent" />
+
+                <!--  API SETTINGS OVERLAY INSIDE CARD  -->
+                <controls:ApiSettingsOverlay
+                    ApiSettings="{Binding ApiSettings, Mode=TwoWay}"
+                    IsVisible="{Binding ApiSettingsOpen}"
+                    SaveCommand="{Binding StoreApiSettingsCommand}" />
+
+            </VerticalStackLayout>
+
+        </Border>
+
+    </Grid>
 </ContentPage>
+

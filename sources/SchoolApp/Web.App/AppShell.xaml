@@ -47,8 +47,8 @@
                 FontSize="20"
                 IsVisible="{Binding ShowLogout}"
                 Opacity="0.6"
-                Text="{Binding UserName}"
-                TextColor="#FFFFFF"
+                Text="{Binding User.UserName}"
+                TextColor="#ffffff"
                 VerticalOptions="End" />
 
             <!--  Logout Button  -->
@@ -111,7 +111,7 @@
                             Grid.Column="0"
                             Aspect="Fill"
                             HeightRequest="30"
-                            Source="dotnet_bot.png"
+                            Source="user_account.png"
                             WidthRequest="30" />
                         <Label
                             x:Name="AccountLabel"
@@ -325,24 +325,23 @@
                 VerticalOptions="Center" />
         </Grid>
     </Shell.FlyoutFooter>
-    build content page component and wrap all pages into
     <ShellContent
         Title="LoadingPage"
         ContentTemplate="{DataTemplate auth:LoadingPage}"
         Route="loading"
         Shell.FlyoutBehavior="Flyout"
-        Shell.FlyoutItemIsVisible="True"
-        Shell.NavBarHasShadow="True"
-        Shell.NavBarIsVisible="True" />
+        Shell.FlyoutItemIsVisible="False"
+        Shell.NavBarHasShadow="False"
+        Shell.NavBarIsVisible="False" />
 
     <ShellContent
         Title="AuthenticationPage"
         ContentTemplate="{DataTemplate auth:AuthenticationPage}"
         Route="login"
         Shell.FlyoutBehavior="Flyout"
-        Shell.FlyoutItemIsVisible="True"
-        Shell.NavBarHasShadow="True"
-        Shell.NavBarIsVisible="True" />
+        Shell.FlyoutItemIsVisible="False"
+        Shell.NavBarHasShadow="False"
+        Shell.NavBarIsVisible="False" />
 
     <ShellContent
         Title="LogoutPage"
@@ -355,9 +354,12 @@
     <ShellContent
         Title="MainPage"
         ContentTemplate="{DataTemplate home:HomePage}"
-        Route="home" />
+        Route="home"
+        Shell.FlyoutItemIsVisible="True"
+        Shell.NavBarHasShadow="True"
+        Shell.NavBarIsVisible="True" />
 
-    <ShellContent
+    <!--<ShellContent
         Title="ProfilePage"
         ContentTemplate="{DataTemplate user:ProfilePage}"
         Route="profile"
@@ -390,5 +392,5 @@
         ContentTemplate="{DataTemplate settings:SettingsPage}"
         Route="settings"
         Shell.NavBarHasShadow="False"
-        Shell.NavBarIsVisible="False" />
+        Shell.NavBarIsVisible="False" />-->
 </Shell>

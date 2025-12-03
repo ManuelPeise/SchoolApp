@@ -27,6 +27,8 @@ public partial class LabeledBorderlessEntry : ContentView
     public static readonly BindableProperty IsPasswordProperty =
        BindableProperty.Create(nameof(IsPassword), typeof(bool), typeof(LabeledBorderlessEntry), false);
 
+    public static readonly BindableProperty IsNumberProperty =
+      BindableProperty.Create(nameof(IsNumber), typeof(bool), typeof(LabeledBorderlessEntry), false);
     public ICommand UnfocusedCommand
     {
         get => (ICommand)GetValue(UnfocusedCommandProperty);
@@ -63,6 +65,12 @@ public partial class LabeledBorderlessEntry : ContentView
         set => SetValue(IsPasswordProperty, value);
     }
     
+    public bool IsNumber
+    {
+        get => (bool)GetValue(IsNumberProperty);
+        set => SetValue(IsNumberProperty, value);
+    }
+
     public LabeledBorderlessEntry()
 	{
         InitializeComponent();
