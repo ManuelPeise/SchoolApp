@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Web.App.Views.User.ProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    xmlns:converters="clr-namespace:Web.App.Converters"
+    Title="Profile"
+    BackgroundColor="{DynamicResource BackgroundPrimary}">
+    <ContentPage.Resources>
+        <converters:DateTimeToStringConverter x:Key="dateConverter" />
+        <converters:InvertBoolConverter x:Key="invertBoolConverter" />
+    </ContentPage.Resources>
+    <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*,Auto,*">
+
+        <Grid Grid.Row="1" Grid.Column="1">
+
+            <Border
+                Grid.Row="1"
+                Grid.Column="1"
+                Padding="0"
+                BackgroundColor="{DynamicResource BorderPrimary}"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="0">
+                <Grid
+                    Padding="30"
+                    BackgroundColor="{StaticResource BackgroundSecondary}"
+                    HorizontalOptions="Center"
+                    MaximumWidthRequest="{OnPlatform WinUI=600,
+                                                     Android=350}"
+                    VerticalOptions="Center">
+                    <Grid RowSpacing="0">
+                        <VerticalStackLayout Spacing="10">
+                            <!--  TODO SET PROFILE IMAGE  -->
+                            <Image
+                                Aspect="AspectFit"
+                                HeightRequest="140"
+                                Source="dotnet_bot.png"
+                                WidthRequest="140" />
+
+                            <Grid
+                                Padding="5,0"
+                                ColumnDefinitions="Auto,*"
+                                ColumnSpacing="0"
+                                MaximumWidthRequest="{OnPlatform WinUI=600,
+                                                                 Android=350}">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Style="{StaticResource Caption}"
+                                    Text="Deine Profildaten"
+                                    TextColor="{DynamicResource FontPrimary}"
+                                    VerticalOptions="Center" />
+
+                                <ImageButton
+                                    Grid.Column="1"
+                                    Aspect="AspectFit"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding ToggleModeCommand}"
+                                    CornerRadius="50"
+                                    HeightRequest="30"
+                                    HorizontalOptions="End"
+                                    Source="{Binding ToggleButtonImage}"
+                                    WidthRequest="30" />
+                            </Grid>
+
+                            <controls:LabeledBorderlessEntry
+                                IsEnabled="{Binding IsEditMode}"
+                                Label="Vorname"
+                                Placeholder="Vorname"
+                                Text="{Binding User.FirstName}" />
+
+                            <controls:LabeledBorderlessEntry
+                                IsEnabled="{Binding IsEditMode}"
+                                Label="Name"
+                                Placeholder="Name"
+                                Text="{Binding User.LastName}" />
+
+                            <controls:LabeledBorderlessEntry
+                                IsEnabled="False"
+                                Label="Benutzername"
+                                Placeholder="Benutzername"
+                                Text="{Binding User.UserName}" />
+
+                            <controls:LabeledBorderlessEntry
+                                IsEnabled="False"
+                                Label="Geburtsdatum"
+                                Placeholder="Benutzername"
+                                Text="{Binding User.DateOfBirth, Converter={StaticResource dateConverter}}" />
+
+                            <Grid
+                                Padding="10,15,0,15"
+                                ColumnDefinitions="*,*"
+                                ColumnSpacing="20">
+                                <Button
+                                    Grid.Column="1"
+                                    Command="{Binding NavigateToChangePasswordCommand}"
+                                    IsEnabled="True"
+                                    IsVisible="True"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    Text="Passwort Ändern" />
+                            </Grid>
+                            <Label
+                                Margin="5,15,0,0"
+                                FontAttributes="Italic"
+                                FontSize="{OnPlatform WinUI=16,
+                                                      Android=12}"
+                                Text="{Binding LastUpdateText}"
+                                TextColor="{DynamicResource FontPrimary}" />
+                            <Grid
+                                Margin="0,25,0,0"
+                                ColumnDefinitions="*,*"
+                                ColumnSpacing="20">
+                                <Button
+                                    Grid.Column="0"
+                                    Command="{Binding RevertChangesCommand}"
+                                    IsEnabled="{Binding IsModified}"
+                                    IsVisible="True"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    Text="Abbrechen"
+                                    TextColor="{StaticResource ColorTextPrimary}" />
+
+                                <Button
+                                    Grid.Column="1"
+                                    Command="{Binding SaveChangesCommand}"
+                                    IsEnabled="{Binding IsModified}"
+                                    IsVisible="True"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    Text="Speichern"
+                                    TextColor="{StaticResource ColorTextPrimary}" />
+                            </Grid>
+
+
+                        </VerticalStackLayout>
+                        <controls:LoadingOverlay
+                            HorizontalOptions="Fill"
+                            IsLoading="{Binding IsLoading}"
+                            VerticalOptions="Fill" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

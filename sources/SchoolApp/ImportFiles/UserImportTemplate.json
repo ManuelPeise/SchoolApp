@@ -1,0 +1,22 @@
+{
+    "id": 0,
+    "familyName": "MyFamily",
+    "familyMembers": [{
+            "id": 0,
+			"familyId": 0,
+            "name": "MyFamilyAdmin",
+            "dateOfBirth": "1980-04-20T00:00:00",
+            "password": "Pass@word",
+            "userrole": 1,
+            "isActive": true
+        }, {
+            "id": 0,
+			"familyId": 0,
+            "name": "MyUser1",
+            "dateOfBirth": "1980-04-20T00:00:00",
+            "password": "Pass@word",
+            "userrole": 0,
+            "isActive": true
+        }
+    ]
+}

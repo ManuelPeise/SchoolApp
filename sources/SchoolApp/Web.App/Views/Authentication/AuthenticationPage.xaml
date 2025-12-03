@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Web.App.Views.Authentication.AuthenticationPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    Title="AuthenticationPage"
+    Style="{StaticResource DefaultContentPageStyle}">
+    <Border
+        Grid.Row="1"
+        Grid.Column="1"
+        HorizontalOptions="Center"
+        MinimumWidthRequest="{OnPlatform WinUI=400,
+                                         Android=300}"
+        Style="{DynamicResource StyledBorder}"
+        VerticalOptions="Center">
+        <!--  Card container (dark surface)  -->
+        <Grid
+            Padding="30"
+            BackgroundColor="{DynamicResource BackgroundSecondary}"
+            HorizontalOptions="Fill"
+            RowDefinitions="Auto,*,*,*"
+            RowSpacing="20"
+            VerticalOptions="Center">
+            <VerticalStackLayout Grid.Row="0" Spacing="30">
+                <Image
+                    Aspect="AspectFit"
+                    HeightRequest="140"
+                    Source="account.png"
+                    Style="{StaticResource HeaderIcon}"
+                    WidthRequest="140" />
+
+                <Label
+                    HorizontalOptions="Center"
+                    Style="{StaticResource Caption}"
+                    Text="Anmeldung" />
+            </VerticalStackLayout>
+            <controls:LabeledBorderlessEntry
+                Grid.Row="1"
+                Label="Benutzername"
+                Text="{Binding UserName}" />
+
+            <controls:LabeledBorderlessEntry
+                Grid.Row="2"
+                IsPassword="True"
+                Label="Passwort"
+                Text="{Binding Password}" />
+
+            <!--  Buttons  -->
+            <Grid
+                Grid.Row="3"
+                ColumnDefinitions="*,*"
+                ColumnSpacing="20">
+                <!--  LOGIN  -->
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding CanLogin}"
+                    Style="{StaticResource ButtonStyle}"
+                    Text="Anmelden" />
+            </Grid>
+
+
+
+            <!--  Loading overlay  -->
+            <controls:LoadingOverlay
+                HorizontalOptions="Fill"
+                IsLoading="{Binding IsLoading}"
+                VerticalOptions="Fill" />
+        </Grid>
+    </Border>
+</ContentPage>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Web.App.Views.Authentication.LoadingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Web.App.ViewComponents"
+    Title="LoadingPage"
+    BackgroundColor="{DynamicResource BackgroundPrimary}"
+    Loaded="LoadingPageLoaded">
+    <VerticalStackLayout
+        Padding="30"
+        Spacing="20"
+        VerticalOptions="Center">
+
+        <controls:LoadingOverlay IsLoading="{Binding IsLoading}" />
+        <BoxView HeightRequest="10" HorizontalOptions="Center" />
+        <controls:ApiSettingsOverlay
+            ApiSettings="{Binding ApiSettings, Mode=TwoWay}"
+            IsVisible="{Binding ApiSettingsOpen}"
+            SaveCommand="{Binding StoreApiSettingsCommand}" />
+    </VerticalStackLayout>
+</ContentPage>
